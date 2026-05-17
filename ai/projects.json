@@ -1,0 +1,185 @@
+{
+  "updated": "2026-05-17",
+  "categories": [
+    "Deploy",
+    "Dev",
+    "Editor",
+    "Education",
+    "Next.js",
+    "Notes",
+    "Python",
+    "React"
+  ],
+  "items": [
+    {
+      "id": "adri-fluid-dark",
+      "title": "프로필 · 경력 사이트",
+      "summary": "김윤형 솔루션 교육·컨설턴트 포트폴리오 (HWP 반영)",
+      "status": "demo",
+      "tags": [
+        "Education",
+        "Dev"
+      ],
+      "links": [
+        {
+          "label": "사이트",
+          "url": "https://cxr542.github.io/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/cxr542.github.io"
+        }
+      ]
+    },
+    {
+      "id": "Crawlingtest",
+      "title": "Python 크롤링",
+      "summary": "교보문고 등 스크래핑 실습 스크립트",
+      "status": "local",
+      "tags": [
+        "Python",
+        "Dev"
+      ],
+      "links": []
+    },
+    {
+      "id": "deploy_test",
+      "title": "Deploy Test",
+      "summary": "배포 테스트 (준비 중)",
+      "status": "planned",
+      "tags": [
+        "Dev",
+        "Deploy"
+      ],
+      "links": []
+    },
+    {
+      "id": "dynamic_deploy_test",
+      "title": "Dynamic Deploy Test",
+      "summary": "배포·동적 설정 실험",
+      "status": "learning",
+      "tags": [
+        "Dev",
+        "Deploy"
+      ],
+      "links": []
+    },
+    {
+      "id": "markdown-editor",
+      "title": "Markdown 에디터",
+      "summary": "CodeMirror + Express — 프론트 위주 실습 (API는 로컬)",
+      "status": "learning",
+      "tags": [
+        "Dev",
+        "Editor"
+      ],
+      "links": [
+        {
+          "label": "데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/markdown-editor/"
+        }
+      ]
+    },
+    {
+      "id": "next.js_test",
+      "title": "Next.js · shadcn",
+      "summary": "Next.js App Router + shadcn/ui 실습",
+      "status": "learning",
+      "tags": [
+        "Dev",
+        "Next.js"
+      ],
+      "links": []
+    },
+    {
+      "id": "react_test",
+      "title": "React · Vite 클리커",
+      "summary": "모바일 클리커 게임 — Vite + React 실습",
+      "status": "demo",
+      "tags": [
+        "Dev",
+        "React"
+      ],
+      "links": [
+        {
+          "label": "데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/react_test/"
+        }
+      ]
+    },
+    {
+      "id": "webtest",
+      "title": "Web Test",
+      "summary": "정적 HTML 웹 실험 (준비 중)",
+      "status": "planned",
+      "tags": [
+        "Dev"
+      ],
+      "links": []
+    },
+    {
+      "id": "note-apple-history-mindmap",
+      "title": "Apple History Mindmap",
+      "summary": "학습 메모 — notes/apple-history-mindmap.md",
+      "status": "demo",
+      "tags": [
+        "Notes",
+        "Education"
+      ],
+      "links": [
+        {
+          "label": "문서",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/apple-history-mindmap.md"
+        }
+      ]
+    },
+    {
+      "id": "note-apple-history",
+      "title": "Apple History",
+      "summary": "학습 메모 — notes/apple-history.md",
+      "status": "demo",
+      "tags": [
+        "Notes",
+        "Education"
+      ],
+      "links": [
+        {
+          "label": "문서",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/apple-history.md"
+        }
+      ]
+    },
+    {
+      "id": "note-mermaid-test",
+      "title": "Mermaid Test",
+      "summary": "학습 메모 — notes/mermaid-test.md",
+      "status": "demo",
+      "tags": [
+        "Notes",
+        "Education"
+      ],
+      "links": [
+        {
+          "label": "문서",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/mermaid-test.md"
+        }
+      ]
+    },
+    {
+      "id": "note-pythagorean-proof",
+      "title": "Pythagorean Proof",
+      "summary": "학습 메모 — notes/pythagorean-proof.md",
+      "status": "demo",
+      "tags": [
+        "Notes",
+        "Education"
+      ],
+      "links": [
+        {
+          "label": "문서",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/pythagorean-proof.md"
+        }
+      ]
+    }
+  ]
+}

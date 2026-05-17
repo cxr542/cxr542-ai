@@ -1,0 +1,13 @@
+{
+  "name": "cxr542-ai",
+  "private": true,
+  "version": "1.0.0",
+  "description": "AI learning hub — catalog and experiment demos",
+  "scripts": {
+    "sync:projects": "node scripts/sync-projects.mjs",
+    "preview": "npx --yes serve . -p 8080",
+    "deploy:react_test": "node scripts/deploy-project.mjs react_test",
+    "deploy:notes": "node scripts/deploy-project.mjs notes",
+    "deploy:all": "npm run deploy:react_test && npm run deploy:notes"
+  }
+}
