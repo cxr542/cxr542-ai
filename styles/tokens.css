@@ -1,0 +1,24 @@
+:root {
+  --color-bg: #0a0a0a;
+  --color-bg-elevated: #141414;
+  --color-accent: #e8a930;
+  --color-accent-hover: #f0b84a;
+  --color-accent-muted: rgba(232, 169, 48, 0.15);
+  --color-text: #f5f5f5;
+  --color-text-muted: #9a9a9a;
+  --color-text-on-accent: #0a0a0a;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --text-hero: clamp(2.25rem, 5vw, 3.5rem);
+  --text-body: 1.0625rem;
+  --leading-tight: 1.15;
+  --leading-body: 1.65;
+  --space-section: clamp(3rem, 8vw, 5.5rem);
+  --content-max: 72rem;
+  --radius-pill: 9999px;
+  --radius-sm: 8px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+  --color-accent-hover: #f0b84a;
+}

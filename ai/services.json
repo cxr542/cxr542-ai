@@ -1,0 +1,61 @@
+{
+  "updated": "2026-05-17",
+  "profileUrl": "https://cxr542.github.io/",
+  "categories": ["Agent", "LLM", "Education", "Dev"],
+  "items": [
+    {
+      "id": "cursor",
+      "title": "Cursor Agent",
+      "summary": "Rules, Hooks, 에이전트 워크플로와 프로젝트 자동화 실험",
+      "status": "learning",
+      "tags": ["Agent", "Dev"],
+      "links": [
+        { "label": "프로필 사이트", "url": "https://cxr542.github.io/" }
+      ]
+    },
+    {
+      "id": "chatgpt",
+      "title": "ChatGPT / API",
+      "summary": "프롬프트 설계, API 연동, 교육·문서 요약 활용 시나리오",
+      "status": "learning",
+      "tags": ["LLM"],
+      "links": [
+        { "label": "OpenAI", "url": "https://openai.com/" }
+      ]
+    },
+    {
+      "id": "claude",
+      "title": "Claude",
+      "summary": "긴 문맥 분석, 제안서·교육 자료 초안 보조",
+      "status": "planned",
+      "tags": ["LLM"],
+      "links": [
+        { "label": "Anthropic", "url": "https://www.anthropic.com/" }
+      ]
+    },
+    {
+      "id": "github-pages",
+      "title": "GitHub Pages 포트폴리오",
+      "summary": "정적 프로필 사이트 (adri-fluid-dark) — HWP 기반 경력 반영",
+      "status": "demo",
+      "tags": ["Dev", "Education"],
+      "links": [
+        { "label": "사이트", "url": "https://cxr542.github.io/" },
+        { "label": "Repo", "url": "https://github.com/cxr542/cxr542.github.io" }
+      ]
+    },
+    {
+      "id": "ai-hub",
+      "title": "AI 학습 허브 (이 사이트)",
+      "summary": "공부·실험 중인 AI 서비스를 카드로 모아 두는 대시보드",
+      "status": "demo",
+      "tags": ["Dev"],
+      "links": []
+    }
+  ],
+  "resources": [
+    { "label": "Cursor Docs", "url": "https://cursor.com/docs" },
+    { "label": "Hugging Face", "url": "https://huggingface.co/" },
+    { "label": "Google AI Studio", "url": "https://aistudio.google.com/" }
+  ]
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="김윤형 AI 학습·실험 허브 — Cursor, LLM, 교육·개발 실험 카드 대시보드"
+    />
+    <title>AI 학습 허브 — 김윤형</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
+    <header class="site-header" id="site-header">
+      <a class="logo" href="#top">AI Lab</a>
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav"
+        aria-label="메뉴 열기"
+      >
+        <span class="nav-toggle__bar"></span>
+        <span class="nav-toggle__bar"></span>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="주요 메뉴">
+        <a href="#services">서비스</a>
+        <a href="#resources">자료</a>
+        <a
+          href="https://cxr542.github.io/"
+          class="nav__external"
+          rel="noopener noreferrer"
+          >프로필</a
+        >
+      </nav>
+      <a
+        class="btn btn--primary header-cta"
+        href="https://cxr542.github.io/"
+        rel="noopener noreferrer"
+        >경력 소개</a
+      >
+    </header>
+
+    <main id="main">
+      <section class="hero section" id="top">
+        <div class="container">
+          <p class="eyebrow">Learning · Experiment</p>
+          <h1 class="hero__title">
+            AI <em class="text-accent">학습·실험</em> 허브
+          </h1>
+          <p class="hero__lead">
+            Cursor, LLM, 교육·개발 도구를 카드로 모아 두는 대시보드입니다. 공부·실험
+            진행 상황을 기록하고 프로필 사이트와 연결합니다.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="services" aria-labelledby="services-heading">
+        <div class="container">
+          <h2 id="services-heading" class="section-label">서비스·실험</h2>
+          <p class="section-intro">
+            학습 중·데모·예정 상태로 구분합니다. 필터로 태그별로 볼 수 있습니다.
+          </p>
+          <div class="filters" id="ai-filters" role="group" aria-label="태그 필터"></div>
+          <div class="ai-grid" id="ai-grid" aria-live="polite"></div>
+          <p class="updated-note" id="updated-note" hidden></p>
+        </div>
+      </section>
+
+      <section class="section" id="resources" aria-labelledby="resources-heading">
+        <div class="container">
+          <h2 id="resources-heading" class="section-label">참고 링크</h2>
+          <ul class="resource-list" id="resource-list"></ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p class="footer__copy">© 김윤형 — AI 학습·실험 허브</p>
+        <p class="footer__meta">
+          <a href="https://cxr542.github.io/" rel="noopener noreferrer">프로필 사이트</a>
+          ·
+          <a
+            href="https://github.com/cxr542/cxr542-ai"
+            rel="noopener noreferrer"
+            >GitHub</a
+          >
+        </p>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/ai-home.js"></script>
+  </body>
+</html>
