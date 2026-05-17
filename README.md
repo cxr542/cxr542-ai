@@ -1,6 +1,6 @@
 # AI 학습·실험 허브
 
-김윤형의 AI 도구·Cursor 실험 카드 대시보드 (adri-fluid-dark 톤).
+김윤형의 AI 도구·Cursor 실험 카드 대시보드 (프로필 사이트와 동일 톤).
 
 - **허브:** https://cxr542.github.io/cxr542-ai/
 - **프로필:** https://cxr542.github.io/
