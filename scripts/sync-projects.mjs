@@ -141,7 +141,7 @@ function main() {
   });
 
   const profileCard = {
-    id: "adri-fluid-dark",
+    id: "cxr542",
     title: "프로필 · 경력 사이트",
     summary: "김윤형 솔루션 교육·컨설턴트 포트폴리오 (HWP 반영)",
     status: "demo",
