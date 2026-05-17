@@ -11,8 +11,9 @@
 ```bash
 npm install
 npm run sync:projects    # ../experiments, ../notes → ai/projects.json
+npm run check:deploy     # 배포 상태 표 (로컬 + GitHub Pages)
 npm run preview          # http://localhost:8080
-npm run deploy:react_test
+npm run deploy:experiments
 npm run deploy:notes
 npm run deploy:all
 ```

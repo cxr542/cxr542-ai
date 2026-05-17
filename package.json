@@ -5,9 +5,14 @@
   "description": "AI learning hub — catalog and experiment demos",
   "scripts": {
     "sync:projects": "node scripts/sync-projects.mjs",
+    "check:deploy": "node scripts/check-deploy.mjs",
+    "check:deploy:local": "node scripts/check-deploy.mjs --local-only",
     "preview": "npx --yes serve . -p 8080",
     "deploy:react_test": "node scripts/deploy-project.mjs react_test",
+    "deploy:markdown-editor": "node scripts/deploy-project.mjs markdown-editor",
+    "deploy:next.js_test": "node scripts/deploy-project.mjs next.js_test",
     "deploy:notes": "node scripts/deploy-project.mjs notes",
-    "deploy:all": "npm run deploy:react_test && npm run deploy:notes"
+    "deploy:experiments": "node scripts/deploy-project.mjs react_test && node scripts/deploy-project.mjs markdown-editor && node scripts/deploy-project.mjs next.js_test",
+    "deploy:all": "npm run deploy:experiments && npm run deploy:notes"
   }
 }

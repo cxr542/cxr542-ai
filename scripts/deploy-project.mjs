@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { execSync } from "child_process";
+import { readMeta, detectDeployable } from "./experiment-meta.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const hubRoot = path.resolve(__dirname, "..");
@@ -44,6 +45,14 @@ function run(cmd, cwd, env = {}) {
   });
 }
 
+function npmInstall(dir) {
+  try {
+    run("npm ci", dir);
+  } catch {
+    run("npm install", dir);
+  }
+}
+
 if (id === "notes") {
   const notesDir = path.resolve(hubRoot, "..", "notes");
   rmrf(outDir);
@@ -73,30 +82,33 @@ if (!fs.existsSync(projectDir)) {
   process.exit(1);
 }
 
+const meta = readMeta(projectDir, id);
+const { kind, reason } = detectDeployable(projectDir, meta);
+
+if (kind === "skip") {
+  console.error(`Skip deploy for ${id}: ${reason || "not deployable"}`);
+  process.exit(1);
+}
+
 const pkgPath = path.join(projectDir, "package.json");
 const hasPkg = fs.existsSync(pkgPath);
+const base = `${pagesBasePath}/${id}/`;
+const basePath = base.replace(/\/$/, "");
+
+if (kind === "static" || (!hasPkg && fs.existsSync(path.join(projectDir, "index.html")))) {
+  rmrf(outDir);
+  copyDir(projectDir, outDir);
+  console.log("Copied static project to", outDir);
+  process.exit(0);
+}
 
 if (!hasPkg) {
-  const indexHtml = path.join(projectDir, "index.html");
-  if (fs.existsSync(indexHtml)) {
-    rmrf(outDir);
-    copyDir(projectDir, outDir);
-    console.log("Copied static project to", outDir);
-    process.exit(0);
-  }
   console.error("No package.json or index.html in", projectDir);
   process.exit(1);
 }
 
-const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
-const base = `${pagesBasePath}/${id}/`;
-
-if (fs.existsSync(path.join(projectDir, "vite.config.ts")) || fs.existsSync(path.join(projectDir, "vite.config.js"))) {
-  try {
-    run("npm ci", projectDir);
-  } catch {
-    run("npm install", projectDir);
-  }
+if (kind === "vite") {
+  npmInstall(projectDir);
   try {
     run("npx tsc -b", projectDir);
   } catch {
@@ -111,6 +123,50 @@ if (fs.existsSync(path.join(projectDir, "vite.config.ts")) || fs.existsSync(path
   rmrf(outDir);
   copyDir(dist, outDir);
   console.log("Deployed Vite build to", outDir);
+  process.exit(0);
+}
+
+if (kind === "next") {
+  if (meta.deploySkip === "api-route" || id === "dynamic_deploy_test") {
+    console.error(
+      `Skip: ${id} uses API routes — refactor for static export or use Netlify (npm run netlify:deploy in project).`
+    );
+    process.exit(1);
+  }
+
+  const hasNextConfig =
+    fs.existsSync(path.join(projectDir, "next.config.ts")) ||
+    fs.existsSync(path.join(projectDir, "next.config.mjs")) ||
+    fs.existsSync(path.join(projectDir, "next.config.js"));
+
+  if (!hasNextConfig) {
+    console.error("next.config not found in", projectDir);
+    process.exit(1);
+  }
+
+  npmInstall(projectDir);
+  for (const cacheDir of [".next", "out"]) {
+    const p = path.join(projectDir, cacheDir);
+    if (fs.existsSync(p)) rmrf(p);
+  }
+  const deployEnv = {
+    CURSOR_PAGES_BASE: basePath,
+    NODE_ENV: "production",
+  };
+  try {
+    run("npm run build", projectDir, deployEnv);
+  } catch {
+    run("npx next build", projectDir, deployEnv);
+  }
+
+  const out = path.join(projectDir, "out");
+  if (!fs.existsSync(out)) {
+    console.error("out/ not found — set output: 'export' in next.config when CURSOR_PAGES_BASE is set");
+    process.exit(1);
+  }
+  rmrf(outDir);
+  copyDir(out, outDir);
+  console.log("Deployed Next static export to", outDir);
   process.exit(0);
 }
 

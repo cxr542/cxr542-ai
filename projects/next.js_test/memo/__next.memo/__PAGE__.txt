@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[45222,["/cxr542-ai/projects/next.js_test/_next/static/chunks/01xlw8hd842-c.js","/cxr542-ai/projects/next.js_test/_next/static/chunks/0xbcw5owglc7e.js","/cxr542-ai/projects/next.js_test/_next/static/chunks/0ka051yepewro.js","/cxr542-ai/projects/next.js_test/_next/static/chunks/091o6glmhmr83.js"],"MemoApp"]
+3:I[97367,["/cxr542-ai/projects/next.js_test/_next/static/chunks/01xlw8hd842-c.js","/cxr542-ai/projects/next.js_test/_next/static/chunks/0xbcw5owglc7e.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{}],[["$","script","script-0",{"src":"/cxr542-ai/projects/next.js_test/_next/static/chunks/091o6glmhmr83.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"7B7N3lKLsdafHRdbnFJoX"}
+5:null

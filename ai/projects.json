@@ -68,7 +68,7 @@
       "id": "markdown-editor",
       "title": "Markdown 에디터",
       "summary": "CodeMirror + Express — 프론트 위주 실습 (API는 로컬)",
-      "status": "learning",
+      "status": "demo",
       "tags": [
         "Dev",
         "Editor"
@@ -84,12 +84,17 @@
       "id": "next.js_test",
       "title": "Next.js · shadcn",
       "summary": "Next.js App Router + shadcn/ui 실습",
-      "status": "learning",
+      "status": "demo",
       "tags": [
         "Dev",
         "Next.js"
       ],
-      "links": []
+      "links": [
+        {
+          "label": "데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/next.js_test/"
+        }
+      ]
     },
     {
       "id": "react_test",

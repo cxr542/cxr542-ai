@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[22016,["/cxr542-ai/projects/next.js_test/_next/static/chunks/01xlw8hd842-c.js","/cxr542-ai/projects/next.js_test/_next/static/chunks/0xbcw5owglc7e.js","/cxr542-ai/projects/next.js_test/_next/static/chunks/0ka051yepewro.js"],""]
+3:I[97367,["/cxr542-ai/projects/next.js_test/_next/static/chunks/01xlw8hd842-c.js","/cxr542-ai/projects/next.js_test/_next/static/chunks/0xbcw5owglc7e.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","div",null,{"className":"mx-auto flex max-w-lg flex-1 flex-col items-center justify-center px-4 py-20 text-center","children":[["$","h1",null,{"className":"text-6xl font-bold text-red-600","children":"404"}],["$","h2",null,{"className":"mt-4 text-xl font-semibold text-zinc-900","children":"세트를 찾을 수 없습니다"}],["$","p",null,{"className":"mt-2 text-zinc-600","children":"요청하신 레고 세트가 존재하지 않거나 삭제되었습니다."}],["$","$L2",null,{"href":"/","className":"mt-8 rounded-xl bg-red-600 px-6 py-3 font-medium text-white transition hover:bg-red-700","children":"카탈로그로 돌아가기"}]]}],[["$","script","script-0",{"src":"/cxr542-ai/projects/next.js_test/_next/static/chunks/0ka051yepewro.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"7B7N3lKLsdafHRdbnFJoX"}
+5:null
