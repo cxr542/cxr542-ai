@@ -34,6 +34,7 @@
       <nav class="nav" id="site-nav" aria-label="주요 메뉴">
         <a href="#services">서비스</a>
         <a href="#projects">Cursor 실험</a>
+        <a href="#vibe-guide">바이브 코딩</a>
         <a href="#resources">자료</a>
         <a
           href="https://cxr542.github.io/"
@@ -91,6 +92,47 @@
           ></div>
           <div class="ai-grid" id="projects-grid" aria-live="polite"></div>
           <p class="updated-note" id="projects-updated-note" hidden></p>
+        </div>
+      </section>
+
+      <section class="section vibe-guide" id="vibe-guide" aria-labelledby="vibe-heading">
+        <div class="container">
+          <h2 id="vibe-heading" class="section-label">Zero-G 바이브 코딩</h2>
+          <p class="section-intro">
+            안티그래비티·Cursor 팀 워크플로 요약입니다. 팀장(Human)은 의도·검토·승인,
+            에이전트(AI)는 구현·밤샘 코딩. <code>plan.md</code>·RULE·SKILL·DESIGN·SUBAGENT 로
+            전역 정책을 물려 받고, 5단계 파이프라인 끝에서 배포(예:
+            <code>cloud-chatbot</code> 터널 공유)로 이어집니다.
+          </p>
+          <div class="vibe-guide__grid">
+            <figure class="vibe-guide__figure">
+              <img
+                src="assets/vibe/zero-g-overview.png"
+                alt="ZERO-G VIBE CODING GUIDE — 팀장과 에이전트 역할, RULE·SKILL·DESIGN·SUBAGENT, 5단계 파이프라인"
+                width="1200"
+                height="675"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>전체 가이드 — 의도(Intent) 중심, 5단계 파이프라인</figcaption>
+            </figure>
+            <figure class="vibe-guide__figure">
+              <img
+                src="assets/vibe/zero-g-steps.png"
+                alt="바이브 코딩 상세 가이드 — Step 0 전역 정책부터 Step 4 배포·QA까지"
+                width="1200"
+                height="675"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>단계별 실전 — plan.md, 업무 지시, 피드백, ZERO-G DEPLOYED</figcaption>
+            </figure>
+          </div>
+          <p class="vibe-guide__note">
+            이미지가 안 보이면
+            <code>assets/vibe/</code> 에 PNG 두 장을 넣은 뒤 push 하세요.
+            <a href="assets/vibe/README.md">폴더 안내</a>
+          </p>
         </div>
       </section>
 

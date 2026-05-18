@@ -54,23 +54,45 @@ function npmInstall(dir) {
 }
 
 if (id === "notes") {
-  const notesDir = path.resolve(hubRoot, "..", "notes");
-  rmrf(outDir);
-  fs.mkdirSync(outDir, { recursive: true });
-  if (fs.existsSync(notesDir)) {
-    for (const f of fs.readdirSync(notesDir)) {
-      if (f.endsWith(".md")) fs.copyFileSync(path.join(notesDir, f), path.join(outDir, f));
+  const externalNotesDir = path.resolve(hubRoot, "..", "notes");
+  const templateNotesDir = path.join(hubRoot, "projects", "notes");
+  const viewerAssets = ["viewer.html", "notes-viewer.js", "notes-viewer.css"];
+  const viewerBackup = {};
+  for (const f of viewerAssets) {
+    const p = path.join(templateNotesDir, f);
+    if (fs.existsSync(p)) viewerBackup[f] = fs.readFileSync(p);
+  }
+
+  function copyMarkdownFrom(dir) {
+    if (!fs.existsSync(dir)) return;
+    for (const f of fs.readdirSync(dir)) {
+      if (f.endsWith(".md")) {
+        fs.copyFileSync(path.join(dir, f), path.join(outDir, f));
+      }
     }
   }
+
+  rmrf(outDir);
+  fs.mkdirSync(outDir, { recursive: true });
+  copyMarkdownFrom(externalNotesDir);
+  copyMarkdownFrom(templateNotesDir);
+  for (const [f, content] of Object.entries(viewerBackup)) {
+    fs.writeFileSync(path.join(outDir, f), content);
+  }
+
+  const mdFiles = fs.readdirSync(outDir).filter((f) => f.endsWith(".md")).sort();
+  const listItems = mdFiles
+    .map((f) => {
+      const label = f.replace(/\.md$/i, "");
+      return `<li><a href="viewer.html#${encodeURIComponent(f)}">${label}</a><a class="source" href="${f}">.md</a></li>`;
+    })
+    .join("");
+
   fs.writeFileSync(
     path.join(outDir, "index.html"),
     `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>학습 메모</title><style>body{font-family:system-ui;background:#0a0a0a;color:#f5f5f5;padding:2rem}a{color:#e8a930}</style></head>
-<body><h1>학습 메모</h1><ul>${fs
-      .readdirSync(outDir)
-      .filter((f) => f.endsWith(".md"))
-      .map((f) => `<li><a href="${f}">${f}</a></li>`)
-      .join("")}</ul>
+<title>학습 메모</title><style>body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#f5f5f5;padding:2rem;line-height:1.5}a{color:#e8a930}ul{padding-left:1.25rem}li{margin:.5rem 0}.source{font-size:.8rem;opacity:.7;margin-left:.5rem}</style></head>
+<body><h1>학습 메모</h1><ul>${listItems}</ul>
 <p><a href="https://cxr542.github.io/cxr542-ai/">← AI 허브</a></p></body></html>`
   );
   console.log("Deployed notes to", outDir);

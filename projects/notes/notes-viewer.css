@@ -1,0 +1,125 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, "Segoe UI", sans-serif;
+  background: #0a0a0a;
+  color: #f5f5f5;
+  line-height: 1.6;
+}
+
+a {
+  color: #e8a930;
+}
+
+.viewer-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #262626;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.viewer-back,
+.viewer-hub {
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.viewer-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  flex: 1 1 auto;
+}
+
+.viewer-source {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.viewer-main {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.viewer-loading,
+.viewer-error {
+  color: #a3a3a3;
+}
+
+.viewer-error {
+  color: #f87171;
+}
+
+.note-content h1,
+.note-content h2,
+.note-content h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+.note-content h1 {
+  font-size: 1.75rem;
+}
+
+.note-content h2 {
+  font-size: 1.35rem;
+}
+
+.note-content p,
+.note-content ul,
+.note-content ol {
+  margin: 0.75em 0;
+}
+
+.note-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.9rem;
+}
+
+.note-content th,
+.note-content td {
+  border: 1px solid #333;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.note-content th {
+  background: #171717;
+}
+
+.note-content pre:not(.mermaid-source) {
+  overflow-x: auto;
+  padding: 1rem;
+  background: #171717;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.note-content code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.9em;
+}
+
+.note-content .mermaid,
+.note-content .mermaid svg {
+  display: block;
+  max-width: 100%;
+  margin: 1.5rem auto;
+}
+
+.note-content .mermaid {
+  min-height: 12rem;
+  overflow-x: auto;
+}

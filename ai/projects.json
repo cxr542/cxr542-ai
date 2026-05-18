@@ -134,7 +134,7 @@
       "links": [
         {
           "label": "문서",
-          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/apple-history-mindmap.md"
+          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history-mindmap.md"
         }
       ]
     },
@@ -150,7 +150,7 @@
       "links": [
         {
           "label": "문서",
-          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/apple-history.md"
+          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history.md"
         }
       ]
     },
@@ -166,7 +166,7 @@
       "links": [
         {
           "label": "문서",
-          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/mermaid-test.md"
+          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#mermaid-test.md"
         }
       ]
     },
@@ -182,7 +182,7 @@
       "links": [
         {
           "label": "문서",
-          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/pythagorean-proof.md"
+          "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#pythagorean-proof.md"
         }
       ]
     }

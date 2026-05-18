@@ -22,7 +22,8 @@ npm run deploy:all
 
 | 경로 | 설명 |
 |------|------|
-| `index.html` | 랜딩 |
+| `index.html` | 랜딩 (`#vibe-guide` — Zero-G 바이브 코딩 인포) |
+| `assets/vibe/` | 바이브 코딩 PNG (`zero-g-overview.png`, `zero-g-steps.png`) |
 | `ai/services.json` | AI 서비스 카드 |
 | `ai/projects.json` | cursorstudy 실험·메모 카드 |
 | `projects/<id>/` | Pages 데모 산출물 |

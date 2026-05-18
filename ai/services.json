@@ -4,6 +4,16 @@
   "categories": ["Agent", "LLM", "Education", "Dev"],
   "items": [
     {
+      "id": "zero-g-vibe",
+      "title": "Zero-G 바이브 코딩",
+      "summary": "안티그래비티 워크플로 — plan.md, 에이전트 협업, 5단계 파이프라인·배포",
+      "status": "demo",
+      "tags": ["Agent", "Education"],
+      "links": [
+        { "label": "가이드 보기", "url": "#vibe-guide" }
+      ]
+    },
+    {
       "id": "cursor",
       "title": "Cursor Agent",
       "summary": "Rules, Hooks, 에이전트 워크플로와 프로젝트 자동화 실험",
@@ -54,6 +64,7 @@
     }
   ],
   "resources": [
+    { "label": "Zero-G 바이브 코딩 (이 사이트)", "url": "#vibe-guide" },
     { "label": "Cursor Docs", "url": "https://cursor.com/docs" },
     { "label": "Hugging Face", "url": "https://huggingface.co/" },
     { "label": "Google AI Studio", "url": "https://aistudio.google.com/" }
