@@ -123,3 +123,19 @@ a {
   min-height: 12rem;
   overflow-x: auto;
 }
+
+.viewer-main--mindmap {
+  max-width: none;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.viewer-main--mindmap .note-content .mermaid {
+  overflow: auto;
+  max-width: none;
+}
+
+.viewer-main--mindmap .note-content .mermaid svg {
+  max-width: none;
+  margin: 1.5rem auto;
+}

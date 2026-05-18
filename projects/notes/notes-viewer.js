@@ -59,6 +59,7 @@ function initMermaid() {
       startOnLoad: false,
       theme: "dark",
       securityLevel: "loose",
+      mindmap: { useMaxWidth: false, padding: 12 },
     });
     mermaidReady = true;
   }
@@ -77,6 +78,10 @@ async function renderMermaid(container) {
   });
   const nodes = container.querySelectorAll(".mermaid");
   if (nodes.length > 0) {
+    const hasMindmap = [...nodes].some((n) => /^\s*mindmap\b/m.test(n.textContent));
+    if (hasMindmap) {
+      document.querySelector(".viewer-main")?.classList.add("viewer-main--mindmap");
+    }
     await mermaid.run({ nodes });
   }
 }
