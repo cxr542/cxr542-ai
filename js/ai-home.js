@@ -127,7 +127,10 @@
         return res.json();
       })
       .then(function (data) {
-        var items = data.items || [];
+        var exclude = config.excludeIds || [];
+        var items = (data.items || []).filter(function (item) {
+          return exclude.indexOf(item.id) === -1;
+        });
         renderFilters(data.categories || [], items);
         renderGrid(items);
 
@@ -163,11 +166,43 @@
       .join("");
   }
 
+  /** 상단 「주요 데모」에만 쓰는 대표 카드 ID — 아래 목록에서는 빼서 중복을 줄입니다. */
+  var FEATURED_ID = "cloud-chatbot";
+
+  function initFeatured(featuredId) {
+    var grid = document.getElementById("featured-grid");
+    if (!grid) return Promise.resolve();
+
+    return fetch("ai/services.json")
+      .then(function (res) {
+        if (!res.ok) throw new Error("Failed to load ai/services.json");
+        return res.json();
+      })
+      .then(function (data) {
+        var item = (data.items || []).find(function (i) {
+          return i.id === featuredId;
+        });
+        if (item) {
+          grid.innerHTML = renderCard(item);
+          return;
+        }
+        grid.innerHTML =
+          '<p class="ai-grid-empty">주요 데모 카드를 찾지 못했습니다.</p>';
+      })
+      .catch(function () {
+        grid.innerHTML =
+          '<p class="ai-grid-empty">주요 데모를 불러오지 못했습니다.</p>';
+      });
+  }
+
+  initFeatured(FEATURED_ID);
+
   initCatalog({
     dataUrl: "ai/services.json",
     gridId: "ai-grid",
     filtersId: "ai-filters",
     updatedNoteId: "updated-note",
+    excludeIds: [FEATURED_ID],
     errorMessage: "서비스 목록을 불러오지 못했습니다. ai/services.json을 확인하세요.",
   }).then(function (data) {
     if (data) renderResources(data.resources);
@@ -178,6 +213,7 @@
     gridId: "projects-grid",
     filtersId: "projects-filters",
     updatedNoteId: "projects-updated-note",
+    excludeIds: [FEATURED_ID],
     errorMessage:
       "프로젝트 목록을 불러오지 못했습니다. npm run sync:projects 후 ai/projects.json을 확인하세요.",
   });
