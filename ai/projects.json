@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-17",
+  "updated": "2026-05-22",
   "categories": [
     "Deploy",
     "Dev",
@@ -11,6 +11,27 @@
     "React"
   ],
   "items": [
+    {
+      "id": "ppt-academizer",
+      "title": "PPT 아카데미화",
+      "summary": "pptx 업로드 → 덱 분석 → 아카데미 템플릿·레이아웃 자동 변환",
+      "status": "demo",
+      "tags": ["Education", "Dev", "Deploy"],
+      "links": [
+        {
+          "label": "데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/ppt-academizer/"
+        },
+        {
+          "label": "Netlify",
+          "url": "https://ppt-academizer.netlify.app/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/ppt-academizer"
+        }
+      ]
+    },
     {
       "id": "cxr542",
       "title": "프로필 · 경력 사이트",

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-17",
+  "updated": "2026-05-22",
   "profileUrl": "https://cxr542.github.io/",
   "categories": ["Agent", "LLM", "Education", "Dev"],
   "items": [
@@ -52,6 +52,18 @@
       "links": [
         { "label": "사이트", "url": "https://cxr542.github.io/" },
         { "label": "Repo", "url": "https://github.com/cxr542/cxr542.github.io" }
+      ]
+    },
+    {
+      "id": "ppt-academizer",
+      "title": "PPT 아카데미화",
+      "summary": "일반·AI pptx → OKESTRO 아카데미 강의안 변환 (규칙·구조 분석, LLM 생성 없음)",
+      "status": "demo",
+      "tags": ["Education", "Dev", "Agent"],
+      "links": [
+        { "label": "데모 (Netlify)", "url": "https://ppt-academizer.netlify.app/" },
+        { "label": "허브 데모", "url": "https://cxr542.github.io/cxr542-ai/projects/ppt-academizer/" },
+        { "label": "Repo", "url": "https://github.com/cxr542/ppt-academizer" }
       ]
     },
     {

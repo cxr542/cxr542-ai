@@ -15,6 +15,7 @@ npm run check:deploy     # 배포 상태 표 (로컬 + GitHub Pages)
 npm run preview          # http://localhost:8080
 npm run deploy:experiments
 npm run deploy:notes
+npm run deploy:ppt-academizer   # apps/ppt-academizer/web → projects/ppt-academizer/
 npm run deploy:all
 ```
 
