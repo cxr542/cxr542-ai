@@ -12,6 +12,31 @@
   ],
   "items": [
     {
+      "id": "cloud-chatbot",
+      "title": "Cloud Learning Chatbot",
+      "summary": "RAG·퀴즈·요약·관리자 대시보드 — FastAPI + Gemini (Render Docker)",
+      "status": "demo",
+      "tags": ["Education", "Python", "Deploy", "Dev"],
+      "links": [
+        {
+          "label": "게이트웨이",
+          "url": "https://cloud-chatbot-963d.onrender.com/home"
+        },
+        {
+          "label": "교육생",
+          "url": "https://cloud-chatbot-963d.onrender.com/"
+        },
+        {
+          "label": "관리자",
+          "url": "https://cloud-chatbot-963d.onrender.com/admin/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/cloud-chatbot"
+        }
+      ]
+    },
+    {
       "id": "ppt-academizer",
       "title": "PPT 아카데미화",
       "summary": "pptx 업로드 → 덱 분석 → 아카데미 템플릿·레이아웃 자동 변환",

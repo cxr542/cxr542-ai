@@ -55,6 +55,19 @@
       ]
     },
     {
+      "id": "cloud-chatbot",
+      "title": "Cloud Learning Chatbot",
+      "summary": "클라우드 학습 RAG 챗봇·퀴즈·관리자 프롬프트·지식 베이스 (Render)",
+      "status": "demo",
+      "tags": ["Education", "LLM", "Dev"],
+      "links": [
+        { "label": "게이트웨이", "url": "https://cloud-chatbot-963d.onrender.com/home" },
+        { "label": "교육생", "url": "https://cloud-chatbot-963d.onrender.com/" },
+        { "label": "관리자", "url": "https://cloud-chatbot-963d.onrender.com/admin/" },
+        { "label": "Repo", "url": "https://github.com/cxr542/cloud-chatbot" }
+      ]
+    },
+    {
       "id": "ppt-academizer",
       "title": "PPT 아카데미화",
       "summary": "일반·AI pptx → OKESTRO 아카데미 강의안 변환 (규칙·구조 분석, LLM 생성 없음)",
@@ -76,6 +89,7 @@
     }
   ],
   "resources": [
+    { "label": "Cloud Chatbot (Render)", "url": "https://cloud-chatbot-963d.onrender.com/home" },
     { "label": "Zero-G 바이브 코딩 (이 사이트)", "url": "#vibe-guide" },
     { "label": "Cursor Docs", "url": "https://cursor.com/docs" },
     { "label": "Hugging Face", "url": "https://huggingface.co/" },
