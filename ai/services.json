@@ -4,6 +4,19 @@
   "categories": ["Agent", "LLM", "Education", "Dev"],
   "items": [
     {
+      "id": "cloud-chatbot",
+      "title": "Cloud Learning Chatbot",
+      "summary": "클라우드 학습 RAG 챗봇·퀴즈·관리자 프롬프트·지식 베이스 (Render)",
+      "status": "demo",
+      "tags": ["Education", "LLM", "Dev"],
+      "links": [
+        { "label": "게이트웨이", "url": "https://cloud-chatbot-963d.onrender.com/home" },
+        { "label": "교육생", "url": "https://cloud-chatbot-963d.onrender.com/" },
+        { "label": "관리자", "url": "https://cloud-chatbot-963d.onrender.com/admin/" },
+        { "label": "Repo", "url": "https://github.com/cxr542/cloud-chatbot" }
+      ]
+    },
+    {
       "id": "zero-g-vibe",
       "title": "Zero-G 바이브 코딩",
       "summary": "안티그래비티 워크플로 — plan.md, 에이전트 협업, 5단계 파이프라인·배포",
@@ -52,19 +65,6 @@
       "links": [
         { "label": "사이트", "url": "https://cxr542.github.io/" },
         { "label": "Repo", "url": "https://github.com/cxr542/cxr542.github.io" }
-      ]
-    },
-    {
-      "id": "cloud-chatbot",
-      "title": "Cloud Learning Chatbot",
-      "summary": "클라우드 학습 RAG 챗봇·퀴즈·관리자 프롬프트·지식 베이스 (Render)",
-      "status": "demo",
-      "tags": ["Education", "LLM", "Dev"],
-      "links": [
-        { "label": "게이트웨이", "url": "https://cloud-chatbot-963d.onrender.com/home" },
-        { "label": "교육생", "url": "https://cloud-chatbot-963d.onrender.com/" },
-        { "label": "관리자", "url": "https://cloud-chatbot-963d.onrender.com/admin/" },
-        { "label": "Repo", "url": "https://github.com/cxr542/cloud-chatbot" }
       ]
     },
     {

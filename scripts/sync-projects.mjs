@@ -14,6 +14,9 @@ const experimentsDir = path.resolve(hubRoot, "..", "experiments");
 const outPath = path.join(hubRoot, "ai", "projects.json");
 const projectsDir = path.join(hubRoot, "projects");
 
+/** experiments/ 밖에서 수동 관리하는 카드 — CI sync 후에도 유지합니다. */
+const PINNED_PROJECT_IDS = ["cloud-chatbot", "ppt-academizer"];
+
 function titleFromId(id) {
   return id.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
@@ -126,7 +129,11 @@ function main() {
       });
   }
 
-  const allItems = [profileCard, ...items, ...notesItems];
+  const pinned = PINNED_PROJECT_IDS.map((id) => byId.get(id)).filter(Boolean);
+  const pinnedSet = new Set(PINNED_PROJECT_IDS);
+  const experimentItems = items.filter((i) => !pinnedSet.has(i.id));
+
+  const allItems = [profileCard, ...pinned, ...experimentItems, ...notesItems];
   const tagSet = new Set();
   allItems.forEach((i) => (i.tags || []).forEach((t) => tagSet.add(t)));
 
