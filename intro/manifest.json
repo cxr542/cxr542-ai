@@ -9,6 +9,15 @@
       { "label": "Repo", "href": "https://github.com/cxr542/cloud-chatbot" }
     ]
   },
+  "vision-font": {
+    "title": "Vision Font",
+    "lead": "시력 테스트로 맞춘 폰트로 웹 기사를 읽는 Expo 앱. WebView CSS injection, 웹·Expo Go MVP.",
+    "links": [
+      { "label": "허브 데모", "href": "https://cxr542.github.io/cxr542-ai/projects/vision-font/" },
+      { "label": "소개", "href": "https://cxr542.github.io/cxr542-ai/intro/vision-font.html" },
+      { "label": "Repo", "href": "https://github.com/cxr542/vision-font" }
+    ]
+  },
   "today-shoes": {
     "title": "오늘뭐신지",
     "lead": "러닝화 사진 신발장 — 정면·왼쪽·오른쪽 3장을 Gemini로 분석해 브랜드·특징·추천 용도를 저장합니다. Expo SDK 54 웹 데모(GitHub Pages).",

@@ -16,7 +16,7 @@ const outPath = path.join(hubRoot, "ai", "projects.json");
 const projectsDir = path.join(hubRoot, "projects");
 
 /** experiments/ 밖에서 수동 관리하는 카드 — CI sync 후에도 유지합니다. */
-const PINNED_PROJECT_IDS = ["cloud-chatbot", "ppt-academizer", "gemini-tuner"];
+const PINNED_PROJECT_IDS = ["cloud-chatbot", "vision-font", "ppt-academizer", "gemini-tuner"];
 
 function titleFromId(id) {
   return id.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());

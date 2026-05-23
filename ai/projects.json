@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-23",
+  "updated": "2026-05-24",
   "categories": [
     "Deploy",
     "Dev",
@@ -69,6 +69,32 @@
         {
           "label": "Repo",
           "url": "https://github.com/cxr542/cloud-chatbot"
+        }
+      ]
+    },
+    {
+      "id": "vision-font",
+      "title": "Vision Font",
+      "summary": "시력 테스트 → 맞춤 폰트·줄간격 → 웹 기사 읽기. Expo + WebView CSS (웹·Expo Go)",
+      "status": "demo",
+      "tags": [
+        "React",
+        "Education",
+        "Dev",
+        "LLM"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/vision-font.html"
+        },
+        {
+          "label": "허브 데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/vision-font/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/vision-font"
         }
       ]
     },

@@ -1,11 +1,12 @@
 {
-  "updated": "2026-05-23",
+  "updated": "2026-05-24",
   "profileUrl": "https://cxr542.github.io/",
   "categories": [
     "Agent",
     "LLM",
     "Education",
-    "Dev"
+    "Dev",
+    "React"
   ],
   "items": [
     {
@@ -38,6 +39,31 @@
         {
           "label": "Repo",
           "url": "https://github.com/cxr542/cloud-chatbot"
+        }
+      ]
+    },
+    {
+      "id": "vision-font",
+      "title": "Vision Font",
+      "summary": "시력 맞춤 웹 기사 리더 — 5단계 테스트, CSS 주입, Expo 웹·모바일 MVP",
+      "status": "demo",
+      "tags": [
+        "React",
+        "Education",
+        "Dev"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/vision-font.html"
+        },
+        {
+          "label": "허브 데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/vision-font/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/vision-font"
         }
       ]
     },
@@ -246,6 +272,10 @@
     {
       "label": "Cloud Chatbot (Render)",
       "url": "https://cloud-chatbot-963d.onrender.com/home"
+    },
+    {
+      "label": "Vision Font (Repo)",
+      "url": "https://github.com/cxr542/vision-font"
     },
     {
       "label": "Zero-G 바이브 코딩 (이 사이트)",

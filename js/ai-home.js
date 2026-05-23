@@ -170,7 +170,7 @@
   }
 
   /** 상단 「주요 데모」 대표 카드 — 아래 목록에서는 빼서 중복을 줄입니다. */
-  var FEATURED_IDS = ["cloud-chatbot", "gemini-tuner", "today-shoes"];
+  var FEATURED_IDS = ["cloud-chatbot", "vision-font", "gemini-tuner", "today-shoes"];
 
   function initFeatured(featuredIds) {
     var grid = document.getElementById("featured-grid");
