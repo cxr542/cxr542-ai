@@ -121,11 +121,7 @@
       });
     }
 
-    return fetch(config.dataUrl)
-      .then(function (res) {
-        if (!res.ok) throw new Error("Failed to load " + config.dataUrl);
-        return res.json();
-      })
+    return fetchJson(config.dataUrl)
       .then(function (data) {
         var exclude = config.excludeIds || [];
         var items = (data.items || []).filter(function (item) {
@@ -150,6 +146,13 @@
       });
   }
 
+  function fetchJson(url) {
+    return fetch(url, { cache: "no-cache" }).then(function (res) {
+      if (!res.ok) throw new Error("Failed to load " + url);
+      return res.json();
+    });
+  }
+
   function renderResources(resources) {
     var resourceList = document.getElementById("resource-list");
     if (!resourceList) return;
@@ -166,24 +169,24 @@
       .join("");
   }
 
-  /** 상단 「주요 데모」에만 쓰는 대표 카드 ID — 아래 목록에서는 빼서 중복을 줄입니다. */
-  var FEATURED_ID = "cloud-chatbot";
+  /** 상단 「주요 데모」 대표 카드 — 아래 목록에서는 빼서 중복을 줄입니다. */
+  var FEATURED_IDS = ["cloud-chatbot", "gemini-tuner"];
 
-  function initFeatured(featuredId) {
+  function initFeatured(featuredIds) {
     var grid = document.getElementById("featured-grid");
     if (!grid) return Promise.resolve();
 
-    return fetch("ai/services.json")
-      .then(function (res) {
-        if (!res.ok) throw new Error("Failed to load ai/services.json");
-        return res.json();
-      })
+    return fetchJson("ai/services.json")
       .then(function (data) {
-        var item = (data.items || []).find(function (i) {
-          return i.id === featuredId;
-        });
-        if (item) {
-          grid.innerHTML = renderCard(item);
+        var items = featuredIds
+          .map(function (id) {
+            return (data.items || []).find(function (i) {
+              return i.id === id;
+            });
+          })
+          .filter(Boolean);
+        if (items.length) {
+          grid.innerHTML = items.map(renderCard).join("");
           return;
         }
         grid.innerHTML =
@@ -195,14 +198,14 @@
       });
   }
 
-  initFeatured(FEATURED_ID);
+  initFeatured(FEATURED_IDS);
 
   initCatalog({
     dataUrl: "ai/services.json",
     gridId: "ai-grid",
     filtersId: "ai-filters",
     updatedNoteId: "updated-note",
-    excludeIds: [FEATURED_ID],
+    excludeIds: FEATURED_IDS,
     errorMessage: "서비스 목록을 불러오지 못했습니다. ai/services.json을 확인하세요.",
   }).then(function (data) {
     if (data) renderResources(data.resources);
@@ -213,7 +216,7 @@
     gridId: "projects-grid",
     filtersId: "projects-filters",
     updatedNoteId: "projects-updated-note",
-    excludeIds: [FEATURED_ID],
+    excludeIds: FEATURED_IDS,
     errorMessage:
       "프로젝트 목록을 불러오지 못했습니다. npm run sync:projects 후 ai/projects.json을 확인하세요.",
   });
