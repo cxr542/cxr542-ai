@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "AI learning hub — catalog and experiment demos",
   "scripts": {
+    "build:intros": "node scripts/build-intros.mjs",
     "sync:projects": "node scripts/sync-projects.mjs",
     "check:deploy": "node scripts/check-deploy.mjs",
     "check:deploy:local": "node scripts/check-deploy.mjs --local-only",

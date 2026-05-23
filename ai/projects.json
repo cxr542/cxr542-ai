@@ -16,8 +16,17 @@
       "title": "Cloud Learning Chatbot",
       "summary": "RAG·퀴즈·요약·관리자 대시보드 — FastAPI + Gemini (Render Docker)",
       "status": "demo",
-      "tags": ["Education", "Python", "Deploy", "Dev"],
+      "tags": [
+        "Education",
+        "Python",
+        "Deploy",
+        "Dev"
+      ],
       "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/cloud-chatbot.html"
+        },
         {
           "label": "게이트웨이",
           "url": "https://cloud-chatbot-963d.onrender.com/home"
@@ -41,8 +50,16 @@
       "title": "PPT 아카데미화",
       "summary": "pptx 업로드 → 덱 분석 → 아카데미 템플릿·레이아웃 자동 변환",
       "status": "demo",
-      "tags": ["Education", "Dev", "Deploy"],
+      "tags": [
+        "Education",
+        "Dev",
+        "Deploy"
+      ],
       "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/ppt-academizer.html"
+        },
         {
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/ppt-academizer/"
@@ -62,7 +79,11 @@
       "title": "GeminiTuner",
       "summary": "Chrome MV3 — gemini.google.com 토큰·비용 패널, 로컬 저장, API·AI Studio 청구 동기화 (v1.0.7)",
       "status": "demo",
-      "tags": ["Dev", "LLM", "Deploy"],
+      "tags": [
+        "Dev",
+        "LLM",
+        "Deploy"
+      ],
       "links": [
         {
           "label": "소개",
@@ -93,6 +114,10 @@
       ],
       "links": [
         {
+          "label": "소개",
+          "url": "https://cxr542.github.io/"
+        },
+        {
           "label": "사이트",
           "url": "https://cxr542.github.io/"
         },
@@ -111,7 +136,12 @@
         "Python",
         "Dev"
       ],
-      "links": []
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/Crawlingtest.html"
+        }
+      ]
     },
     {
       "id": "deploy_test",
@@ -122,7 +152,12 @@
         "Dev",
         "Deploy"
       ],
-      "links": []
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/deploy_test.html"
+        }
+      ]
     },
     {
       "id": "dynamic_deploy_test",
@@ -133,7 +168,12 @@
         "Dev",
         "Deploy"
       ],
-      "links": []
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/dynamic_deploy_test.html"
+        }
+      ]
     },
     {
       "id": "markdown-editor",
@@ -145,6 +185,10 @@
         "Editor"
       ],
       "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/markdown-editor.html"
+        },
         {
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/markdown-editor/"
@@ -162,6 +206,10 @@
       ],
       "links": [
         {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/next.js_test.html"
+        },
+        {
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/next.js_test/"
         }
@@ -178,6 +226,10 @@
       ],
       "links": [
         {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/react_test.html"
+        },
+        {
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/react_test/"
         }
@@ -191,7 +243,12 @@
       "tags": [
         "Dev"
       ],
-      "links": []
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/webtest.html"
+        }
+      ]
     },
     {
       "id": "note-apple-history-mindmap",
@@ -203,6 +260,10 @@
         "Education"
       ],
       "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/note-apple-history-mindmap.html"
+        },
         {
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history-mindmap.md"
@@ -220,6 +281,10 @@
       ],
       "links": [
         {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/note-apple-history.html"
+        },
+        {
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history.md"
         }
@@ -236,6 +301,10 @@
       ],
       "links": [
         {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/note-mermaid-test.html"
+        },
+        {
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#mermaid-test.md"
         }
@@ -251,6 +320,10 @@
         "Education"
       ],
       "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/note-pythagorean-proof.html"
+        },
         {
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#pythagorean-proof.md"
