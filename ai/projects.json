@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-22",
+  "updated": "2026-05-23",
   "categories": [
     "Deploy",
     "Dev",
@@ -54,6 +54,31 @@
         {
           "label": "Repo",
           "url": "https://github.com/cxr542/ppt-academizer"
+        }
+      ]
+    },
+    {
+      "id": "gemini-tuner",
+      "title": "GeminiTuner",
+      "summary": "Chrome MV3 — gemini.google.com 토큰·비용 패널, 로컬 저장, API·AI Studio 청구 동기화 (v1.0.7)",
+      "status": "demo",
+      "tags": ["Dev", "LLM", "Deploy"],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/GeminiTuner/"
+        },
+        {
+          "label": "허브 데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/gemini-tuner/"
+        },
+        {
+          "label": "Privacy",
+          "url": "https://cxr542.github.io/GeminiTuner/privacy.html"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/GeminiTuner"
         }
       ]
     },
