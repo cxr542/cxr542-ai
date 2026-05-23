@@ -5,12 +5,39 @@
     "Dev",
     "Editor",
     "Education",
+    "LLM",
     "Next.js",
     "Notes",
     "Python",
     "React"
   ],
   "items": [
+    {
+      "id": "today-shoes",
+      "title": "오늘뭐신지",
+      "summary": "러닝화 3각 사진 → Gemini 이름·특징·용도 분석 → 신발장 (Expo · Pages)",
+      "status": "demo",
+      "tags": [
+        "React",
+        "LLM",
+        "Deploy",
+        "Dev"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/today-shoes.html"
+        },
+        {
+          "label": "앱",
+          "url": "https://cxr542.github.io/today-shoes/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/today-shoes"
+        }
+      ]
+    },
     {
       "id": "cloud-chatbot",
       "title": "Cloud Learning Chatbot",

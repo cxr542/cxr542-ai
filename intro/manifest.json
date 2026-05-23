@@ -9,6 +9,14 @@
       { "label": "Repo", "href": "https://github.com/cxr542/cloud-chatbot" }
     ]
   },
+  "today-shoes": {
+    "title": "오늘뭐신지",
+    "lead": "러닝화 사진 신발장 — 정면·왼쪽·오른쪽 3장을 Gemini로 분석해 브랜드·특징·추천 용도를 저장합니다. Expo SDK 54 웹 데모(GitHub Pages).",
+    "links": [
+      { "label": "앱 실행", "href": "https://cxr542.github.io/today-shoes/" },
+      { "label": "Repo", "href": "https://github.com/cxr542/today-shoes" }
+    ]
+  },
   "gemini-tuner": {
     "title": "GeminiTuner",
     "lead": "gemini.google.com에서 토큰·예상 비용을 보는 Chrome FinOps 확장. USD/KRW, 월 예산, AI Studio 지출 동기화.",

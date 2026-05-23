@@ -42,6 +42,31 @@
       ]
     },
     {
+      "id": "today-shoes",
+      "title": "오늘뭐신지",
+      "summary": "러닝화 3장(정면·좌·우) → Gemini 분석 → 신발장. Expo 웹 · GitHub Pages",
+      "status": "demo",
+      "tags": [
+        "LLM",
+        "Dev",
+        "Agent"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/today-shoes.html"
+        },
+        {
+          "label": "앱",
+          "url": "https://cxr542.github.io/today-shoes/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/today-shoes"
+        }
+      ]
+    },
+    {
       "id": "gemini-tuner",
       "title": "GeminiTuner",
       "summary": "gemini.google.com 토큰·예상 비용 FinOps — Chrome 확장, USD/KRW·월 예산·AI Studio 동기화",
@@ -210,6 +235,10 @@
     }
   ],
   "resources": [
+    {
+      "label": "오늘뭐신지 (러닝화 신발장)",
+      "url": "https://cxr542.github.io/today-shoes/"
+    },
     {
       "label": "GeminiTuner (Chrome)",
       "url": "https://cxr542.github.io/GeminiTuner/"
