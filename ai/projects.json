@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-24",
+  "updated": "2026-05-25",
   "categories": [
     "Deploy",
     "Dev",
@@ -9,9 +9,35 @@
     "Next.js",
     "Notes",
     "Python",
-    "React"
+    "React",
+    "Wiki"
   ],
   "items": [
+    {
+      "id": "ai-synapse-wiki",
+      "title": "AI-Synapse Wiki",
+      "summary": "주제 중심 AI 지식 Wiki + 관리자 관측 대시보드",
+      "status": "demo",
+      "tags": [
+        "Wiki",
+        "LLM",
+        "Dev"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/ai-synapse-wiki.html"
+        },
+        {
+          "label": "Wiki",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/AI-Synapse-Wiki"
+        }
+      ]
+    },
     {
       "id": "today-shoes",
       "title": "오늘뭐신지",

@@ -1,14 +1,41 @@
 {
-  "updated": "2026-05-24",
+  "updated": "2026-05-25",
   "profileUrl": "https://cxr542.github.io/",
   "categories": [
     "Agent",
     "LLM",
     "Education",
     "Dev",
-    "React"
+    "React",
+    "Wiki"
   ],
   "items": [
+    {
+      "id": "ai-synapse-wiki",
+      "title": "AI-Synapse Wiki",
+      "summary": "한글 AI 지식 Wiki — 주제·Synapse·관리 대시보드 (Antigravity, Gemini, ChatGPT, Harness 등)",
+      "status": "demo",
+      "tags": [
+        "Wiki",
+        "LLM",
+        "Dev",
+        "Agent"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/ai-synapse-wiki.html"
+        },
+        {
+          "label": "Wiki",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/AI-Synapse-Wiki"
+        }
+      ]
+    },
     {
       "id": "cloud-chatbot",
       "title": "Cloud Learning Chatbot",
@@ -261,6 +288,10 @@
     }
   ],
   "resources": [
+    {
+      "label": "AI-Synapse Wiki",
+      "url": "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/"
+    },
     {
       "label": "오늘뭐신지 (러닝화 신발장)",
       "url": "https://cxr542.github.io/today-shoes/"

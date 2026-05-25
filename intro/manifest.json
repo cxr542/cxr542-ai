@@ -1,4 +1,12 @@
 {
+  "ai-synapse-wiki": {
+    "title": "AI-Synapse Wiki",
+    "lead": "한글 AI 지식 Wiki — topics·hubs·stories·Synapse 연결과 관리자 관측 대시보드. Antigravity, Gemini, ChatGPT, Harness Engineering 등 주제를 정리합니다.",
+    "links": [
+      { "label": "Wiki 열기", "href": "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/" },
+      { "label": "Repo", "href": "https://github.com/cxr542/AI-Synapse-Wiki" }
+    ]
+  },
   "cloud-chatbot": {
     "title": "Cloud Learning Chatbot",
     "lead": "클라우드 학습용 RAG 챗봇·퀴즈·요약·관리자 프롬프트·지식 베이스. FastAPI + Gemini, Render Docker로 운영합니다.",
