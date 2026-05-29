@@ -316,6 +316,10 @@
       ],
       "links": [
         {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/edu-team-tms.html"
+        },
+        {
           "label": "조회",
           "url": "https://okestro-edu-team-tms.vercel.app/"
         },

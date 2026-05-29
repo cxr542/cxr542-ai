@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "updated": "2026-05-26",
+  "comment": "허브 소개 편집 후보낸 overrides. npm run build:intros && npm run build:catalog",
+  "overrides": {}
+}

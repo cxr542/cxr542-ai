@@ -81,6 +81,23 @@ export function loadManifest() {
   return JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 }
 
+export function loadIntroOverrides() {
+  const overridesPath = path.join(hubRoot, "ai", "intro-overrides.json");
+  if (!fs.existsSync(overridesPath)) return {};
+  const raw = JSON.parse(fs.readFileSync(overridesPath, "utf8"));
+  return raw.overrides && typeof raw.overrides === "object" ? raw.overrides : {};
+}
+
+export function loadMergedManifest() {
+  const manifest = loadManifest();
+  const overrides = loadIntroOverrides();
+  const merged = { ...manifest };
+  Object.entries(overrides).forEach(([id, entry]) => {
+    merged[id] = { ...(merged[id] || {}), ...entry };
+  });
+  return merged;
+}
+
 export function ensureIntroLink(links, id, manifest) {
   const entry = manifest[id];
   const introUrl = entry ? getIntroUrl(id, entry) : `${introPagesBase}/${id}.html`;
@@ -119,7 +136,7 @@ function patchCatalog(relPath, manifest) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const manifest = loadManifest();
+  const manifest = loadMergedManifest();
   main();
   patchCatalog("ai/services.json", manifest);
   patchCatalog("ai/projects.json", manifest);

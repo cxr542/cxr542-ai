@@ -14,6 +14,8 @@ const outPath = path.join(hubRoot, "ai", "catalog.json");
 const overridesPath = path.join(hubRoot, "ai", "category-overrides.json");
 const navLabelsPath = path.join(hubRoot, "ai", "nav-labels.json");
 const visibilityPath = path.join(hubRoot, "ai", "hub-visibility.json");
+const introManifestPath = path.join(hubRoot, "intro", "manifest.json");
+const introOverridesPath = path.join(hubRoot, "ai", "intro-overrides.json");
 
 const CATEGORY_BY_ID = {
   "today-shoes": "hobby",
@@ -106,6 +108,27 @@ function loadHubVisibility() {
   };
 }
 
+function loadMergedIntroManifest() {
+  const manifest = loadJson(introManifestPath) || {};
+  const raw = loadJson(introOverridesPath);
+  const overrides =
+    raw && raw.overrides && typeof raw.overrides === "object" ? raw.overrides : {};
+  const merged = { ...manifest };
+  Object.entries(overrides).forEach(([id, entry]) => {
+    merged[id] = { ...(merged[id] || {}), ...entry };
+  });
+  return { merged, overrides };
+}
+
+function introPageFromEntry(item, entry) {
+  if (!entry) return undefined;
+  return {
+    title: entry.title || item.title,
+    lead: entry.lead || item.summary || "",
+    links: Array.isArray(entry.links) ? entry.links : [],
+  };
+}
+
 function deriveLinkFields(item) {
   const links = item.links || [];
   const intro = links.find((l) => l.label === "소개");
@@ -141,6 +164,8 @@ function main() {
   const fileOverrides = loadCategoryOverrides();
   const navLabels = loadNavLabels();
   const hubVisibility = loadHubVisibility();
+  const { merged: introManifest, overrides: introOverrides } =
+    loadMergedIntroManifest();
   const services = loadJson(servicesPath) || { items: [], resources: [] };
   const projects = loadJson(projectsPath) || { items: [] };
   const byId = new Map();
@@ -165,9 +190,11 @@ function main() {
       const category = fileOverrides[item.id] || categoryBase;
       const { localFolder, deployable, deploySkip, ...rest } = item;
       const withCat = { ...rest, category, categoryBase };
+      const introPage = introPageFromEntry(withCat, introManifest[item.id]);
       return {
         ...withCat,
         ...deriveLinkFields(withCat),
+        introPage,
         sectionHidden: EXCLUDE_FROM_SECTIONS.has(item.id) || undefined,
       };
     })
@@ -204,6 +231,7 @@ function main() {
     ],
     navLabels: { ...defaultNav, ...navLabels },
     categoryOverrides: fileOverrides,
+    introOverrides,
     hubVisibility,
     items,
     resources: services.resources || [],

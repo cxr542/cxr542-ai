@@ -5,6 +5,7 @@
   var CATEGORY_OVERRIDES_KEY = "cxr542-hub-category-overrides";
   var CATEGORY_EDIT_KEY = "cxr542-hub-category-edit";
   var VISIBILITY_KEY = "cxr542-hub-visibility";
+  var INTRO_OVERRIDES_KEY = "cxr542-hub-intro-overrides";
 
   var statusLabels = {
     learning: "학습 중",
@@ -34,6 +35,8 @@
     hiddenNavIds: [],
     fileHiddenItemIds: [],
     fileHiddenNavIds: [],
+    introDefaults: {},
+    localIntroOverrides: {},
     route: { view: "work", itemId: "", panel: "intro" },
     searchQuery: "",
     profileUrl: "https://cxr542.github.io/",
@@ -551,6 +554,254 @@
     return '<div class="hub-launch-list">' + cards.join("") + "</div>";
   }
 
+  function cloneIntro(intro) {
+    return {
+      title: intro.title,
+      lead: intro.lead,
+      links: (intro.links || []).map(function (l) {
+        return { label: l.label, href: l.href };
+      }),
+    };
+  }
+
+  function introSnapshot(intro) {
+    return JSON.stringify({
+      title: intro.title,
+      lead: intro.lead,
+      links: intro.links || [],
+    });
+  }
+
+  function defaultIntroLinksFromItem(item) {
+    var links = [];
+    if (item.repoUrl) {
+      links.push({ label: "Repo", href: item.repoUrl });
+    }
+    (item.appUrls || []).forEach(function (l) {
+      if (l && l.url) links.push({ label: l.label || l.url, href: l.url });
+    });
+    return links;
+  }
+
+  function getIntroBase(item) {
+    var base = state.introDefaults[item.id];
+    if (base) return cloneIntro(base);
+    return {
+      title: item.title,
+      lead: item.summary || "",
+      links: defaultIntroLinksFromItem(item),
+    };
+  }
+
+  function getEffectiveIntro(item) {
+    var base = getIntroBase(item);
+    var local = state.localIntroOverrides[item.id];
+    if (!local) return base;
+    return {
+      title: local.title !== undefined ? local.title : base.title,
+      lead: local.lead !== undefined ? local.lead : base.lead,
+      links: local.links !== undefined ? local.links : base.links,
+    };
+  }
+
+  function saveIntroOverride(id, intro) {
+    var item = state.catalogItems.find(function (i) {
+      return i.id === id;
+    });
+    if (!item) return;
+    var normalized = cloneIntro(intro);
+    if (introSnapshot(normalized) === introSnapshot(getIntroBase(item))) {
+      delete state.localIntroOverrides[id];
+    } else {
+      state.localIntroOverrides[id] = normalized;
+    }
+    localStorage.setItem(
+      INTRO_OVERRIDES_KEY,
+      JSON.stringify(state.localIntroOverrides)
+    );
+  }
+
+  function resetIntroOverride(id) {
+    delete state.localIntroOverrides[id];
+    localStorage.setItem(
+      INTRO_OVERRIDES_KEY,
+      JSON.stringify(state.localIntroOverrides)
+    );
+  }
+
+  function renderIntroPreviewHtml(intro) {
+    var links = intro.links || [];
+    var list =
+      links.length > 0
+        ? "<ul>" +
+          links
+            .map(function (l) {
+              return (
+                "<li><a href=\"" +
+                escapeHtml(l.href) +
+                '" target="_blank" rel="noopener noreferrer">' +
+                escapeHtml(l.label) +
+                "</a></li>"
+              );
+            })
+            .join("") +
+          "</ul>"
+        : '<p class="hub-summary">등록된 링크가 없습니다.</p>';
+
+    var btnRow = links
+      .slice(0, 2)
+      .map(function (l, i) {
+        return (
+          '<a class="btn' +
+          (i ? " btn--ghost" : "") +
+          '" href="' +
+          escapeHtml(l.href) +
+          '" target="_blank" rel="noopener noreferrer">' +
+          escapeHtml(l.label) +
+          "</a>"
+        );
+      })
+      .join("");
+
+    return (
+      '<section class="hub-intro-preview" aria-label="소개 미리보기">' +
+      '<h3 class="hub-intro-preview__title">' +
+      escapeHtml(intro.title) +
+      "</h3>" +
+      '<p class="hub-intro-preview__lead">' +
+      escapeHtml(intro.lead) +
+      "</p>" +
+      '<div class="hub-intro-preview__card">' +
+      "<h4>바로가기</h4>" +
+      list +
+      (btnRow ? '<div class="hub-intro-preview__btns">' + btnRow + "</div>" : "") +
+      "</div>" +
+      "</section>"
+    );
+  }
+
+  function renderIntroEditorHtml(item, intro) {
+    var rows = (intro.links || [])
+      .map(function (l, idx) {
+        return (
+          '<div class="hub-intro-link-row" data-idx="' +
+          idx +
+          '">' +
+          '<input type="text" class="hub-intro-link-label" placeholder="라벨" value="' +
+          escapeHtml(l.label) +
+          '" />' +
+          '<input type="url" class="hub-intro-link-href" placeholder="https://…" value="' +
+          escapeHtml(l.href) +
+          '" />' +
+          '<button type="button" class="btn btn--ghost hub-intro-link-remove" aria-label="링크 삭제">×</button>' +
+          "</div>"
+        );
+      })
+      .join("");
+
+    return (
+      '<form class="hub-intro-editor" id="hub-intro-form" data-item-id="' +
+      escapeHtml(item.id) +
+      '">' +
+      "<h3>소개 페이지 편집</h3>" +
+      '<p class="hub-panel-note">저장 후 「소개 JSON」을 <code>ai/intro-overrides.json</code>에 넣고 <code>npm run build:hub</code>를 실행하면 HTML·카탈로그에 반영됩니다.</p>' +
+      '<label class="hub-intro-field">제목<input type="text" name="title" value="' +
+      escapeHtml(intro.title) +
+      '" required /></label>' +
+      '<label class="hub-intro-field">요약<textarea name="lead" rows="4" required>' +
+      escapeHtml(intro.lead) +
+      "</textarea></label>" +
+      '<div class="hub-intro-links-wrap">' +
+      "<span class=\"hub-intro-links-label\">바로가기 링크</span>" +
+      '<div id="hub-intro-links">' +
+      rows +
+      "</div>" +
+      '<button type="button" class="btn btn--ghost" id="hub-intro-add-link">링크 추가</button>' +
+      "</div>" +
+      '<div class="hub-intro-editor__actions">' +
+      '<button type="submit" class="btn btn--secondary">소개 저장</button>' +
+      '<button type="button" class="btn btn--ghost" id="hub-intro-reset">기본값으로</button>' +
+      "</div>" +
+      "</form>"
+    );
+  }
+
+  function readIntroFromForm(form) {
+    var links = [];
+    form.querySelectorAll(".hub-intro-link-row").forEach(function (row) {
+      var label = row.querySelector(".hub-intro-link-label");
+      var href = row.querySelector(".hub-intro-link-href");
+      var labelVal = label && label.value.trim();
+      var hrefVal = href && href.value.trim();
+      if (labelVal && hrefVal) {
+        links.push({ label: labelVal, href: hrefVal });
+      }
+    });
+    return {
+      title: form.querySelector('[name="title"]').value.trim(),
+      lead: form.querySelector('[name="lead"]').value.trim(),
+      links: links,
+    };
+  }
+
+  function bindIntroEditor(item) {
+    var form = document.getElementById("hub-intro-form");
+    if (!form || form.getAttribute("data-item-id") !== item.id) return;
+
+    var linksEl = document.getElementById("hub-intro-links");
+
+    function addLinkRow(label, href) {
+      var row = document.createElement("div");
+      row.className = "hub-intro-link-row";
+      row.innerHTML =
+        '<input type="text" class="hub-intro-link-label" placeholder="라벨" value="' +
+        escapeHtml(label || "") +
+        '" />' +
+        '<input type="url" class="hub-intro-link-href" placeholder="https://…" value="' +
+        escapeHtml(href || "") +
+        '" />' +
+        '<button type="button" class="btn btn--ghost hub-intro-link-remove" aria-label="링크 삭제">×</button>';
+      linksEl.appendChild(row);
+      row.querySelector(".hub-intro-link-remove").addEventListener("click", function () {
+        row.remove();
+      });
+    }
+
+    form.querySelectorAll(".hub-intro-link-remove").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var row = btn.closest(".hub-intro-link-row");
+        if (row) row.remove();
+      });
+    });
+
+    var addBtn = document.getElementById("hub-intro-add-link");
+    if (addBtn) {
+      addBtn.addEventListener("click", function () {
+        addLinkRow("", "");
+      });
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var intro = readIntroFromForm(form);
+      if (!intro.title) {
+        window.alert("제목을 입력하세요.");
+        return;
+      }
+      saveIntroOverride(item.id, intro);
+      renderPanel();
+    });
+
+    var resetBtn = document.getElementById("hub-intro-reset");
+    if (resetBtn) {
+      resetBtn.addEventListener("click", function () {
+        if (!window.confirm("이 항목의 소개 편집을 취소하고 기본값으로 되돌릴까요?")) return;
+        resetIntroOverride(item.id);
+        renderPanel();
+      });
+    }
+  }
+
   function introPanelHtml(item) {
     var status = statusLabels[item.status] || item.status;
     var tags = (item.tags || [])
@@ -585,17 +836,21 @@
         "</em></p>";
     }
 
+    var intro = getEffectiveIntro(item);
+    html += renderIntroPreviewHtml(intro);
+
     if (item.introUrl) {
       html +=
-        '<p class="hub-panel-note">상세 소개는 별도 페이지에서 확인합니다.</p>' +
+        '<p class="hub-panel-note">독립 소개 페이지</p>' +
         '<div class="hub-launch-list">' +
-        launchCardHtml("소개 페이지", item.introUrl, true) +
+        launchCardHtml("소개 페이지 열기", item.introUrl, false) +
         "</div>";
     }
 
     if (state.categoryEditMode) {
+      html += renderIntroEditorHtml(item, intro);
       html +=
-        '<p style="margin:0 0 1rem"><button type="button" class="btn btn--ghost" id="hub-hide-current-item">이 항목 숨기기</button></p>';
+        '<p style="margin:1rem 0"><button type="button" class="btn btn--ghost" id="hub-hide-current-item">이 항목 숨기기</button></p>';
     }
 
     html += '<div class="hub-repo-footer">';
@@ -667,6 +922,9 @@
     }
 
     body.innerHTML = introPanelHtml(item);
+    if (state.categoryEditMode) {
+      bindIntroEditor(item);
+    }
     var hideBtn = document.getElementById("hub-hide-current-item");
     if (hideBtn) {
       hideBtn.addEventListener("click", function () {
@@ -842,6 +1100,22 @@
     if (modal) modal.hidden = true;
   }
 
+  function exportIntroOverrides() {
+    var overrides = {};
+    Object.keys(state.localIntroOverrides).forEach(function (id) {
+      overrides[id] = state.localIntroOverrides[id];
+    });
+    downloadJson(
+      {
+        version: 1,
+        updated: new Date().toISOString().slice(0, 10),
+        comment: "ai/intro-overrides.json overrides → npm run build:hub",
+        overrides: overrides,
+      },
+      "intro-overrides.json"
+    );
+  }
+
   function exportCategoryOverrides() {
     var overrides = {};
     Object.keys(state.localCategoryOverrides).forEach(function (id) {
@@ -881,12 +1155,14 @@
 
     var catExport = document.getElementById("hub-category-export");
     var visExport = document.getElementById("hub-visibility-export");
+    var introExport = document.getElementById("hub-intro-export");
     document.getElementById("hub-category-edit-toggle").addEventListener("click", function () {
       state.categoryEditMode = !state.categoryEditMode;
       localStorage.setItem(CATEGORY_EDIT_KEY, state.categoryEditMode ? "1" : "0");
       this.classList.toggle("is-active", state.categoryEditMode);
       if (catExport) catExport.hidden = !state.categoryEditMode;
       if (visExport) visExport.hidden = !state.categoryEditMode;
+      if (introExport) introExport.hidden = !state.categoryEditMode;
       renderItemTabs();
       renderPanel();
     });
@@ -895,6 +1171,9 @@
     }
     if (visExport) {
       visExport.addEventListener("click", exportHubVisibility);
+    }
+    if (introExport) {
+      introExport.addEventListener("click", exportIntroOverrides);
     }
 
     document.getElementById("hidden-restore-close").addEventListener("click", closeHiddenRestoreModal);
@@ -921,6 +1200,7 @@
 
   function init() {
     state.localCategoryOverrides = loadJson(CATEGORY_OVERRIDES_KEY, {});
+    state.localIntroOverrides = loadJson(INTRO_OVERRIDES_KEY, {});
     state.navLabels = loadJson(NAV_LABELS_KEY, {});
     state.categoryEditMode = localStorage.getItem(CATEGORY_EDIT_KEY) === "1";
 
@@ -957,6 +1237,9 @@
 
         state.catalogItems.forEach(function (item) {
           state.baseCategories[item.id] = item.categoryBase || item.category;
+          if (item.introPage) {
+            state.introDefaults[item.id] = cloneIntro(item.introPage);
+          }
         });
 
         applyItemCategories();
@@ -969,6 +1252,8 @@
         if (catExportEl) catExportEl.hidden = !state.categoryEditMode;
         var visExportEl = document.getElementById("hub-visibility-export");
         if (visExportEl) visExportEl.hidden = !state.categoryEditMode;
+        var introExportEl = document.getElementById("hub-intro-export");
+        if (introExportEl) introExportEl.hidden = !state.categoryEditMode;
 
         var updatedEl = document.getElementById("catalog-updated");
         if (updatedEl && data.updated) {
