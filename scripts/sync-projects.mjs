@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { pagesBase, readMeta, listExperimentIds } from "./experiment-meta.mjs";
+import { loadManifest, ensureIntroLink } from "./build-intros.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const hubRoot = path.resolve(__dirname, "..");
@@ -15,7 +16,13 @@ const outPath = path.join(hubRoot, "ai", "projects.json");
 const projectsDir = path.join(hubRoot, "projects");
 
 /** experiments/ 밖에서 수동 관리하는 카드 — CI sync 후에도 유지합니다. */
-const PINNED_PROJECT_IDS = ["cloud-chatbot", "ppt-academizer"];
+const PINNED_PROJECT_IDS = [
+  "ai-synapse-wiki",
+  "cloud-chatbot",
+  "vision-font",
+  "ppt-academizer",
+  "gemini-tuner",
+];
 
 function titleFromId(id) {
   return id.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -47,6 +54,7 @@ function main() {
 
   const existing = loadExisting();
   const byId = new Map((existing.items || []).map((i) => [i.id, i]));
+  const introManifest = loadManifest();
 
   const dirs = listExperimentIds(experimentsDir);
 
@@ -75,6 +83,8 @@ function main() {
       links.unshift(demoLink(id));
     }
 
+    const linksWithIntro = ensureIntroLink(links, id, introManifest);
+
     return stripForPublish({
       id,
       title: prev.title || meta.title || titleFromId(id),
@@ -86,24 +96,28 @@ function main() {
       tags: prev.tags || meta.tags || ["Dev"],
       deployable,
       deploySkip: meta.deploySkip,
-      links,
+      links: linksWithIntro,
     });
   });
 
-  const profileCard = {
+  const profileCard = stripForPublish({
     id: "cxr542",
     title: "프로필 · 경력 사이트",
     summary: "김윤형 솔루션 교육·컨설턴트 포트폴리오 (HWP 반영)",
     status: "demo",
     tags: ["Education", "Dev"],
-    links: [
-      { label: "사이트", url: "https://cxr542.github.io/" },
-      {
-        label: "Repo",
-        url: "https://github.com/cxr542/cxr542.github.io",
-      },
-    ],
-  };
+    links: ensureIntroLink(
+      [
+        { label: "사이트", url: "https://cxr542.github.io/" },
+        {
+          label: "Repo",
+          url: "https://github.com/cxr542/cxr542.github.io",
+        },
+      ],
+      "cxr542",
+      introManifest
+    ),
+  });
 
   const notesItems = [];
   const notesDir = path.resolve(hubRoot, "..", "notes");
@@ -113,23 +127,35 @@ function main() {
       .sort()
       .forEach((file) => {
         const id = file.replace(/\.md$/, "");
+        const noteId = `note-${id}`;
         notesItems.push({
-          id: `note-${id}`,
+          id: noteId,
           title: titleFromId(id),
           summary: `학습 메모 — notes/${file}`,
           status: "demo",
           tags: ["Notes", "Education"],
-          links: [
-            {
-              label: "문서",
-              url: `${pagesBase}/notes/${file}`,
-            },
-          ],
+          links: ensureIntroLink(
+            [
+              {
+                label: "문서",
+                url: `${pagesBase}/notes/viewer.html#${file}`,
+              },
+            ],
+            noteId,
+            introManifest
+          ),
         });
       });
   }
 
-  const pinned = PINNED_PROJECT_IDS.map((id) => byId.get(id)).filter(Boolean);
+  const pinned = PINNED_PROJECT_IDS.map((id) => {
+    const item = byId.get(id);
+    if (!item) return null;
+    return {
+      ...item,
+      links: ensureIntroLink(item.links, id, introManifest),
+    };
+  }).filter(Boolean);
   const pinnedSet = new Set(PINNED_PROJECT_IDS);
   const experimentItems = items.filter((i) => !pinnedSet.has(i.id));
 

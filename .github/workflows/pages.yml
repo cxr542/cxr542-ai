@@ -24,6 +24,9 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Build intro pages and refresh catalog links
+        run: node scripts/build-intros.mjs
+
       - name: Validate manifest
         run: node scripts/sync-projects.mjs
         continue-on-error: true

@@ -1,19 +1,147 @@
 {
   "updated": "2026-05-29",
   "profileUrl": "https://cxr542.github.io/",
-  "categories": ["Agent", "LLM", "Education", "Dev"],
+  "categories": [
+    "Agent",
+    "LLM",
+    "Education",
+    "Dev",
+    "React",
+    "Wiki"
+  ],
   "items": [
+    {
+      "id": "ai-synapse-wiki",
+      "title": "AI-Synapse Wiki",
+      "summary": "한글 AI 지식 Wiki — 주제·Synapse·관리 대시보드 (Antigravity, Gemini, ChatGPT, Harness 등)",
+      "status": "demo",
+      "tags": [
+        "Wiki",
+        "LLM",
+        "Dev",
+        "Agent"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/ai-synapse-wiki.html"
+        },
+        {
+          "label": "Wiki",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/AI-Synapse-Wiki"
+        }
+      ]
+    },
     {
       "id": "cloud-chatbot",
       "title": "Cloud Learning Chatbot",
       "summary": "클라우드 학습 RAG 챗봇·퀴즈·관리자 프롬프트·지식 베이스 (Render)",
       "status": "demo",
-      "tags": ["Education", "LLM", "Dev"],
+      "tags": [
+        "Education",
+        "LLM",
+        "Dev"
+      ],
       "links": [
-        { "label": "게이트웨이", "url": "https://cloud-chatbot-963d.onrender.com/home" },
-        { "label": "교육생", "url": "https://cloud-chatbot-963d.onrender.com/" },
-        { "label": "관리자", "url": "https://cloud-chatbot-963d.onrender.com/admin/" },
-        { "label": "Repo", "url": "https://github.com/cxr542/cloud-chatbot" }
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/cloud-chatbot.html"
+        },
+        {
+          "label": "게이트웨이",
+          "url": "https://cloud-chatbot-963d.onrender.com/home"
+        },
+        {
+          "label": "교육생",
+          "url": "https://cloud-chatbot-963d.onrender.com/"
+        },
+        {
+          "label": "관리자",
+          "url": "https://cloud-chatbot-963d.onrender.com/admin/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/cloud-chatbot"
+        }
+      ]
+    },
+    {
+      "id": "vision-font",
+      "title": "Vision Font",
+      "summary": "시력 맞춤 웹 기사 리더 — 5단계 테스트, CSS 주입, Expo 웹·모바일 MVP",
+      "status": "demo",
+      "tags": [
+        "React",
+        "Education",
+        "Dev"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/vision-font.html"
+        },
+        {
+          "label": "허브 데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/vision-font/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/vision-font"
+        }
+      ]
+    },
+    {
+      "id": "today-shoes",
+      "title": "오늘뭐신지",
+      "summary": "러닝화 3장(정면·좌·우) → Gemini 분석 → 신발장. Expo 웹 · GitHub Pages",
+      "status": "demo",
+      "tags": [
+        "LLM",
+        "Dev",
+        "Agent"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/today-shoes.html"
+        },
+        {
+          "label": "앱",
+          "url": "https://cxr542.github.io/today-shoes/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/today-shoes"
+        }
+      ]
+    },
+    {
+      "id": "gemini-tuner",
+      "title": "GeminiTuner",
+      "summary": "gemini.google.com 토큰·예상 비용 FinOps — Chrome 확장, USD/KRW·월 예산·AI Studio 동기화",
+      "status": "demo",
+      "tags": [
+        "LLM",
+        "Dev",
+        "Agent"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/GeminiTuner/"
+        },
+        {
+          "label": "허브 데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/gemini-tuner/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/GeminiTuner"
+        }
       ]
     },
     {
@@ -21,9 +149,15 @@
       "title": "Zero-G 바이브 코딩",
       "summary": "안티그래비티 워크플로 — plan.md, 에이전트 협업, 5단계 파이프라인·배포",
       "status": "demo",
-      "tags": ["Agent", "Education"],
+      "tags": [
+        "Agent",
+        "Education"
+      ],
       "links": [
-        { "label": "가이드 보기", "url": "#vibe-guide" }
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/#vibe-guide"
+        }
       ]
     },
     {
@@ -31,9 +165,19 @@
       "title": "Cursor Agent",
       "summary": "Rules, Hooks, 에이전트 워크플로와 프로젝트 자동화 실험",
       "status": "learning",
-      "tags": ["Agent", "Dev"],
+      "tags": [
+        "Agent",
+        "Dev"
+      ],
       "links": [
-        { "label": "프로필 사이트", "url": "https://cxr542.github.io/" }
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/cursor.html"
+        },
+        {
+          "label": "프로필 사이트",
+          "url": "https://cxr542.github.io/"
+        }
       ]
     },
     {
@@ -41,9 +185,18 @@
       "title": "ChatGPT / API",
       "summary": "프롬프트 설계, API 연동, 교육·문서 요약 활용 시나리오",
       "status": "learning",
-      "tags": ["LLM"],
+      "tags": [
+        "LLM"
+      ],
       "links": [
-        { "label": "OpenAI", "url": "https://openai.com/" }
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/chatgpt.html"
+        },
+        {
+          "label": "OpenAI",
+          "url": "https://openai.com/"
+        }
       ]
     },
     {
@@ -51,9 +204,18 @@
       "title": "Claude",
       "summary": "긴 문맥 분석, 제안서·교육 자료 초안 보조",
       "status": "planned",
-      "tags": ["LLM"],
+      "tags": [
+        "LLM"
+      ],
       "links": [
-        { "label": "Anthropic", "url": "https://www.anthropic.com/" }
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/claude.html"
+        },
+        {
+          "label": "Anthropic",
+          "url": "https://www.anthropic.com/"
+        }
       ]
     },
     {
@@ -61,10 +223,23 @@
       "title": "GitHub Pages 포트폴리오",
       "summary": "정적 프로필 사이트 (cxr542.github.io) — HWP 기반 경력 반영",
       "status": "demo",
-      "tags": ["Dev", "Education"],
+      "tags": [
+        "Dev",
+        "Education"
+      ],
       "links": [
-        { "label": "사이트", "url": "https://cxr542.github.io/" },
-        { "label": "Repo", "url": "https://github.com/cxr542/cxr542.github.io" }
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/"
+        },
+        {
+          "label": "사이트",
+          "url": "https://cxr542.github.io/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/cxr542.github.io"
+        }
       ]
     },
     {
@@ -72,11 +247,28 @@
       "title": "PPT 아카데미화",
       "summary": "일반·AI pptx → OKESTRO 아카데미 강의안 변환 (규칙·구조 분석, LLM 생성 없음)",
       "status": "demo",
-      "tags": ["Education", "Dev", "Agent"],
+      "tags": [
+        "Education",
+        "Dev",
+        "Agent"
+      ],
       "links": [
-        { "label": "데모 (Netlify)", "url": "https://ppt-academizer.netlify.app/" },
-        { "label": "허브 데모", "url": "https://cxr542.github.io/cxr542-ai/projects/ppt-academizer/" },
-        { "label": "Repo", "url": "https://github.com/cxr542/ppt-academizer" }
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/ppt-academizer.html"
+        },
+        {
+          "label": "데모 (Netlify)",
+          "url": "https://ppt-academizer.netlify.app/"
+        },
+        {
+          "label": "허브 데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/ppt-academizer/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/ppt-academizer"
+        }
       ]
     },
     {
@@ -84,12 +276,27 @@
       "title": "교육팀 TMS",
       "summary": "팀 빌딩비 장부·주간 업무일지(KPI M/M)",
       "status": "demo",
-      "tags": ["Education", "Dev"],
+      "tags": [
+        "Education",
+        "Dev"
+      ],
       "links": [
-        { "label": "조회", "url": "https://okestro-edu-team-tms.vercel.app/" },
-        { "label": "편집", "url": "https://okestro-edu-team-tms.vercel.app/?mode=edit" },
-        { "label": "허브 데모", "url": "https://cxr542.github.io/cxr542-ai/projects/edu-team-tms/" },
-        { "label": "Repo", "url": "https://github.com/cxr542/edu-team-tms" }
+        {
+          "label": "조회",
+          "url": "https://okestro-edu-team-tms.vercel.app/"
+        },
+        {
+          "label": "편집",
+          "url": "https://okestro-edu-team-tms.vercel.app/?mode=edit"
+        },
+        {
+          "label": "허브 데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/edu-team-tms/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/edu-team-tms"
+        }
       ]
     },
     {
@@ -97,15 +304,53 @@
       "title": "AI 학습 허브 (이 사이트)",
       "summary": "공부·실험 중인 AI 서비스를 카드로 모아 두는 대시보드",
       "status": "demo",
-      "tags": ["Dev"],
-      "links": []
+      "tags": [
+        "Dev"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/"
+        }
+      ]
     }
   ],
   "resources": [
-    { "label": "Cloud Chatbot (Render)", "url": "https://cloud-chatbot-963d.onrender.com/home" },
-    { "label": "Zero-G 바이브 코딩 (이 사이트)", "url": "#vibe-guide" },
-    { "label": "Cursor Docs", "url": "https://cursor.com/docs" },
-    { "label": "Hugging Face", "url": "https://huggingface.co/" },
-    { "label": "Google AI Studio", "url": "https://aistudio.google.com/" }
+    {
+      "label": "AI-Synapse Wiki",
+      "url": "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/"
+    },
+    {
+      "label": "오늘뭐신지 (러닝화 신발장)",
+      "url": "https://cxr542.github.io/today-shoes/"
+    },
+    {
+      "label": "GeminiTuner (Chrome)",
+      "url": "https://cxr542.github.io/GeminiTuner/"
+    },
+    {
+      "label": "Cloud Chatbot (Render)",
+      "url": "https://cloud-chatbot-963d.onrender.com/home"
+    },
+    {
+      "label": "Vision Font (Repo)",
+      "url": "https://github.com/cxr542/vision-font"
+    },
+    {
+      "label": "Zero-G 바이브 코딩 (이 사이트)",
+      "url": "#vibe-guide"
+    },
+    {
+      "label": "Cursor Docs",
+      "url": "https://cursor.com/docs"
+    },
+    {
+      "label": "Hugging Face",
+      "url": "https://huggingface.co/"
+    },
+    {
+      "label": "Google AI Studio",
+      "url": "https://aistudio.google.com/"
+    }
   ]
 }

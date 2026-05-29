@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "AI learning hub — catalog and experiment demos",
   "scripts": {
+    "build:intros": "node scripts/build-intros.mjs",
     "sync:projects": "node scripts/sync-projects.mjs",
     "check:deploy": "node scripts/check-deploy.mjs",
     "check:deploy:local": "node scripts/check-deploy.mjs --local-only",
@@ -15,6 +16,7 @@
     "deploy:experiments": "node scripts/deploy-project.mjs react_test && node scripts/deploy-project.mjs markdown-editor && node scripts/deploy-project.mjs next.js_test",
     "deploy:ppt-academizer": "node scripts/deploy-ppt-academizer.mjs",
     "deploy:edu-team-tms": "node scripts/deploy-edu-team-tms.mjs",
-    "deploy:all": "npm run deploy:experiments && npm run deploy:notes && npm run deploy:ppt-academizer && npm run deploy:edu-team-tms"
+    "deploy:ai-synapse-wiki": "node scripts/deploy-ai-synapse-wiki.mjs",
+    "deploy:all": "npm run deploy:experiments && npm run deploy:notes && npm run deploy:ppt-academizer && npm run deploy:edu-team-tms && npm run deploy:ai-synapse-wiki"
   }
 }

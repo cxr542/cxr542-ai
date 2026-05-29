@@ -1,0 +1,178 @@
+{
+  "ai-synapse-wiki": {
+    "title": "AI-Synapse Wiki",
+    "lead": "한글 AI 지식 Wiki — topics·hubs·stories·Synapse 연결과 관리자 관측 대시보드. Antigravity, Gemini, ChatGPT, Harness Engineering 등 주제를 정리합니다.",
+    "links": [
+      { "label": "Wiki 열기", "href": "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/" },
+      { "label": "Repo", "href": "https://github.com/cxr542/AI-Synapse-Wiki" }
+    ]
+  },
+  "cloud-chatbot": {
+    "title": "Cloud Learning Chatbot",
+    "lead": "클라우드 학습용 RAG 챗봇·퀴즈·요약·관리자 프롬프트·지식 베이스. FastAPI + Gemini, Render Docker로 운영합니다.",
+    "links": [
+      { "label": "게이트웨이", "href": "https://cloud-chatbot-963d.onrender.com/home" },
+      { "label": "교육생", "href": "https://cloud-chatbot-963d.onrender.com/" },
+      { "label": "관리자", "href": "https://cloud-chatbot-963d.onrender.com/admin/" },
+      { "label": "Repo", "href": "https://github.com/cxr542/cloud-chatbot" }
+    ]
+  },
+  "vision-font": {
+    "title": "Vision Font",
+    "lead": "시력 테스트로 맞춘 폰트로 웹 기사를 읽는 Expo 앱. WebView CSS injection, 웹·Expo Go MVP.",
+    "links": [
+      { "label": "허브 데모", "href": "https://cxr542.github.io/cxr542-ai/projects/vision-font/" },
+      { "label": "소개", "href": "https://cxr542.github.io/cxr542-ai/intro/vision-font.html" },
+      { "label": "Repo", "href": "https://github.com/cxr542/vision-font" }
+    ]
+  },
+  "today-shoes": {
+    "title": "오늘뭐신지",
+    "lead": "러닝화 사진 신발장 — 정면·왼쪽·오른쪽 3장을 Gemini로 분석해 브랜드·특징·추천 용도를 저장합니다. Expo SDK 54 웹 데모(GitHub Pages).",
+    "links": [
+      { "label": "앱 실행", "href": "https://cxr542.github.io/today-shoes/" },
+      { "label": "Repo", "href": "https://github.com/cxr542/today-shoes" }
+    ]
+  },
+  "gemini-tuner": {
+    "title": "GeminiTuner",
+    "lead": "gemini.google.com에서 토큰·예상 비용을 보는 Chrome FinOps 확장. USD/KRW, 월 예산, AI Studio 지출 동기화.",
+    "links": [
+      { "label": "허브 데모", "href": "https://cxr542.github.io/cxr542-ai/projects/gemini-tuner/" },
+      { "label": "Repo", "href": "https://github.com/cxr542/GeminiTuner" }
+    ],
+    "introUrl": "https://cxr542.github.io/GeminiTuner/"
+  },
+  "ppt-academizer": {
+    "title": "PPT 아카데미화",
+    "lead": "일반·AI pptx를 OKESTRO 아카데미 강의안 형식으로 변환합니다. 규칙·구조 분석 기반이며 LLM 생성은 사용하지 않습니다.",
+    "links": [
+      { "label": "데모 실행", "href": "https://cxr542.github.io/cxr542-ai/projects/ppt-academizer/" },
+      { "label": "Netlify", "href": "https://ppt-academizer.netlify.app/" },
+      { "label": "Repo", "href": "https://github.com/cxr542/ppt-academizer" }
+    ]
+  },
+  "zero-g-vibe": {
+    "title": "Zero-G 바이브 코딩",
+    "lead": "안티그래비티·Cursor 팀 워크플로 — plan.md, RULE·SKILL, 5단계 파이프라인과 배포까지.",
+    "links": [],
+    "introUrl": "https://cxr542.github.io/cxr542-ai/#vibe-guide"
+  },
+  "cursor": {
+    "title": "Cursor Agent",
+    "lead": "Rules, Hooks, 에이전트 워크플로와 프로젝트 자동화 실험 기록입니다.",
+    "links": [
+      { "label": "Cursor Docs", "href": "https://cursor.com/docs" },
+      { "label": "프로필", "href": "https://cxr542.github.io/" }
+    ]
+  },
+  "chatgpt": {
+    "title": "ChatGPT / API",
+    "lead": "프롬프트 설계, API 연동, 교육·문서 요약 활용 시나리오를 학습·실험 중입니다.",
+    "links": [{ "label": "OpenAI", "href": "https://openai.com/" }]
+  },
+  "claude": {
+    "title": "Claude",
+    "lead": "긴 문맥 분석, 제안서·교육 자료 초안 보조 활용을 계획·실험 중입니다.",
+    "links": [{ "label": "Anthropic", "href": "https://www.anthropic.com/" }]
+  },
+  "github-pages": {
+    "title": "GitHub Pages 포트폴리오",
+    "lead": "정적 프로필 사이트(cxr542.github.io) — HWP 기반 경력·프로젝트 소개.",
+    "links": [
+      { "label": "사이트 열기", "href": "https://cxr542.github.io/" },
+      { "label": "Repo", "href": "https://github.com/cxr542/cxr542.github.io" }
+    ],
+    "introUrl": "https://cxr542.github.io/"
+  },
+  "ai-hub": {
+    "title": "AI 학습 허브",
+    "lead": "공부·실험 중인 AI 서비스와 Cursor 프로젝트를 카드로 모아 둔 이 대시보드입니다.",
+    "links": [{ "label": "허브 홈", "href": "https://cxr542.github.io/cxr542-ai/" }],
+    "introUrl": "https://cxr542.github.io/cxr542-ai/"
+  },
+  "cxr542": {
+    "title": "프로필 · 경력 사이트",
+    "lead": "김윤형 솔루션 교육·컨설턴트 포트폴리오입니다.",
+    "links": [
+      { "label": "사이트", "href": "https://cxr542.github.io/" },
+      { "label": "Repo", "href": "https://github.com/cxr542/cxr542.github.io" }
+    ],
+    "introUrl": "https://cxr542.github.io/"
+  },
+  "react_test": {
+    "title": "React · Vite 클리커",
+    "lead": "모바일 클리커 게임 — Vite + React 실습 데모입니다.",
+    "links": [{ "label": "데모 실행", "href": "https://cxr542.github.io/cxr542-ai/projects/react_test/" }]
+  },
+  "next.js_test": {
+    "title": "Next.js · shadcn",
+    "lead": "Next.js App Router + shadcn/ui 컴포넌트 실습 데모입니다.",
+    "links": [{ "label": "데모 실행", "href": "https://cxr542.github.io/cxr542-ai/projects/next.js_test/" }]
+  },
+  "markdown-editor": {
+    "title": "Markdown 에디터",
+    "lead": "CodeMirror + Express — 프론트 위주 실습(API는 로컬 실행).",
+    "links": [{ "label": "데모 실행", "href": "https://cxr542.github.io/cxr542-ai/projects/markdown-editor/" }]
+  },
+  "Crawlingtest": {
+    "title": "Python 크롤링",
+    "lead": "교보문고 등 스크래핑 실습 스크립트 — 로컬 실행 프로젝트입니다.",
+    "links": []
+  },
+  "deploy_test": {
+    "title": "Deploy Test",
+    "lead": "GitHub Pages·Render 등 배포 파이프라인 테스트(준비 중).",
+    "links": []
+  },
+  "dynamic_deploy_test": {
+    "title": "Dynamic Deploy Test",
+    "lead": "동적 라우트·API가 있는 Next.js 배포 실험입니다.",
+    "links": []
+  },
+  "webtest": {
+    "title": "Web Test",
+    "lead": "정적 HTML 웹 실험(준비 중).",
+    "links": []
+  },
+  "note-apple-history": {
+    "title": "Apple History",
+    "lead": "학습 메모 — Apple 역사 정리.",
+    "links": [
+      {
+        "label": "메모 읽기",
+        "href": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history.md"
+      }
+    ]
+  },
+  "note-apple-history-mindmap": {
+    "title": "Apple History Mindmap",
+    "lead": "학습 메모 — Apple 역사 마인드맵.",
+    "links": [
+      {
+        "label": "메모 읽기",
+        "href": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history-mindmap.md"
+      }
+    ]
+  },
+  "note-mermaid-test": {
+    "title": "Mermaid Test",
+    "lead": "학습 메모 — Mermaid 다이어그램 테스트.",
+    "links": [
+      {
+        "label": "메모 읽기",
+        "href": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#mermaid-test.md"
+      }
+    ]
+  },
+  "note-pythagorean-proof": {
+    "title": "Pythagorean Proof",
+    "lead": "학습 메모 — 피타고라스 정리 증명.",
+    "links": [
+      {
+        "label": "메모 읽기",
+        "href": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#pythagorean-proof.md"
+      }
+    ]
+  }
+}

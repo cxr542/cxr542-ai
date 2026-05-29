@@ -5,34 +5,60 @@
     "Dev",
     "Editor",
     "Education",
+    "LLM",
     "Next.js",
     "Notes",
     "Python",
-    "React"
+    "React",
+    "Wiki"
   ],
   "items": [
     {
-      "id": "edu-team-tms",
-      "title": "교육팀 TMS",
-      "summary": "팀 빌딩비 장부·주간 업무일지(KPI M/M) — Vercel + GitHub Pages 데모",
+      "id": "cxr542",
+      "title": "프로필 · 경력 사이트",
+      "summary": "김윤형 솔루션 교육·컨설턴트 포트폴리오 (HWP 반영)",
       "status": "demo",
-      "tags": ["Education", "Dev", "React", "Deploy"],
+      "tags": [
+        "Education",
+        "Dev"
+      ],
       "links": [
         {
-          "label": "조회",
-          "url": "https://okestro-edu-team-tms.vercel.app/"
+          "label": "소개",
+          "url": "https://cxr542.github.io/"
         },
         {
-          "label": "편집",
-          "url": "https://okestro-edu-team-tms.vercel.app/?mode=edit"
-        },
-        {
-          "label": "허브 데모",
-          "url": "https://cxr542.github.io/cxr542-ai/projects/edu-team-tms/"
+          "label": "사이트",
+          "url": "https://cxr542.github.io/"
         },
         {
           "label": "Repo",
-          "url": "https://github.com/cxr542/edu-team-tms"
+          "url": "https://github.com/cxr542/cxr542.github.io"
+        }
+      ]
+    },
+    {
+      "id": "ai-synapse-wiki",
+      "title": "AI-Synapse Wiki",
+      "summary": "주제 중심 AI 지식 Wiki + 관리자 관측 대시보드",
+      "status": "demo",
+      "tags": [
+        "Wiki",
+        "LLM",
+        "Dev"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/ai-synapse-wiki.html"
+        },
+        {
+          "label": "Wiki",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/AI-Synapse-Wiki"
         }
       ]
     },
@@ -41,8 +67,17 @@
       "title": "Cloud Learning Chatbot",
       "summary": "RAG·퀴즈·요약·관리자 대시보드 — FastAPI + Gemini (Render Docker)",
       "status": "demo",
-      "tags": ["Education", "Python", "Deploy", "Dev"],
+      "tags": [
+        "Education",
+        "Python",
+        "Deploy",
+        "Dev"
+      ],
       "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/cloud-chatbot.html"
+        },
         {
           "label": "게이트웨이",
           "url": "https://cloud-chatbot-963d.onrender.com/home"
@@ -62,12 +97,46 @@
       ]
     },
     {
+      "id": "vision-font",
+      "title": "Vision Font",
+      "summary": "시력 테스트 → 맞춤 폰트·줄간격 → 웹 기사 읽기. Expo + WebView CSS (웹·Expo Go)",
+      "status": "demo",
+      "tags": [
+        "React",
+        "Education",
+        "Dev",
+        "LLM"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/vision-font.html"
+        },
+        {
+          "label": "허브 데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/vision-font/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/vision-font"
+        }
+      ]
+    },
+    {
       "id": "ppt-academizer",
       "title": "PPT 아카데미화",
       "summary": "pptx 업로드 → 덱 분석 → 아카데미 템플릿·레이아웃 자동 변환",
       "status": "demo",
-      "tags": ["Education", "Dev", "Deploy"],
+      "tags": [
+        "Education",
+        "Dev",
+        "Deploy"
+      ],
       "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/ppt-academizer.html"
+        },
         {
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/ppt-academizer/"
@@ -83,22 +152,31 @@
       ]
     },
     {
-      "id": "cxr542",
-      "title": "프로필 · 경력 사이트",
-      "summary": "김윤형 솔루션 교육·컨설턴트 포트폴리오 (HWP 반영)",
+      "id": "gemini-tuner",
+      "title": "GeminiTuner",
+      "summary": "Chrome MV3 — gemini.google.com 토큰·비용 패널, 로컬 저장, API·AI Studio 청구 동기화 (v1.0.7)",
       "status": "demo",
       "tags": [
-        "Education",
-        "Dev"
+        "Dev",
+        "LLM",
+        "Deploy"
       ],
       "links": [
         {
-          "label": "사이트",
-          "url": "https://cxr542.github.io/"
+          "label": "소개",
+          "url": "https://cxr542.github.io/GeminiTuner/"
+        },
+        {
+          "label": "허브 데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/gemini-tuner/"
+        },
+        {
+          "label": "Privacy",
+          "url": "https://cxr542.github.io/GeminiTuner/privacy.html"
         },
         {
           "label": "Repo",
-          "url": "https://github.com/cxr542/cxr542.github.io"
+          "url": "https://github.com/cxr542/GeminiTuner"
         }
       ]
     },
@@ -111,7 +189,12 @@
         "Python",
         "Dev"
       ],
-      "links": []
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/Crawlingtest.html"
+        }
+      ]
     },
     {
       "id": "deploy_test",
@@ -122,7 +205,12 @@
         "Dev",
         "Deploy"
       ],
-      "links": []
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/deploy_test.html"
+        }
+      ]
     },
     {
       "id": "dynamic_deploy_test",
@@ -133,7 +221,12 @@
         "Dev",
         "Deploy"
       ],
-      "links": []
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/dynamic_deploy_test.html"
+        }
+      ]
     },
     {
       "id": "markdown-editor",
@@ -145,6 +238,10 @@
         "Editor"
       ],
       "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/markdown-editor.html"
+        },
         {
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/markdown-editor/"
@@ -162,8 +259,27 @@
       ],
       "links": [
         {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/next.js_test.html"
+        },
+        {
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/next.js_test/"
+        }
+      ]
+    },
+    {
+      "id": "ppt-test",
+      "title": "Ppt Test",
+      "summary": "Cursorstudy experiments/ppt-test",
+      "status": "learning",
+      "tags": [
+        "Dev"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/ppt-test.html"
         }
       ]
     },
@@ -178,6 +294,10 @@
       ],
       "links": [
         {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/react_test.html"
+        },
+        {
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/react_test/"
         }
@@ -191,7 +311,12 @@
       "tags": [
         "Dev"
       ],
-      "links": []
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/webtest.html"
+        }
+      ]
     },
     {
       "id": "note-apple-history-mindmap",
@@ -203,6 +328,10 @@
         "Education"
       ],
       "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/note-apple-history-mindmap.html"
+        },
         {
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history-mindmap.md"
@@ -220,6 +349,10 @@
       ],
       "links": [
         {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/note-apple-history.html"
+        },
+        {
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history.md"
         }
@@ -236,6 +369,10 @@
       ],
       "links": [
         {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/note-mermaid-test.html"
+        },
+        {
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#mermaid-test.md"
         }
@@ -251,6 +388,10 @@
         "Education"
       ],
       "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/note-pythagorean-proof.html"
+        },
         {
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#pythagorean-proof.md"
