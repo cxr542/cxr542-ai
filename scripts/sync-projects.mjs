@@ -18,7 +18,9 @@ const projectsDir = path.join(hubRoot, "projects");
 /** experiments/ 밖에서 수동 관리하는 카드 — CI sync 후에도 유지합니다. */
 const PINNED_PROJECT_IDS = [
   "ai-synapse-wiki",
+  "today-shoes",
   "cloud-chatbot",
+  "edu-team-tms",
   "vision-font",
   "ppt-academizer",
   "gemini-tuner",
