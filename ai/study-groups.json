@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "updated": "2026-05-29",
+  "comment": "공부·실험(study) 하위 분류. catalog 항목의 subcategory id와 매칭",
+  "subcategories": [
+    { "id": "dev", "label": "개발·배포" },
+    { "id": "ai-tools", "label": "AI·도구" },
+    { "id": "notes", "label": "학습 메모" },
+    { "id": "other", "label": "기타" }
+  ]
+}

@@ -31,6 +31,24 @@
   },
   "categoryOverrides": {},
   "introOverrides": {},
+  "studyGroups": [
+    {
+      "id": "dev",
+      "label": "개발·배포"
+    },
+    {
+      "id": "ai-tools",
+      "label": "AI·도구"
+    },
+    {
+      "id": "notes",
+      "label": "학습 메모"
+    },
+    {
+      "id": "other",
+      "label": "기타"
+    }
+  ],
   "hubVisibility": {
     "hiddenItems": [],
     "hiddenNav": []
@@ -323,7 +341,8 @@
             "href": "https://github.com/cxr542/AI-Synapse-Wiki"
           }
         ]
-      }
+      },
+      "subcategory": "ai-tools"
     },
     {
       "id": "note-apple-history",
@@ -365,7 +384,8 @@
             "href": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history.md"
           }
         ]
-      }
+      },
+      "subcategory": "notes"
     },
     {
       "id": "note-apple-history-mindmap",
@@ -407,7 +427,8 @@
             "href": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history-mindmap.md"
           }
         ]
-      }
+      },
+      "subcategory": "notes"
     },
     {
       "id": "chatgpt",
@@ -448,7 +469,8 @@
             "href": "https://openai.com/"
           }
         ]
-      }
+      },
+      "subcategory": "ai-tools"
     },
     {
       "id": "claude",
@@ -489,7 +511,8 @@
             "href": "https://www.anthropic.com/"
           }
         ]
-      }
+      },
+      "subcategory": "ai-tools"
     },
     {
       "id": "cloud-chatbot",
@@ -566,7 +589,8 @@
             "href": "https://github.com/cxr542/cloud-chatbot"
           }
         ]
-      }
+      },
+      "subcategory": "ai-tools"
     },
     {
       "id": "cursor",
@@ -612,7 +636,8 @@
             "href": "https://cxr542.github.io/"
           }
         ]
-      }
+      },
+      "subcategory": "ai-tools"
     },
     {
       "id": "deploy_test",
@@ -640,7 +665,8 @@
         "title": "Deploy Test",
         "lead": "GitHub Pages·Render 등 배포 파이프라인 테스트(준비 중).",
         "links": []
-      }
+      },
+      "subcategory": "dev"
     },
     {
       "id": "dynamic_deploy_test",
@@ -668,7 +694,8 @@
         "title": "Dynamic Deploy Test",
         "lead": "동적 라우트·API가 있는 Next.js 배포 실험입니다.",
         "links": []
-      }
+      },
+      "subcategory": "dev"
     },
     {
       "id": "gemini-tuner",
@@ -728,7 +755,8 @@
             "href": "https://github.com/cxr542/GeminiTuner"
           }
         ]
-      }
+      },
+      "subcategory": "ai-tools"
     },
     {
       "id": "github-pages",
@@ -820,7 +848,8 @@
             "href": "https://cxr542.github.io/cxr542-ai/projects/markdown-editor/"
           }
         ]
-      }
+      },
+      "subcategory": "dev"
     },
     {
       "id": "note-mermaid-test",
@@ -862,7 +891,8 @@
             "href": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#mermaid-test.md"
           }
         ]
-      }
+      },
+      "subcategory": "notes"
     },
     {
       "id": "next.js_test",
@@ -904,7 +934,8 @@
             "href": "https://cxr542.github.io/cxr542-ai/projects/next.js_test/"
           }
         ]
-      }
+      },
+      "subcategory": "dev"
     },
     {
       "id": "ppt-academizer",
@@ -1006,7 +1037,8 @@
       "introUrl": "https://cxr542.github.io/cxr542-ai/intro/ppt-test.html",
       "repoUrl": null,
       "primaryAppUrl": null,
-      "appUrls": []
+      "appUrls": [],
+      "subcategory": "dev"
     },
     {
       "id": "note-pythagorean-proof",
@@ -1048,7 +1080,8 @@
             "href": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#pythagorean-proof.md"
           }
         ]
-      }
+      },
+      "subcategory": "notes"
     },
     {
       "id": "Crawlingtest",
@@ -1076,7 +1109,8 @@
         "title": "Python 크롤링",
         "lead": "교보문고 등 스크래핑 실습 스크립트 — 로컬 실행 프로젝트입니다.",
         "links": []
-      }
+      },
+      "subcategory": "dev"
     },
     {
       "id": "react_test",
@@ -1118,7 +1152,8 @@
             "href": "https://cxr542.github.io/cxr542-ai/projects/react_test/"
           }
         ]
-      }
+      },
+      "subcategory": "dev"
     },
     {
       "id": "vision-font",
@@ -1174,7 +1209,8 @@
             "href": "https://github.com/cxr542/vision-font"
           }
         ]
-      }
+      },
+      "subcategory": "other"
     },
     {
       "id": "webtest",
@@ -1201,7 +1237,8 @@
         "title": "Web Test",
         "lead": "정적 HTML 웹 실험(준비 중).",
         "links": []
-      }
+      },
+      "subcategory": "dev"
     }
   ],
   "resources": [

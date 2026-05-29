@@ -7,6 +7,7 @@
   var VISIBILITY_KEY = "cxr542-hub-visibility";
   var INTRO_OVERRIDES_KEY = "cxr542-hub-intro-overrides";
   var IDEAS_DRAFTS_KEY = "cxr542-hub-idea-drafts";
+  var STUDY_SUB_KEY = "cxr542-hub-study-subcategory";
 
   var statusLabels = {
     learning: "학습 중",
@@ -39,6 +40,8 @@
     introDefaults: {},
     localIntroOverrides: {},
     ideaDrafts: [],
+    studyGroups: [],
+    studySubFilter: "all",
     route: { view: "work", itemId: "", panel: "intro" },
     searchQuery: "",
     profileUrl: "https://cxr542.github.io/",
@@ -265,8 +268,79 @@
 
   function itemsForView(view) {
     if (systemViews.indexOf(view) !== -1) return [];
-    return state.items.filter(function (i) {
+    var items = state.items.filter(function (i) {
       return i.category === view;
+    });
+    if (view === "study" && state.studySubFilter && state.studySubFilter !== "all") {
+      items = items.filter(function (i) {
+        return (i.subcategory || "other") === state.studySubFilter;
+      });
+    }
+    return items;
+  }
+
+  function countStudySub(subId) {
+    return state.items.filter(function (i) {
+      if (i.category !== "study") return false;
+      if (subId === "all") return true;
+      return (i.subcategory || "other") === subId;
+    }).length;
+  }
+
+  function studySubLabel(subId) {
+    if (subId === "all") return "전체";
+    var g = state.studyGroups.find(function (s) {
+      return s.id === subId;
+    });
+    return g ? g.label : subId;
+  }
+
+  function renderSubcategoryChips() {
+    var nav = document.getElementById("hub-subcategory-chips");
+    if (!nav) return;
+
+    if (state.route.view !== "study" || !state.studyGroups.length) {
+      nav.hidden = true;
+      nav.innerHTML = "";
+      return;
+    }
+
+    nav.hidden = false;
+    var chips =
+      '<button type="button" class="hub-subchip' +
+      (state.studySubFilter === "all" ? " is-active" : "") +
+      '" data-sub="all">전체 <span class="hub-subchip__n">' +
+      countStudySub("all") +
+      "</span></button>";
+
+    state.studyGroups.forEach(function (sg) {
+      var n = countStudySub(sg.id);
+      if (!n) return;
+      chips +=
+        '<button type="button" class="hub-subchip' +
+        (state.studySubFilter === sg.id ? " is-active" : "") +
+        '" data-sub="' +
+        escapeHtml(sg.id) +
+        '">' +
+        escapeHtml(sg.label) +
+        ' <span class="hub-subchip__n">' +
+        n +
+        "</span></button>";
+    });
+
+    nav.innerHTML = chips;
+    nav.querySelectorAll(".hub-subchip").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.studySubFilter = btn.getAttribute("data-sub");
+        localStorage.setItem(STUDY_SUB_KEY, state.studySubFilter);
+        var items = itemsForView("study");
+        if (items.length) {
+          state.route.itemId = items[0].id;
+        }
+        state.route.panel = "intro";
+        setHash();
+        renderAll();
+      });
     });
   }
 
@@ -333,6 +407,8 @@
       return;
     }
     if (!r.itemId || !findItem(r.itemId)) {
+      r.itemId = items[0].id;
+    } else if (!items.some(function (i) { return i.id === r.itemId; })) {
       r.itemId = items[0].id;
     }
     if (r.panel === "app") {
@@ -950,7 +1026,14 @@
       escapeHtml(item.category) +
       '">' +
       escapeHtml(getNavLabel(item.category)) +
-      "</span>" +
+      "</span>";
+    if (item.category === "study" && item.subcategory) {
+      html +=
+        '<span class="hub-pill hub-pill--study-sub">' +
+        escapeHtml(studySubLabel(item.subcategory)) +
+        "</span>";
+    }
+    html +=
       '<span class="hub-pill">' +
       escapeHtml(status) +
       "</span>" +
@@ -1048,6 +1131,24 @@
     var items = itemsForView(r.view).filter(matchesSearch);
     var item = findItem(r.itemId) || items[0];
     if (!item) {
+      if (r.view === "study" && state.studySubFilter !== "all") {
+        body.innerHTML =
+          '<p class="hub-empty">「' +
+          escapeHtml(studySubLabel(state.studySubFilter)) +
+          "」에 항목이 없습니다.</p>" +
+          '<p><button type="button" class="btn btn--ghost" id="hub-sub-reset">전체 보기</button></p>';
+        var resetBtn = document.getElementById("hub-sub-reset");
+        if (resetBtn) {
+          resetBtn.addEventListener("click", function () {
+            state.studySubFilter = "all";
+            localStorage.setItem(STUDY_SUB_KEY, "all");
+            ensureValidRoute();
+            setHash();
+            renderAll();
+          });
+        }
+        return;
+      }
       if (r.view === "ideas") {
         body.innerHTML =
           '<p class="hub-empty">아이디어뱅크가 비어 있습니다.</p>' +
@@ -1097,6 +1198,7 @@
 
   function renderAll() {
     renderSidebar();
+    renderSubcategoryChips();
     renderItemTabs();
     renderPanel();
   }
@@ -1475,6 +1577,7 @@
     state.localCategoryOverrides = loadJson(CATEGORY_OVERRIDES_KEY, {});
     state.localIntroOverrides = loadJson(INTRO_OVERRIDES_KEY, {});
     state.ideaDrafts = loadIdeaDrafts();
+    state.studySubFilter = localStorage.getItem(STUDY_SUB_KEY) || "all";
     state.navLabels = loadJson(NAV_LABELS_KEY, {});
     state.categoryEditMode = localStorage.getItem(CATEGORY_EDIT_KEY) === "1";
     updateIdeasExportButton();
@@ -1491,6 +1594,7 @@
       })
       .then(function (data) {
         state.catalogItems = data.items || [];
+        state.studyGroups = data.studyGroups || [];
         state.categories = data.categories || [];
         state.resources = data.resources || [];
         state.fileCategoryOverrides = data.categoryOverrides || {};

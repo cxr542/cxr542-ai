@@ -17,6 +17,30 @@ const visibilityPath = path.join(hubRoot, "ai", "hub-visibility.json");
 const introManifestPath = path.join(hubRoot, "intro", "manifest.json");
 const introOverridesPath = path.join(hubRoot, "ai", "intro-overrides.json");
 const ideasPath = path.join(hubRoot, "ai", "ideas.json");
+const studyGroupsPath = path.join(hubRoot, "ai", "study-groups.json");
+
+/** study 하위 분류 — 항목 id → subcategory id */
+const SUBCATEGORY_BY_ID = {
+  react_test: "dev",
+  "next.js_test": "dev",
+  "markdown-editor": "dev",
+  deploy_test: "dev",
+  dynamic_deploy_test: "dev",
+  webtest: "dev",
+  Crawlingtest: "dev",
+  "ppt-test": "dev",
+  cursor: "ai-tools",
+  chatgpt: "ai-tools",
+  claude: "ai-tools",
+  "cloud-chatbot": "ai-tools",
+  "gemini-tuner": "ai-tools",
+  "ai-synapse-wiki": "ai-tools",
+  "note-apple-history": "notes",
+  "note-apple-history-mindmap": "notes",
+  "note-mermaid-test": "notes",
+  "note-pythagorean-proof": "notes",
+  "vision-font": "other",
+};
 
 const CATEGORY_BY_ID = {
   "today-shoes": "hobby",
@@ -135,6 +159,18 @@ function introPageFromIdeaItem(item) {
   };
 }
 
+function loadStudyGroups() {
+  const raw = loadJson(studyGroupsPath);
+  if (!raw || !Array.isArray(raw.subcategories)) return [];
+  return raw.subcategories;
+}
+
+function resolveSubcategory(item, category) {
+  if (category !== "study") return undefined;
+  if (item.subcategory) return item.subcategory;
+  return SUBCATEGORY_BY_ID[item.id] || "other";
+}
+
 function loadIdeasItems() {
   const raw = loadJson(ideasPath);
   if (!raw || !Array.isArray(raw.items)) return [];
@@ -217,10 +253,12 @@ function main() {
       let introPage =
         introPageFromEntry(withCat, introManifest[item.id]) ||
         (item.intro ? introPageFromIdeaItem(withCat) : undefined);
+      const subcategory = resolveSubcategory(withCat, category);
       return {
         ...withCat,
         ...deriveLinkFields(withCat),
         introPage,
+        subcategory,
         sectionHidden: EXCLUDE_FROM_SECTIONS.has(item.id) || undefined,
       };
     })
@@ -259,6 +297,7 @@ function main() {
     navLabels: { ...defaultNav, ...navLabels },
     categoryOverrides: fileOverrides,
     introOverrides,
+    studyGroups: loadStudyGroups(),
     hubVisibility,
     items,
     resources: services.resources || [],
