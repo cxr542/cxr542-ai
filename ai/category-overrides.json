@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "updated": "2026-05-26",
+  "comment": "항목 id → work | study | hobby | ideas. 허브 편집 모드에서 JSON보내기 후 이 파일에 붙여넣고 npm run build:catalog",
+  "overrides": {}
+}

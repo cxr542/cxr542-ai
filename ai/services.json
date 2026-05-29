@@ -243,10 +243,44 @@
       ]
     },
     {
+      "id": "edu-team-tms",
+      "title": "교육팀 TMS",
+      "summary": "교육팀 TMS — 팀 빌딩비 장부·주간 업무일지",
+      "status": "demo",
+      "category": "work",
+      "tags": [
+        "Education",
+        "Dev"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/edu-team-tms.html"
+        },
+        {
+          "label": "조회",
+          "url": "https://okestro-edu-team-tms.vercel.app/"
+        },
+        {
+          "label": "편집",
+          "url": "https://okestro-edu-team-tms.vercel.app/?mode=edit"
+        },
+        {
+          "label": "허브 데모",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/edu-team-tms/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/edu-team-tms"
+        }
+      ]
+    },
+    {
       "id": "ppt-academizer",
       "title": "PPT 아카데미화",
       "summary": "일반·AI pptx → OKESTRO 아카데미 강의안 변환 (규칙·구조 분석, LLM 생성 없음)",
       "status": "demo",
+      "category": "work",
       "tags": [
         "Education",
         "Dev",
@@ -301,8 +335,9 @@
     },
     {
       "id": "ai-hub",
-      "title": "AI 학습 허브 (이 사이트)",
-      "summary": "공부·실험 중인 AI 서비스를 카드로 모아 두는 대시보드",
+      "title": "cxr542-hub (이 사이트)",
+      "summary": "업무·공부·취미·아이디어를 카테고리별로 모은 개인 포털",
+      "category": "study",
       "status": "demo",
       "tags": [
         "Dev"

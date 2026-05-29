@@ -5,6 +5,7 @@
  */
 import fs from "fs";
 import path from "path";
+import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 import { pagesBase, readMeta, listExperimentIds } from "./experiment-meta.mjs";
 import { loadManifest, ensureIntroLink } from "./build-intros.mjs";
@@ -173,6 +174,15 @@ function main() {
 
   fs.writeFileSync(outPath, JSON.stringify(out, null, 2) + "\n", "utf8");
   console.log("Wrote", outPath, `(${allItems.length} items)`);
+
+  const buildCatalog = path.join(__dirname, "build-catalog.mjs");
+  if (fs.existsSync(buildCatalog)) {
+    const r = spawnSync(process.execPath, [buildCatalog], {
+      cwd: hubRoot,
+      stdio: "inherit",
+    });
+    if (r.status !== 0) process.exit(r.status || 1);
+  }
 }
 
 main();

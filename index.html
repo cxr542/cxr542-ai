@@ -5,176 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="김윤형 AI 학습·실험 허브 — Cursor, LLM, 교육·개발 실험 카드 대시보드"
+      content="cxr542-hub — AI로 만든 서비스·실험·취미·아이디어를 카테고리별로 모은 개인 포털"
     />
-    <title>AI 학습 허브 — 김윤형</title>
+    <title>cxr542-hub — 김윤형</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/glass.css" />
+    <link rel="stylesheet" href="styles/layout-shell.css" />
   </head>
-  <body>
-    <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <body class="hub-tms">
+    <a class="skip-link" href="#hub-panel-body">본문으로 건너뛰기</a>
 
-    <header class="site-header" id="site-header">
-      <a class="logo" href="#top">AI Lab</a>
-      <button
-        class="nav-toggle"
-        type="button"
-        aria-expanded="false"
-        aria-controls="site-nav"
-        aria-label="메뉴 열기"
-      >
-        <span class="nav-toggle__bar"></span>
-        <span class="nav-toggle__bar"></span>
-      </button>
-      <nav class="nav" id="site-nav" aria-label="주요 메뉴">
-        <a href="#featured">주요 데모</a>
-        <a href="#services">서비스</a>
-        <a href="#projects">Cursor 실험</a>
-        <a href="#vibe-guide">바이브 코딩</a>
-        <a href="#resources">자료</a>
-        <a
-          href="https://cxr542.github.io/"
-          class="nav__external"
-          rel="noopener noreferrer"
-          >프로필</a
-        >
-      </nav>
-      <a
-        class="btn btn--primary header-cta"
-        href="https://cxr542.github.io/"
-        rel="noopener noreferrer"
-        >경력 소개</a
-      >
-    </header>
+    <div class="hub-shell">
+      <aside class="hub-sidebar" id="hub-sidebar" aria-label="카테고리 메뉴"></aside>
 
-    <main id="main">
-      <section class="hero section" id="top">
-        <div class="container">
-          <p class="eyebrow">Learning · Experiment</p>
-          <h1 class="hero__title">
-            AI <em class="text-accent">학습·실험</em> 허브
-          </h1>
-          <p class="hero__lead">
-            Cursor, LLM, 교육·개발 도구를 카드로 모아 두는 대시보드입니다. 공부·실험
-            진행 상황을 기록하고 프로필 사이트와 연결합니다.
-          </p>
-        </div>
-      </section>
-
-      <section class="section" id="featured" aria-labelledby="featured-heading">
-        <div class="container">
-          <h2 id="featured-heading" class="section-label">주요 데모</h2>
-          <p class="section-intro">
-            대표 프로젝트입니다. <strong>AI-Synapse Wiki</strong>(지식 Wiki),
-            <strong>Cloud Learning Chatbot</strong>(Render),
-            <strong>Vision Font</strong>(시력 맞춤 리더 · Expo),
-            <strong>GeminiTuner</strong>(Chrome FinOps),
-            <strong>오늘뭐신지</strong>(러닝화 신발장 · Pages) 링크가 바로 보입니다.
-          </p>
-          <div class="ai-grid" id="featured-grid" aria-live="polite"></div>
-        </div>
-      </section>
-
-      <section class="section" id="services" aria-labelledby="services-heading">
-        <div class="container">
-          <h2 id="services-heading" class="section-label">서비스·실험</h2>
-          <p class="section-intro">
-            학습 중·데모·예정 상태로 구분합니다. 필터로 태그별로 볼 수 있습니다.
-          </p>
-          <div class="filters" id="ai-filters" role="group" aria-label="태그 필터"></div>
-          <div class="ai-grid" id="ai-grid" aria-live="polite"></div>
-          <p class="updated-note" id="updated-note" hidden></p>
-        </div>
-      </section>
-
-      <section class="section" id="projects" aria-labelledby="projects-heading">
-        <div class="container">
-          <h2 id="projects-heading" class="section-label">Cursor 실험</h2>
-          <p class="section-intro">
-            cursorstudy <code>experiments/</code> · <code>notes/</code> 폴더를 카드로
-            모았습니다. 데모는 GitHub Pages 서브경로로 배포됩니다.
-          </p>
-          <div
-            class="filters"
-            id="projects-filters"
-            role="group"
-            aria-label="프로젝트 태그 필터"
-          ></div>
-          <div class="ai-grid" id="projects-grid" aria-live="polite"></div>
-          <p class="updated-note" id="projects-updated-note" hidden></p>
-        </div>
-      </section>
-
-      <section class="section vibe-guide" id="vibe-guide" aria-labelledby="vibe-heading">
-        <div class="container">
-          <h2 id="vibe-heading" class="section-label">Zero-G 바이브 코딩</h2>
-          <p class="section-intro">
-            안티그래비티·Cursor 팀 워크플로 요약입니다. 팀장(Human)은 의도·검토·승인,
-            에이전트(AI)는 구현·밤샘 코딩. <code>plan.md</code>·RULE·SKILL·DESIGN·SUBAGENT 로
-            전역 정책을 물려 받고, 5단계 파이프라인 끝에서 배포(예:
-            <code>cloud-chatbot</code> 터널 공유)로 이어집니다.
-          </p>
-          <div class="vibe-guide__grid">
-            <figure class="vibe-guide__figure">
-              <img
-                src="assets/vibe/zero-g-overview.png"
-                alt="ZERO-G VIBE CODING GUIDE — 팀장과 에이전트 역할, RULE·SKILL·DESIGN·SUBAGENT, 5단계 파이프라인"
-                width="1200"
-                height="675"
-                loading="lazy"
-                decoding="async"
-              />
-              <figcaption>전체 가이드 — 의도(Intent) 중심, 5단계 파이프라인</figcaption>
-            </figure>
-            <figure class="vibe-guide__figure">
-              <img
-                src="assets/vibe/zero-g-steps.png"
-                alt="바이브 코딩 상세 가이드 — Step 0 전역 정책부터 Step 4 배포·QA까지"
-                width="1200"
-                height="675"
-                loading="lazy"
-                decoding="async"
-              />
-              <figcaption>단계별 실전 — plan.md, 업무 지시, 피드백, ZERO-G DEPLOYED</figcaption>
-            </figure>
-          </div>
-          <p class="vibe-guide__note">
-            이미지가 안 보이면
-            <code>assets/vibe/</code> 에 PNG 두 장을 넣은 뒤 push 하세요.
-            <a href="assets/vibe/README.md">폴더 안내</a>
-          </p>
-        </div>
-      </section>
-
-      <section class="section" id="resources" aria-labelledby="resources-heading">
-        <div class="container">
-          <h2 id="resources-heading" class="section-label">참고 링크</h2>
-          <ul class="resource-list" id="resource-list"></ul>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container">
-        <p class="footer__copy">© 김윤형 — AI 학습·실험 허브</p>
-        <p class="footer__meta">
-          <a href="https://cxr542.github.io/" rel="noopener noreferrer">프로필 사이트</a>
-          ·
-          <a
-            href="https://github.com/cxr542/cxr542-ai"
-            rel="noopener noreferrer"
-            >GitHub</a
+      <div class="hub-main">
+        <div class="hub-toolbar">
+          <label class="visually-hidden" for="hub-search">검색</label>
+          <input
+            type="search"
+            id="hub-search"
+            placeholder="이름, 태그, 설명 검색…"
+            autocomplete="off"
+          />
+          <span class="hub-route-hint" id="hub-route-hint" aria-live="polite"></span>
+          <button type="button" class="btn btn--ghost" id="hub-category-edit-toggle">
+            카테고리 편집
+          </button>
+          <button
+            type="button"
+            class="btn btn--ghost"
+            id="hub-category-export"
+            title="category-overrides.json"
+            hidden
           >
-        </p>
+            카테고리 JSON
+          </button>
+        </div>
+        <nav class="hub-item-tabs" id="hub-item-tabs" aria-label="항목" hidden></nav>
+        <nav class="hub-panel-tabs" id="hub-panel-tabs" aria-label="소개 또는 앱" hidden>
+          <button type="button" class="hub-panel-tab is-active" data-panel="intro">소개</button>
+          <button type="button" class="hub-panel-tab" data-panel="app">접속 / 앱</button>
+        </nav>
+        <div class="hub-panel-body" id="hub-panel-body" tabindex="-1"></div>
       </div>
+    </div>
+
+    <div class="hub-modal-backdrop" id="nav-labels-modal" hidden>
+      <div class="hub-modal" role="dialog" aria-labelledby="nav-labels-title">
+        <h3 id="nav-labels-title">사이드바 메뉴 이름</h3>
+        <form id="nav-labels-form"></form>
+        <div class="hub-modal__actions">
+          <button type="button" class="btn btn--secondary" id="nav-labels-save">적용</button>
+          <button type="button" class="btn btn--ghost" id="nav-labels-export">JSON 보내기</button>
+          <button type="button" class="btn btn--ghost" id="nav-labels-reset">기본값</button>
+          <button type="button" class="btn btn--ghost" id="nav-labels-close">닫기</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="site-footer" style="display: none" aria-hidden="true">
+      <p class="updated-note" id="catalog-updated"></p>
     </footer>
 
     <script src="js/main.js"></script>
-    <script src="js/ai-home.js?v=20260523b"></script>
+    <script src="js/hub-main.js?v=20260529"></script>
   </body>
 </html>

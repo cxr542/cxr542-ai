@@ -6,6 +6,7 @@
   "scripts": {
     "build:intros": "node scripts/build-intros.mjs",
     "sync:projects": "node scripts/sync-projects.mjs",
+    "build:catalog": "node scripts/build-catalog.mjs",
     "check:deploy": "node scripts/check-deploy.mjs",
     "check:deploy:local": "node scripts/check-deploy.mjs --local-only",
     "preview": "npx --yes serve . -p 8080",

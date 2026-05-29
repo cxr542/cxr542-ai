@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "updated": "2026-05-29",
+  "comment": "사이드바 메뉴 이름. 허브 UI에서 수정 후 JSON 보내기로 이 파일 갱신 가능.",
+  "labels": {
+    "work": "업무 도우미",
+    "study": "공부·실험",
+    "hobby": "러닝·취미",
+    "ideas": "아이디어뱅크",
+    "guide": "Zero-G 바이브 코딩",
+    "resources": "참고 링크",
+    "profile": "프로필"
+  }
+}

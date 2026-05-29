@@ -1,24 +1,47 @@
 :root {
-  --color-bg: #0a0a0a;
-  --color-bg-elevated: #141414;
+  --color-bg: #050508;
+  --color-bg-elevated: #0e0e14;
+  --color-mesh-1: rgba(88, 56, 180, 0.35);
+  --color-mesh-2: rgba(232, 169, 48, 0.2);
+  --color-mesh-3: rgba(40, 120, 200, 0.18);
+  --color-glass: rgba(18, 18, 28, 0.55);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
   --color-accent: #e8a930;
   --color-accent-hover: #f0b84a;
-  --color-accent-muted: rgba(232, 169, 48, 0.15);
-  --color-text: #f5f5f5;
-  --color-text-muted: #9a9a9a;
-  --color-text-on-accent: #0a0a0a;
-  --color-border: rgba(255, 255, 255, 0.1);
+  --color-accent-muted: rgba(232, 169, 48, 0.14);
+  --color-accent-violet: #a78bfa;
+  --color-text: #f0f0f5;
+  --color-text-muted: #9a9aa8;
+  --color-text-on-accent: #050508;
+  --color-border: rgba(255, 255, 255, 0.12);
   --color-border-subtle: rgba(255, 255, 255, 0.06);
-  --font-sans: "DM Sans", system-ui, sans-serif;
-  --text-hero: clamp(2.25rem, 5vw, 3.5rem);
+  --cat-work: #5b9fd4;
+  --cat-study: #a78bfa;
+  --cat-hobby: #6ee7b7;
+  --cat-ideas: #fbbf24;
+  --cat-work-glow: rgba(91, 159, 212, 0.35);
+  --cat-study-glow: rgba(167, 139, 250, 0.35);
+  --cat-hobby-glow: rgba(110, 231, 183, 0.3);
+  --cat-ideas-glow: rgba(251, 191, 36, 0.35);
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-display: "Sora", var(--font-sans);
+  --text-hero: clamp(2.5rem, 6vw, 3.75rem);
   --text-body: 1.0625rem;
-  --leading-tight: 1.15;
+  --leading-tight: 1.12;
   --leading-body: 1.65;
   --space-section: clamp(3rem, 8vw, 5.5rem);
-  --content-max: 72rem;
+  --content-max: 76rem;
   --radius-pill: 9999px;
-  --radius-sm: 8px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --blur-glass: 16px;
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.35);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 180ms;
-  --color-accent-hover: #f0b84a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --blur-glass: 0px;
+  }
 }
