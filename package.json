@@ -14,6 +14,7 @@
     "deploy:notes": "node scripts/deploy-project.mjs notes",
     "deploy:experiments": "node scripts/deploy-project.mjs react_test && node scripts/deploy-project.mjs markdown-editor && node scripts/deploy-project.mjs next.js_test",
     "deploy:ppt-academizer": "node scripts/deploy-ppt-academizer.mjs",
-    "deploy:all": "npm run deploy:experiments && npm run deploy:notes && npm run deploy:ppt-academizer"
+    "deploy:edu-team-tms": "node scripts/deploy-edu-team-tms.mjs",
+    "deploy:all": "npm run deploy:experiments && npm run deploy:notes && npm run deploy:ppt-academizer && npm run deploy:edu-team-tms"
   }
 }
