@@ -260,6 +260,7 @@
       "id": "deploy_test",
       "title": "Deploy Test",
       "summary": "배포 테스트 (준비 중)",
+      "category": "study",
       "status": "planned",
       "tags": [
         "Dev",
@@ -367,6 +368,7 @@
       "id": "webtest",
       "title": "Web Test",
       "summary": "정적 HTML 웹 실험 (준비 중)",
+      "category": "study",
       "status": "planned",
       "tags": [
         "Dev"

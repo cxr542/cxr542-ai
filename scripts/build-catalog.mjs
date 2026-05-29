@@ -16,6 +16,7 @@ const navLabelsPath = path.join(hubRoot, "ai", "nav-labels.json");
 const visibilityPath = path.join(hubRoot, "ai", "hub-visibility.json");
 const introManifestPath = path.join(hubRoot, "intro", "manifest.json");
 const introOverridesPath = path.join(hubRoot, "ai", "intro-overrides.json");
+const ideasPath = path.join(hubRoot, "ai", "ideas.json");
 
 const CATEGORY_BY_ID = {
   "today-shoes": "hobby",
@@ -23,8 +24,8 @@ const CATEGORY_BY_ID = {
   "edu-team-tms": "work",
   "github-pages": "work",
   cxr542: "work",
-  "deploy_test": "ideas",
-  webtest: "ideas",
+  "deploy_test": "study",
+  webtest: "study",
   "zero-g-vibe": "study",
   "ai-hub": "study",
 };
@@ -40,17 +41,6 @@ const EXTRA_ITEMS = [
     status: "learning",
     category: "work",
     tags: ["KPI", "Education"],
-    links: [],
-    source: "manual",
-  },
-  {
-    id: "hub-v3-rollout",
-    title: "cxr542-hub TMS UI",
-    summary: "왼쪽 카테고리 · 오른쪽 탭 · 소개/앱 패널.",
-    status: "idea",
-    category: "ideas",
-    tags: ["portal"],
-    nextAction: "배포 후 프로필 링크 갱신",
     links: [],
     source: "manual",
   },
@@ -129,6 +119,35 @@ function introPageFromEntry(item, entry) {
   };
 }
 
+function introPageFromIdeaItem(item) {
+  const intro = item.intro || {};
+  const blocks = [
+    { label: "문제", text: intro.problem },
+    { label: "가설", text: intro.hypothesis },
+    { label: "최소 실험", text: intro.experiment },
+    { label: "성공 기준", text: intro.success },
+  ].filter((b) => b.text);
+  return {
+    title: item.title,
+    lead: item.summary || "",
+    links: [],
+    blocks,
+  };
+}
+
+function loadIdeasItems() {
+  const raw = loadJson(ideasPath);
+  if (!raw || !Array.isArray(raw.items)) return [];
+  return raw.items.map((item) => ({
+    ...item,
+    category: "ideas",
+    categoryBase: "ideas",
+    status: item.status || "idea",
+    source: "ideas",
+    links: item.links || [],
+  }));
+}
+
 function deriveLinkFields(item) {
   const links = item.links || [];
   const intro = links.find((l) => l.label === "소개");
@@ -184,13 +203,20 @@ function main() {
     byId.set(item.id, prev ? mergeItem(item, prev) : item);
   });
 
+  loadIdeasItems().forEach((item) => {
+    const prev = byId.get(item.id);
+    byId.set(item.id, prev ? mergeItem(item, prev) : item);
+  });
+
   const items = [...byId.values()]
     .map((item) => {
       const categoryBase = resolveCategory(item);
       const category = fileOverrides[item.id] || categoryBase;
       const { localFolder, deployable, deploySkip, ...rest } = item;
       const withCat = { ...rest, category, categoryBase };
-      const introPage = introPageFromEntry(withCat, introManifest[item.id]);
+      let introPage =
+        introPageFromEntry(withCat, introManifest[item.id]) ||
+        (item.intro ? introPageFromIdeaItem(withCat) : undefined);
       return {
         ...withCat,
         ...deriveLinkFields(withCat),
@@ -204,7 +230,8 @@ function main() {
   const tagSet = new Set();
   items.forEach((i) => (i.tags || []).forEach((t) => tagSet.add(t)));
 
-  const updated = [services.updated, projects.updated]
+  const ideasFile = loadJson(ideasPath);
+  const updated = [services.updated, projects.updated, ideasFile && ideasFile.updated]
     .filter(Boolean)
     .sort()
     .pop();

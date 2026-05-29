@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>마라톤 기록 — 앱 UI 목업</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #050508;
+        --card: rgba(255, 255, 255, 0.04);
+        --border: rgba(255, 255, 255, 0.1);
+        --text: #f0f0f5;
+        --muted: #9a9aa8;
+        --accent: #6ee7b7;
+        --accent-dim: rgba(110, 231, 183, 0.15);
+        --font: "IBM Plex Sans", system-ui, sans-serif;
+        --font-display: "Sora", var(--font);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        font-family: var(--font);
+        font-size: 15px;
+        color: var(--text);
+        background:
+          radial-gradient(ellipse 80% 40% at 50% -10%, rgba(110, 231, 183, 0.12), transparent),
+          var(--bg);
+      }
+
+      .mock-banner {
+        padding: 0.45rem 0.75rem;
+        text-align: center;
+        font-size: 0.75rem;
+        color: var(--muted);
+        background: rgba(110, 231, 183, 0.1);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mock-banner strong {
+        color: var(--accent);
+      }
+
+      .mock-banner a {
+        color: var(--accent);
+        margin-left: 0.5rem;
+      }
+
+      .phone {
+        max-width: 420px;
+        margin: 0 auto;
+        min-height: calc(100dvh - 32px);
+        display: flex;
+        flex-direction: column;
+        padding-bottom: calc(4.25rem + var(--safe-bottom));
+      }
+
+      .app-header {
+        padding: 1rem 1.1rem 0.5rem;
+      }
+
+      .app-header h1 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        font-weight: 600;
+        background: linear-gradient(135deg, #f5f5f5, var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .app-header p {
+        margin: 0.35rem 0 0;
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+
+      .screen {
+        display: none;
+        flex: 1;
+        flex-direction: column;
+        padding: 0 1rem 1rem;
+        animation: fade 0.2s ease;
+      }
+
+      .screen.is-active {
+        display: flex;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(4px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-bottom: 0.85rem;
+      }
+
+      .chip {
+        padding: 0.35rem 0.7rem;
+        font-size: 0.75rem;
+        font-family: inherit;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        cursor: pointer;
+      }
+
+      .chip.is-active {
+        color: var(--text);
+        border-color: rgba(110, 231, 183, 0.5);
+        background: var(--accent-dim);
+      }
+
+      .race-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .race-card {
+        padding: 0.85rem 1rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: border-color 0.15s;
+      }
+
+      .race-card:hover {
+        border-color: rgba(110, 231, 183, 0.35);
+      }
+
+      .race-card__top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .race-card__name {
+        margin: 0;
+        font-weight: 500;
+        font-size: 0.9375rem;
+      }
+
+      .race-card__time {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--accent);
+        white-space: nowrap;
+      }
+
+      .race-card__meta {
+        margin: 0.35rem 0 0;
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .race-card__note {
+        margin: 0.45rem 0 0;
+        font-size: 0.8125rem;
+        color: var(--muted);
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 0.1rem 0.45rem;
+        font-size: 0.6875rem;
+        border-radius: 4px;
+        margin-right: 0.35rem;
+      }
+
+      .badge--full {
+        color: #6ee7b7;
+        border: 1px solid rgba(110, 231, 183, 0.4);
+      }
+
+      .badge--half {
+        color: #a78bfa;
+        border: 1px solid rgba(167, 139, 250, 0.4);
+      }
+
+      .badge--10k {
+        color: #5b9fd4;
+        border: 1px solid rgba(91, 159, 212, 0.4);
+      }
+
+      .detail-hero {
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+      }
+
+      .detail-hero h2 {
+        margin: 0 0 0.25rem;
+        font-size: 1.125rem;
+      }
+
+      .detail-hero .big-time {
+        margin: 0.5rem 0;
+        font-family: var(--font-display);
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--accent);
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .detail-cell {
+        padding: 0.65rem 0.75rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+
+      .detail-cell span {
+        display: block;
+        font-size: 0.6875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        margin-bottom: 0.2rem;
+      }
+
+      .detail-note {
+        padding: 0.85rem 1rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 0.875rem;
+        line-height: 1.55;
+        color: var(--muted);
+      }
+
+      .back-row {
+        margin-bottom: 0.75rem;
+      }
+
+      .back-row button {
+        font: inherit;
+        font-size: 0.8125rem;
+        color: var(--accent);
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+      }
+
+      .form label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+
+      .form input,
+      .form select,
+      .form textarea {
+        display: block;
+        width: 100%;
+        margin-top: 0.3rem;
+        padding: 0.55rem 0.65rem;
+        font: inherit;
+        font-size: 0.9375rem;
+        color: var(--text);
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+
+      .form textarea {
+        min-height: 4.5rem;
+        resize: vertical;
+      }
+
+      .btn-primary {
+        width: 100%;
+        margin-top: 0.5rem;
+        padding: 0.75rem;
+        font: inherit;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: #050508;
+        background: var(--accent);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.55rem;
+        margin-bottom: 1rem;
+      }
+
+      .stat-card {
+        padding: 1rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+
+      .stat-card--wide {
+        grid-column: 1 / -1;
+      }
+
+      .stat-card .label {
+        font-size: 0.6875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+
+      .stat-card .value {
+        margin-top: 0.35rem;
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--accent);
+      }
+
+      .stat-card .sub {
+        margin-top: 0.2rem;
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .section-title {
+        margin: 0 0 0.5rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .tab-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        padding: 0.35rem 0.5rem calc(0.35rem + var(--safe-bottom));
+        background: rgba(12, 12, 18, 0.92);
+        border-top: 1px solid var(--border);
+        backdrop-filter: blur(12px);
+      }
+
+      .tab-bar__inner {
+        display: flex;
+        width: min(100%, 420px);
+        gap: 0.25rem;
+      }
+
+      .tab {
+        flex: 1;
+        padding: 0.5rem 0.25rem;
+        font: inherit;
+        font-size: 0.6875rem;
+        color: var(--muted);
+        background: transparent;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .tab.is-active {
+        color: var(--accent);
+        background: var(--accent-dim);
+      }
+
+      .tab span {
+        display: block;
+        font-size: 1.1rem;
+        margin-bottom: 0.15rem;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="mock-banner">
+      <strong>앱 UI 목업</strong> — 데이터·저장 없음 ·
+      <a href="marathon-log-hub-mockup.html">허브 소개 목업</a>
+    </p>
+
+    <div class="phone">
+      <header class="app-header">
+        <h1>마라톤 기록</h1>
+        <p id="header-sub">대회 기록 · PB</p>
+      </header>
+
+      <section class="screen is-active" id="screen-list" aria-label="기록 목록">
+        <div class="chips" id="year-chips"></div>
+        <div class="chips" id="dist-chips">
+          <button type="button" class="chip is-active" data-dist="all">전체</button>
+          <button type="button" class="chip" data-dist="full">풀</button>
+          <button type="button" class="chip" data-dist="half">하프</button>
+          <button type="button" class="chip" data-dist="10k">10K</button>
+        </div>
+        <ul class="race-list" id="race-list"></ul>
+      </section>
+
+      <section class="screen" id="screen-detail" aria-label="상세">
+        <div class="back-row">
+          <button type="button" id="btn-back-list">← 기록 목록</button>
+        </div>
+        <div id="detail-body"></div>
+      </section>
+
+      <section class="screen" id="screen-add" aria-label="추가">
+        <form class="form" onsubmit="return false">
+          <label>날짜<input type="date" value="2025-03-15" /></label>
+          <label>대회명<input type="text" placeholder="예: 서울마라톤" /></label>
+          <label>
+            거리
+            <select>
+              <option value="full">풀 (42.195km)</option>
+              <option value="half">하프</option>
+              <option value="10k">10K</option>
+            </select>
+          </label>
+          <label>기록 (칩)<input type="text" placeholder="03:42:15" /></label>
+          <label>목표<input type="text" placeholder="SUB4" /></label>
+          <label>메모<textarea placeholder="날씨, 컨디션, 페이스 메모…"></textarea></label>
+          <button type="button" class="btn-primary" disabled>저장 (목업)</button>
+        </form>
+      </section>
+
+      <section class="screen" id="screen-stats" aria-label="통계">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="label">풀 PB</div>
+            <div class="value">3:41:58</div>
+            <div class="sub">2024 서울</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">하프 PB</div>
+            <div class="value">1:42:03</div>
+            <div class="sub">2023 부산</div>
+          </div>
+          <div class="stat-card stat-card--wide">
+            <div class="label">2025년 완주</div>
+            <div class="value">2회</div>
+            <div class="sub">풀 0 · 하프 1 · 10K 1</div>
+          </div>
+        </div>
+        <p class="section-title">최근 3경기</p>
+        <ul class="race-list" id="stats-recent"></ul>
+      </section>
+    </div>
+
+    <nav class="tab-bar" aria-label="앱 탭">
+      <div class="tab-bar__inner">
+        <button type="button" class="tab is-active" data-tab="list"><span>📋</span>기록</button>
+        <button type="button" class="tab" data-tab="stats"><span>📊</span>통계</button>
+        <button type="button" class="tab" data-tab="add"><span>＋</span>추가</button>
+      </div>
+    </nav>
+
+    <script>
+      var RACES = [
+        {
+          id: "1",
+          date: "2025-02-23",
+          name: "대구 하프",
+          distance: "half",
+          chipTime: "1:45:22",
+          goal: "1:45",
+          weather: "맑음 8°C",
+          notes: "후반 5km 페이스 유지 성공",
+        },
+        {
+          id: "2",
+          date: "2024-11-03",
+          name: "JTBC 서울 10K",
+          distance: "10k",
+          chipTime: "48:12",
+          goal: "50분",
+          weather: "흐림",
+          notes: "출발 혼잡, 2km부터 리듬 잡음",
+        },
+        {
+          id: "3",
+          date: "2024-03-17",
+          name: "서울마라톤",
+          distance: "full",
+          chipTime: "3:41:58",
+          goal: "SUB4",
+          weather: "맑음 12°C",
+          notes: "30km 이후 페이스 붕괴. 다음엔 25km 롱런 보강",
+        },
+        {
+          id: "4",
+          date: "2023-10-15",
+          name: "부산 하프",
+          distance: "half",
+          chipTime: "1:42:03",
+          goal: "1:45",
+          weather: "바람",
+          notes: "PB. 해운대 구간 바람",
+        },
+        {
+          id: "5",
+          date: "2023-03-19",
+          name: "서울마라톤",
+          distance: "full",
+          chipTime: "4:02:11",
+          goal: "완주",
+          weather: "미세먼지",
+          notes: "첫 풀. 35km에서 걸음",
+        },
+        {
+          id: "6",
+          date: "2022-11-06",
+          name: "춘천마라톤",
+          distance: "full",
+          chipTime: "4:18:44",
+          goal: "완주",
+          weather: "추움",
+          notes: "보온·페이스 전략 부족",
+        },
+      ];
+
+      var distLabel = { full: "풀", half: "하프", "10k": "10K" };
+      var state = { year: "all", dist: "all" };
+
+      function showScreen(id) {
+        document.querySelectorAll(".screen").forEach(function (el) {
+          el.classList.toggle("is-active", el.id === "screen-" + id);
+        });
+        document.querySelectorAll(".tab").forEach(function (btn) {
+          var t = btn.getAttribute("data-tab");
+          btn.classList.toggle("is-active", t === id && id !== "detail");
+        });
+        var sub = {
+          list: "대회 기록 · PB",
+          stats: "통계 요약",
+          add: "새 기록 추가",
+          detail: "대회 상세",
+        };
+        document.getElementById("header-sub").textContent = sub[id] || "";
+        document.querySelector(".tab-bar").style.display =
+          id === "detail" ? "none" : "flex";
+      }
+
+      function badgeClass(d) {
+        if (d === "full") return "badge badge--full";
+        if (d === "half") return "badge badge--half";
+        return "badge badge--10k";
+      }
+
+      function filtered() {
+        return RACES.filter(function (r) {
+          var y = r.date.slice(0, 4);
+          if (state.year !== "all" && y !== state.year) return false;
+          if (state.dist !== "all" && r.distance !== state.dist) return false;
+          return true;
+        }).sort(function (a, b) {
+          return b.date.localeCompare(a.date);
+        });
+      }
+
+      function renderList() {
+        var list = document.getElementById("race-list");
+        list.innerHTML = filtered()
+          .map(function (r) {
+            return (
+              '<li class="race-card" data-id="' +
+              r.id +
+              '">' +
+              '<div class="race-card__top">' +
+              "<h3 class=\"race-card__name\">" +
+              r.name +
+              "</h3>" +
+              '<span class="race-card__time">' +
+              r.chipTime +
+              "</span>" +
+              "</div>" +
+              '<p class="race-card__meta">' +
+              '<span class="' +
+              badgeClass(r.distance) +
+              '">' +
+              distLabel[r.distance] +
+              "</span>" +
+              r.date +
+              "</p>" +
+              (r.notes ? '<p class="race-card__note">' + r.notes + "</p>" : "") +
+              "</li>"
+            );
+          })
+          .join("");
+        list.querySelectorAll(".race-card").forEach(function (card) {
+          card.addEventListener("click", function () {
+            openDetail(card.getAttribute("data-id"));
+          });
+        });
+      }
+
+      function openDetail(id) {
+        var r = RACES.find(function (x) {
+          return x.id === id;
+        });
+        if (!r) return;
+        document.getElementById("detail-body").innerHTML =
+          '<div class="detail-hero">' +
+          "<h2>" +
+          r.name +
+          "</h2>" +
+          '<p style="margin:0;font-size:0.8125rem;color:var(--muted)">' +
+          r.date +
+          ' · <span class="' +
+          badgeClass(r.distance) +
+          '">' +
+          distLabel[r.distance] +
+          "</span></p>" +
+          '<p class="big-time">' +
+          r.chipTime +
+          "</p>" +
+          '<p style="margin:0;font-size:0.8125rem;color:var(--muted)">목표: ' +
+          r.goal +
+          "</p>" +
+          "</div>" +
+          '<div class="detail-grid">' +
+          '<div class="detail-cell"><span>날씨</span>' +
+          (r.weather || "—") +
+          "</div>" +
+          '<div class="detail-cell"><span>칩 기록</span>' +
+          r.chipTime +
+          "</div>" +
+          "</div>" +
+          '<p class="section-title">메모</p>' +
+          '<div class="detail-note">' +
+          (r.notes || "메모 없음") +
+          "</div>";
+        showScreen("detail");
+      }
+
+      function renderYearChips() {
+        var years = {};
+        RACES.forEach(function (r) {
+          years[r.date.slice(0, 4)] = true;
+        });
+        var el = document.getElementById("year-chips");
+        var html =
+          '<button type="button" class="chip' +
+          (state.year === "all" ? " is-active" : "") +
+          '" data-year="all">전체</button>';
+        Object.keys(years)
+          .sort()
+          .reverse()
+          .forEach(function (y) {
+            html +=
+              '<button type="button" class="chip' +
+              (state.year === y ? " is-active" : "") +
+              '" data-year="' +
+              y +
+              '">' +
+              y +
+              "</button>";
+          });
+        el.innerHTML = html;
+        el.querySelectorAll(".chip").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            state.year = btn.getAttribute("data-year");
+            el.querySelectorAll(".chip").forEach(function (c) {
+              c.classList.toggle("is-active", c === btn);
+            });
+            renderList();
+          });
+        });
+      }
+
+      document.getElementById("dist-chips").addEventListener("click", function (e) {
+        var btn = e.target.closest(".chip");
+        if (!btn) return;
+        state.dist = btn.getAttribute("data-dist");
+        document.querySelectorAll("#dist-chips .chip").forEach(function (c) {
+          c.classList.toggle("is-active", c === btn);
+        });
+        renderList();
+      });
+
+      document.getElementById("btn-back-list").addEventListener("click", function () {
+        showScreen("list");
+      });
+
+      document.querySelectorAll(".tab").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showScreen(btn.getAttribute("data-tab"));
+        });
+      });
+
+      document.getElementById("stats-recent").innerHTML = RACES.slice()
+        .sort(function (a, b) {
+          return b.date.localeCompare(a.date);
+        })
+        .slice(0, 3)
+        .map(function (r) {
+          return (
+            '<li class="race-card">' +
+            '<div class="race-card__top">' +
+            "<h3 class=\"race-card__name\">" +
+            r.name +
+            "</h3>" +
+            '<span class="race-card__time">' +
+            r.chipTime +
+            "</span>" +
+            "</div>" +
+            '<p class="race-card__meta">' +
+            r.date +
+            " · " +
+            distLabel[r.distance] +
+            "</p></li>"
+          );
+        })
+        .join("");
+
+      renderYearChips();
+      renderList();
+    </script>
+  </body>
+</html>

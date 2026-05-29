@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cxr542-hub — 마라톤 기록 (아이디어뱅크 목업)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #050508;
+        --sidebar: #0c0c12;
+        --border: rgba(255, 255, 255, 0.1);
+        --text: #f0f0f5;
+        --muted: #9a9aa8;
+        --green: #10b981;
+        --cat-ideas: #fbbf24;
+        --font: "IBM Plex Sans", system-ui, sans-serif;
+        --font-display: "Sora", var(--font);
+        --sidebar-w: 220px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .mock-banner {
+        padding: 0.5rem 1rem;
+        text-align: center;
+        font-size: 0.8125rem;
+        color: var(--muted);
+        background: rgba(251, 191, 36, 0.1);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mock-banner strong {
+        color: var(--cat-ideas);
+      }
+
+      .mock-banner a {
+        color: var(--green);
+        margin-left: 0.5rem;
+      }
+
+      .hub-shell {
+        display: grid;
+        grid-template-columns: var(--sidebar-w) 1fr;
+        min-height: calc(100dvh - 36px);
+      }
+
+      .sidebar {
+        padding: 1rem 0.75rem;
+        background: var(--sidebar);
+        border-right: 1px solid rgba(16, 185, 129, 0.12);
+      }
+
+      .logo-block h1 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.125rem;
+      }
+
+      .logo-block p {
+        margin: 0.35rem 0 1rem;
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .nav-item {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0.2rem 0;
+        padding: 0.55rem 0.65rem;
+        font: inherit;
+        font-size: 0.875rem;
+        text-align: left;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 8px;
+      }
+
+      .nav-item.active {
+        color: var(--text);
+        background: rgba(251, 191, 36, 0.12);
+        border-color: rgba(251, 191, 36, 0.35);
+      }
+
+      .nav-item .badge {
+        font-size: 0.6875rem;
+        padding: 0.1rem 0.4rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      .toolbar {
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .item-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .item-tab {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8125rem;
+        color: var(--text);
+        background: rgba(251, 191, 36, 0.15);
+        border: 1px solid rgba(251, 191, 36, 0.4);
+        border-radius: 8px;
+      }
+
+      .panel-tabs {
+        display: flex;
+        gap: 0.25rem;
+        padding: 0.5rem 1rem 0;
+      }
+
+      .panel-tab {
+        padding: 0.45rem 0.85rem;
+        font-size: 0.8125rem;
+        color: var(--muted);
+        border: 1px solid transparent;
+        border-radius: 8px 8px 0 0;
+      }
+
+      .panel-tab.active {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.04);
+        border-color: var(--border);
+        border-bottom-color: transparent;
+      }
+
+      .panel-tab.disabled {
+        opacity: 0.4;
+        text-decoration: line-through;
+      }
+
+      .panel-body {
+        flex: 1;
+        padding: 1rem 1.25rem 2rem;
+        overflow-y: auto;
+        border-top: 1px solid var(--border);
+        margin-top: -1px;
+      }
+
+      .panel-body h2 {
+        margin: 0 0 0.75rem;
+        font-family: var(--font-display);
+        font-size: 1.25rem;
+      }
+
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-bottom: 1rem;
+      }
+
+      .pill {
+        padding: 0.2rem 0.55rem;
+        font-size: 0.75rem;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+
+      .pill--ideas {
+        color: var(--cat-ideas);
+        border-color: var(--cat-ideas);
+      }
+
+      .summary {
+        margin: 0 0 1rem;
+        max-width: 58ch;
+        line-height: 1.65;
+        color: var(--muted);
+      }
+
+      .next-box {
+        margin: 0 0 1.25rem;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        font-style: italic;
+        color: var(--cat-ideas);
+        background: rgba(251, 191, 36, 0.08);
+        border-left: 3px solid var(--cat-ideas);
+        border-radius: 0 8px 8px 0;
+      }
+
+      .intro-preview h3 {
+        margin: 0 0 0.5rem;
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        background: linear-gradient(135deg, #f5f5f5, var(--green));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .intro-preview .lead {
+        margin: 0 0 1rem;
+        color: var(--muted);
+        line-height: 1.65;
+        max-width: 58ch;
+      }
+
+      .idea-blocks {
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+        margin-bottom: 1rem;
+        max-width: 40rem;
+      }
+
+      .idea-block {
+        padding: 0.75rem 0.9rem;
+        background: rgba(0, 0, 0, 0.28);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+
+      .idea-block strong {
+        display: block;
+        font-size: 0.6875rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--cat-ideas);
+        margin-bottom: 0.35rem;
+      }
+
+      .idea-block p {
+        margin: 0;
+        font-size: 0.875rem;
+        line-height: 1.55;
+        color: var(--muted);
+      }
+
+      .launch-card {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.9rem 1rem;
+        max-width: 36rem;
+        margin-bottom: 0.75rem;
+        border: 1px solid rgba(110, 231, 183, 0.35);
+        border-radius: 12px;
+        background: rgba(110, 231, 183, 0.08);
+      }
+
+      .launch-card a {
+        padding: 0.5rem 0.9rem;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: #050508;
+        background: var(--green);
+        border-radius: 8px;
+        text-decoration: none;
+      }
+
+      .panel-note {
+        font-size: 0.8125rem;
+        color: var(--muted);
+        margin: 0 0 0.5rem;
+      }
+
+      @media (max-width: 720px) {
+        .hub-shell {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <p class="mock-banner">
+      <strong>허브 UI 목업</strong> — 아이디어뱅크 · 「마라톤 기록」 소개 탭 ·
+      <a href="marathon-log-app-mockup.html">앱 UI 목업</a>
+    </p>
+
+    <div class="hub-shell">
+      <aside class="sidebar">
+        <div class="logo-block">
+          <h1>cxr542-hub</h1>
+          <p>Personal portal</p>
+        </div>
+        <div class="nav-item">업무 도우미 <span class="badge">5</span></div>
+        <div class="nav-item">공부·실험 <span class="badge">12</span></div>
+        <div class="nav-item">러닝·취미 <span class="badge">2</span></div>
+        <div class="nav-item active">아이디어뱅크 <span class="badge">1</span></div>
+      </aside>
+
+      <div class="main">
+        <div class="toolbar">#/ideas/marathon-log/intro</div>
+        <nav class="item-tabs" aria-label="항목">
+          <span class="item-tab">마라톤 기록</span>
+        </nav>
+        <nav class="panel-tabs" aria-label="패널">
+          <span class="panel-tab active">소개</span>
+          <span class="panel-tab disabled">접속 / 앱</span>
+        </nav>
+        <div class="panel-body">
+          <h2>마라톤 기록</h2>
+          <div class="meta-row">
+            <span class="pill pill--ideas">아이디어뱅크</span>
+            <span class="pill">아이디어</span>
+            <span class="pill">product</span>
+            <span class="pill">Running</span>
+            <span class="pill">personal</span>
+          </div>
+          <p class="summary">
+            iPhone 메모·Google Keep에 흩어진 대회 기록을 한곳에서 관리. 로컬 저장, PB·연도 통계, JSON 백업.
+          </p>
+          <p class="next-box">다음: UI 목업 확정 → sample-races.json → Vite MVP(대회 CRUD)</p>
+
+          <section class="intro-preview" aria-label="소개 미리보기">
+            <h3>마라톤 기록</h3>
+            <p class="lead">
+              실행 전 아이디어 — 메모앱 대체용 웹 장부. 오늘뭐신지(신발)와 역할을 분리합니다.
+            </p>
+            <div class="idea-blocks">
+              <div class="idea-block">
+                <strong>문제</strong>
+                <p>
+                  iPhone 메모·Google Keep에 대회명·기록·메모가 항목마다 형식이 달라 PB, 연도별 횟수, 거리별 검색이 어렵다.
+                </p>
+              </div>
+              <div class="idea-block">
+                <strong>가설</strong>
+                <p>
+                  대회 단위 JSON + 로컬 웹 앱이면 cxr542-hub에서 hobby(오늘뭐신지)와 함께 관리하면서도 데이터는 본인 기기에만 둘 수 있다.
+                </p>
+              </div>
+              <div class="idea-block">
+                <strong>최소 실험</strong>
+                <p>
+                  Keep에서 샘플 10건 정리 → 목록·추가·편집·통계 MVP → JSON export/import.
+                </p>
+              </div>
+              <div class="idea-block">
+                <strong>성공 기준</strong>
+                <p>
+                  projects/marathon-log Pages 배포 URL + Repo 링크 생기면 러닝·취미로 승격.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <p class="panel-note">앱 화면 미리보기 (목업)</p>
+          <div class="launch-card">
+            <span>마라톤 기록 앱 — 기록 · 통계 · 추가</span>
+            <a href="marathon-log-app-mockup.html">앱 목업 열기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -34,6 +34,18 @@
             autocomplete="off"
           />
           <span class="hub-route-hint" id="hub-route-hint" aria-live="polite"></span>
+          <button type="button" class="btn btn--secondary" id="hub-quick-idea-open" title="아이디어뱅크에 빠르게 등록">
+            ＋ 아이디어
+          </button>
+          <button
+            type="button"
+            class="btn btn--ghost"
+            id="hub-ideas-export"
+            title="ideas.json"
+            hidden
+          >
+            ideas JSON
+          </button>
           <button type="button" class="btn btn--ghost" id="hub-category-edit-toggle">
             항목·메뉴 관리
           </button>
@@ -90,6 +102,46 @@
       </div>
     </div>
 
+    <div class="hub-modal-backdrop" id="quick-idea-modal" hidden>
+      <div class="hub-modal hub-modal--wide" role="dialog" aria-labelledby="quick-idea-title">
+        <h3 id="quick-idea-title">아이디어 빠른 등록</h3>
+        <p class="hub-summary" style="margin: 0 0 0.75rem; font-size: 0.8125rem">
+          브라우저에 임시 저장됩니다. 확정 시 <strong>ideas JSON</strong>을
+          <code>ai/ideas.json</code>에 넣고 <code>npm run build:hub</code> 하세요.
+        </p>
+        <form id="quick-idea-form">
+          <label class="hub-intro-field"
+            >제목 (필수)<input type="text" name="title" required placeholder="예: 마라톤 기록" autocomplete="off"
+          /></label>
+          <label class="hub-intro-field"
+            >한 줄 요약 (필수)<textarea name="summary" rows="2" required placeholder="무엇을 위한 아이디어인지"></textarea
+          ></label>
+          <label class="hub-intro-field"
+            >다음 행동<textarea name="nextAction" rows="2" placeholder="가장 작은 다음 한 걸음"></textarea
+          ></label>
+          <label class="hub-intro-field"
+            >문제<textarea name="problem" rows="2" placeholder="지금 불편한 점"></textarea
+          ></label>
+          <label class="hub-intro-field"
+            >가설<textarea name="hypothesis" rows="2" placeholder="이렇게 하면 나아질 것"></textarea
+          ></label>
+          <label class="hub-intro-field"
+            >최소 실험<textarea name="experiment" rows="2" placeholder="1~2시간 안에 할 수 있는 것"></textarea
+          ></label>
+          <label class="hub-intro-field"
+            >성공 기준<textarea name="success" rows="2" placeholder="이게 되면 study/hobby로 승격"></textarea
+          ></label>
+          <label class="hub-intro-field"
+            >태그 (쉼표)<input type="text" name="tags" placeholder="product, Running"
+          /></label>
+        </form>
+        <div class="hub-modal__actions">
+          <button type="button" class="btn btn--secondary" id="quick-idea-save">저장 · 아이디어뱅크 열기</button>
+          <button type="button" class="btn btn--ghost" id="quick-idea-close">닫기</button>
+        </div>
+      </div>
+    </div>
+
     <div class="hub-modal-backdrop" id="hidden-restore-modal" hidden>
       <div class="hub-modal" role="dialog" aria-labelledby="hidden-restore-title">
         <h3 id="hidden-restore-title">숨긴 항목·메뉴</h3>
@@ -105,6 +157,6 @@
     </footer>
 
     <script src="js/main.js"></script>
-    <script src="js/hub-main.js?v=intro-edit"></script>
+    <script src="js/hub-main.js?v=quick-idea"></script>
   </body>
 </html>

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "updated": "2026-05-29",
+  "comment": "아이디어뱅크 전용. 허브 ＋ 아이디어 → ideas JSON 보내기로 갱신 가능",
+  "items": [
+    {
+      "id": "marathon-log",
+      "title": "마라톤 기록장",
+      "summary": "iPhone 메모·Google Keep에 흩어진 대회 기록을 한곳에서 관리. 로컬 저장, PB·연도 통계, JSON 백업.",
+      "status": "idea",
+      "category": "ideas",
+      "tags": ["product", "Running", "personal"],
+      "nextAction": "UI 목업 확정 → sample-races.json → Vite MVP(대회 CRUD)",
+      "links": [],
+      "intro": {
+        "problem": "iPhone 메모·Google Keep에 대회명·기록·메모가 항목마다 형식이 달라 PB, 연도별 횟수, 거리별 검색이 어렵다.",
+        "hypothesis": "대회 단위 JSON + 로컬 웹 앱이면 cxr542-hub에서 hobby(오늘뭐신지)와 역할을 분리하며 관리할 수 있다.",
+        "experiment": "Keep에서 샘플 10건 정리 → 목록·추가·편집·통계 MVP → JSON export/import.",
+        "success": "projects/marathon-log Pages 배포 URL + Repo 링크 생기면 러닝·취미로 승격."
+      }
+    }
+  ]
+}

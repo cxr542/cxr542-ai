@@ -1,4 +1,12 @@
 {
+  "marathon-log": {
+    "title": "마라톤 기록장",
+    "lead": "실행 전 아이디어 — 메모앱 대체용 웹 장부. 오늘뭐신지(신발)와 역할을 분리합니다.",
+    "links": [
+      { "label": "앱 UI 목업", "href": "https://cxr542.github.io/cxr542-ai/preview/marathon-log-app-mockup.html" },
+      { "label": "허브 소개 목업", "href": "https://cxr542.github.io/cxr542-ai/preview/marathon-log-hub-mockup.html" }
+    ]
+  },
   "edu-team-tms": {
     "title": "교육팀 TMS",
     "lead": "팀 빌딩비 장부·주간 업무일지(KPI M/M). Vercel 운영 + GitHub Pages 허브 데모.",
