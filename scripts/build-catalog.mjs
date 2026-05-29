@@ -134,10 +134,6 @@ function deriveLinkFields(item) {
     repoUrl,
     primaryAppUrl,
     appUrls,
-    embedAllowed:
-      item.embedAllowed !== false &&
-      item.category !== "ideas" &&
-      !!primaryAppUrl,
   };
 }
 

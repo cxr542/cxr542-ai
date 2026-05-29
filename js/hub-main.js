@@ -616,7 +616,7 @@
   }
 
   function appPanelHtml(item) {
-    var html = "<h2>" + escapeHtml(item.title) + " — 바로가기</h2>";
+    var html = "<h2>" + escapeHtml(item.title) + " — 접속</h2>";
     var links = item.appUrls || [];
 
     if (!hasAppLinks(item)) {

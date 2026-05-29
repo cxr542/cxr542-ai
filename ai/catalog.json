@@ -51,8 +51,7 @@
       "introUrl": null,
       "repoUrl": null,
       "primaryAppUrl": null,
-      "appUrls": [],
-      "embedAllowed": false
+      "appUrls": []
     },
     {
       "id": "edu-team-tms",
@@ -106,8 +105,7 @@
           "label": "허브 데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/edu-team-tms/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "today-shoes",
@@ -146,8 +144,7 @@
           "label": "앱",
           "url": "https://cxr542.github.io/today-shoes/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "cxr542",
@@ -183,8 +180,7 @@
           "label": "사이트",
           "url": "https://cxr542.github.io/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "ai-synapse-wiki",
@@ -222,8 +218,7 @@
           "label": "Wiki",
           "url": "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "note-apple-history",
@@ -255,8 +250,7 @@
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history.md"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "note-apple-history-mindmap",
@@ -288,8 +282,7 @@
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#apple-history-mindmap.md"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "chatgpt",
@@ -320,8 +313,7 @@
           "label": "OpenAI",
           "url": "https://openai.com/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "claude",
@@ -352,8 +344,7 @@
           "label": "Anthropic",
           "url": "https://www.anthropic.com/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "cloud-chatbot",
@@ -408,8 +399,7 @@
           "label": "관리자",
           "url": "https://cloud-chatbot-963d.onrender.com/admin/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "cursor",
@@ -441,8 +431,7 @@
           "label": "프로필 사이트",
           "url": "https://cxr542.github.io/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "hub-v3-rollout",
@@ -460,8 +449,7 @@
       "introUrl": null,
       "repoUrl": null,
       "primaryAppUrl": null,
-      "appUrls": [],
-      "embedAllowed": false
+      "appUrls": []
     },
     {
       "id": "deploy_test",
@@ -484,8 +472,7 @@
       "introUrl": "https://cxr542.github.io/cxr542-ai/intro/deploy_test.html",
       "repoUrl": null,
       "primaryAppUrl": null,
-      "appUrls": [],
-      "embedAllowed": false
+      "appUrls": []
     },
     {
       "id": "dynamic_deploy_test",
@@ -508,8 +495,7 @@
       "introUrl": "https://cxr542.github.io/cxr542-ai/intro/dynamic_deploy_test.html",
       "repoUrl": null,
       "primaryAppUrl": null,
-      "appUrls": [],
-      "embedAllowed": false
+      "appUrls": []
     },
     {
       "id": "gemini-tuner",
@@ -555,8 +541,7 @@
           "label": "Privacy",
           "url": "https://cxr542.github.io/GeminiTuner/privacy.html"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "github-pages",
@@ -592,8 +577,7 @@
           "label": "사이트",
           "url": "https://cxr542.github.io/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "markdown-editor",
@@ -625,8 +609,7 @@
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/markdown-editor/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "note-mermaid-test",
@@ -658,8 +641,7 @@
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#mermaid-test.md"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "next.js_test",
@@ -691,8 +673,7 @@
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/next.js_test/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "ppt-academizer",
@@ -754,8 +735,7 @@
           "label": "Netlify",
           "url": "https://ppt-academizer.netlify.app/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "ppt-test",
@@ -777,8 +757,7 @@
       "introUrl": "https://cxr542.github.io/cxr542-ai/intro/ppt-test.html",
       "repoUrl": null,
       "primaryAppUrl": null,
-      "appUrls": [],
-      "embedAllowed": false
+      "appUrls": []
     },
     {
       "id": "note-pythagorean-proof",
@@ -810,8 +789,7 @@
           "label": "문서",
           "url": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#pythagorean-proof.md"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "Crawlingtest",
@@ -834,8 +812,7 @@
       "introUrl": "https://cxr542.github.io/cxr542-ai/intro/Crawlingtest.html",
       "repoUrl": null,
       "primaryAppUrl": null,
-      "appUrls": [],
-      "embedAllowed": false
+      "appUrls": []
     },
     {
       "id": "react_test",
@@ -867,8 +844,7 @@
           "label": "데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/react_test/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "vision-font",
@@ -906,8 +882,7 @@
           "label": "허브 데모",
           "url": "https://cxr542.github.io/cxr542-ai/projects/vision-font/"
         }
-      ],
-      "embedAllowed": true
+      ]
     },
     {
       "id": "webtest",
@@ -929,8 +904,7 @@
       "introUrl": "https://cxr542.github.io/cxr542-ai/intro/webtest.html",
       "repoUrl": null,
       "primaryAppUrl": null,
-      "appUrls": [],
-      "embedAllowed": false
+      "appUrls": []
     }
   ],
   "resources": [

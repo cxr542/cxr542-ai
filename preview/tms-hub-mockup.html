@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cxr542-hub TMS형 UI — 미리보기 (목업)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #050508;
+        --sidebar: #0c0c12;
+        --panel: #12121a;
+        --border: rgba(255, 255, 255, 0.1);
+        --text: #f0f0f5;
+        --muted: #9a9aa8;
+        --accent: #e8a930;
+        --green: #10b981;
+        --cat-work: #5b9fd4;
+        --cat-study: #a78bfa;
+        --cat-hobby: #6ee7b7;
+        --cat-ideas: #fbbf24;
+        --font: "IBM Plex Sans", system-ui, sans-serif;
+        --font-display: "Sora", var(--font);
+        --sidebar-w: 220px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .mock-banner {
+        padding: 0.5rem 1rem;
+        text-align: center;
+        font-size: 0.8125rem;
+        color: var(--muted);
+        background: rgba(232, 169, 48, 0.12);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mock-banner strong {
+        color: var(--accent);
+      }
+
+      .hub-shell {
+        display: grid;
+        grid-template-columns: var(--sidebar-w) 1fr;
+        min-height: calc(100dvh - 36px);
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem 0.75rem;
+        background: var(--sidebar);
+        border-right: 1px solid rgba(16, 185, 129, 0.12);
+      }
+
+      .logo-block {
+        padding: 0.5rem 0.5rem 1rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 0.75rem;
+      }
+
+      .logo-block h1 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.125rem;
+        font-weight: 600;
+      }
+
+      .logo-block p {
+        margin: 0.35rem 0 0;
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .nav-section-label {
+        margin: 0.75rem 0.35rem 0.35rem;
+        font-size: 0.6875rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0.2rem 0;
+        padding: 0.55rem 0.65rem;
+        font: inherit;
+        font-size: 0.875rem;
+        text-align: left;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .nav-item:hover {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .nav-item.active {
+        color: var(--text);
+        background: rgba(16, 185, 129, 0.12);
+        border-color: rgba(16, 185, 129, 0.25);
+      }
+
+      .nav-item .badge {
+        font-size: 0.6875rem;
+        padding: 0.1rem 0.4rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .sidebar-footer {
+        margin-top: auto;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--border);
+      }
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        background: var(--panel);
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .toolbar input {
+        flex: 1;
+        min-width: 12rem;
+        padding: 0.45rem 0.75rem;
+        font: inherit;
+        color: var(--text);
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+      }
+
+      .item-tabs {
+        display: flex;
+        gap: 0.35rem;
+        padding: 0.5rem 1rem;
+        overflow-x: auto;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .item-tab {
+        flex-shrink: 0;
+        padding: 0.4rem 0.85rem;
+        font: inherit;
+        font-size: 0.8125rem;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        cursor: pointer;
+      }
+
+      .item-tab.active {
+        color: var(--text);
+        border-color: var(--green);
+        background: rgba(16, 185, 129, 0.1);
+      }
+
+      .panel-tabs {
+        display: flex;
+        gap: 0;
+        padding: 0 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .panel-tab {
+        padding: 0.65rem 1rem;
+        font: inherit;
+        font-size: 0.875rem;
+        color: var(--muted);
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+      }
+
+      .panel-tab.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+
+      .panel-tab:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .panel-body {
+        flex: 1;
+        padding: 1.25rem 1rem 2rem;
+        overflow: auto;
+      }
+
+      .panel-body h2 {
+        margin: 0 0 0.5rem;
+        font-family: var(--font-display);
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .pill {
+        font-size: 0.6875rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+      }
+
+      .pill--work {
+        color: var(--cat-work);
+        border-color: var(--cat-work);
+      }
+
+      .pill--study {
+        color: var(--cat-study);
+        border-color: var(--cat-study);
+      }
+
+      .pill--hobby {
+        color: var(--cat-hobby);
+        border-color: var(--cat-hobby);
+      }
+
+      .pill--ideas {
+        color: var(--cat-ideas);
+        border-color: var(--cat-ideas);
+      }
+
+      .summary {
+        margin: 0 0 1rem;
+        max-width: 56ch;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+
+      .link-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .link-list li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .link-list a {
+        color: var(--accent);
+      }
+
+      .iframe-box {
+        margin-top: 1rem;
+        border: 1px dashed var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.4);
+      }
+
+      .iframe-box__label {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .iframe-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 280px;
+        padding: 1rem;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+
+      .static-page {
+        max-width: 40rem;
+      }
+
+      @media (max-width: 720px) {
+        .hub-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 0.25rem;
+        }
+
+        .logo-block {
+          width: 100%;
+        }
+
+        .nav-section-label {
+          display: none;
+        }
+
+        .sidebar-footer {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <p class="mock-banner">
+      <strong>UI 목업</strong> — 구현 전 TMS형 cxr542-hub 레이아웃 미리보기 (데이터·iframe은 샘플)
+    </p>
+
+    <div class="hub-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="main">
+        <div class="toolbar">
+          <input type="search" id="search" placeholder="검색…" aria-label="검색" />
+          <span id="route-label" style="font-size: 0.75rem; color: var(--muted)"></span>
+        </div>
+        <nav class="item-tabs" id="item-tabs" hidden></nav>
+        <nav class="panel-tabs" id="panel-tabs" hidden>
+          <button type="button" class="panel-tab active" data-panel="intro">소개</button>
+          <button type="button" class="panel-tab" data-panel="app">접속 / 앱</button>
+        </nav>
+        <div class="panel-body" id="panel-body"></div>
+      </div>
+    </div>
+
+    <script>
+      const CATEGORIES = [
+        { id: "featured", label: "Featured", system: true },
+        { id: "work", label: "업무 도우미" },
+        { id: "study", label: "공부·실험" },
+        { id: "hobby", label: "러닝·취미" },
+        { id: "ideas", label: "아이디어뱅크" },
+        { id: "guide", label: "Zero-G 가이드", system: true },
+        { id: "resources", label: "참고 링크", system: true },
+      ];
+
+      const ITEMS = [
+        {
+          id: "edu-team-tms",
+          title: "교육팀 TMS",
+          category: "work",
+          status: "데모",
+          summary: "팀 빌딩비 장부·주간 업무일지(KPI M/M).",
+          tags: ["Education", "Dev"],
+          introUrl: "intro/edu-team-tms.html",
+          appUrl: "https://okestro-edu-team-tms.vercel.app/",
+          links: [
+            { label: "조회", url: "https://okestro-edu-team-tms.vercel.app/" },
+            { label: "편집", url: "https://okestro-edu-team-tms.vercel.app/?mode=edit" },
+            { label: "Repo", url: "https://github.com/cxr542/edu-team-tms" },
+          ],
+        },
+        {
+          id: "education-kpi",
+          title: "교육팀 KPI 정의서",
+          category: "work",
+          status: "학습 중",
+          summary: "핵심 역량 레벨(종합) 4요소 KPI 보완본.",
+          tags: ["KPI"],
+          introUrl: null,
+          appUrl: null,
+          links: [],
+        },
+        {
+          id: "ppt-academizer",
+          title: "PPT 아카데미화",
+          category: "work",
+          status: "데모",
+          summary: "pptx → 아카데미 강의안 변환.",
+          tags: ["Education"],
+          introUrl: "intro/ppt-academizer.html",
+          appUrl: "https://ppt-academizer.netlify.app/",
+          links: [{ label: "데모", url: "https://ppt-academizer.netlify.app/" }],
+        },
+        {
+          id: "ai-synapse-wiki",
+          title: "AI-Synapse Wiki",
+          category: "study",
+          status: "데모",
+          summary: "한글 AI 지식 Wiki + 관리 대시보드.",
+          tags: ["Wiki", "LLM"],
+          featured: true,
+          introUrl: "intro/ai-synapse-wiki.html",
+          appUrl: "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/",
+          links: [{ label: "Wiki", url: "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/" }],
+        },
+        {
+          id: "cloud-chatbot",
+          title: "Cloud Learning Chatbot",
+          category: "study",
+          status: "데모",
+          summary: "RAG 챗봇·퀴즈·관리자 (Render).",
+          tags: ["Education", "LLM"],
+          featured: true,
+          introUrl: "intro/cloud-chatbot.html",
+          appUrl: "https://cloud-chatbot-963d.onrender.com/home",
+          links: [{ label: "게이트웨이", url: "https://cloud-chatbot-963d.onrender.com/home" }],
+        },
+        {
+          id: "today-shoes",
+          title: "오늘뭐신지",
+          category: "hobby",
+          status: "데모",
+          summary: "러닝화 3각 사진 → Gemini 분석 → 신발장.",
+          tags: ["running"],
+          featured: true,
+          introUrl: "intro/today-shoes.html",
+          appUrl: "https://cxr542.github.io/today-shoes/",
+          links: [{ label: "앱", url: "https://cxr542.github.io/today-shoes/" }],
+        },
+        {
+          id: "hub-v3",
+          title: "cxr542-hub TMS UI",
+          category: "ideas",
+          status: "아이디어",
+          summary: "왼쪽 카테고리 · 오른쪽 탭 · 소개/앱 패널.",
+          tags: ["portal"],
+          nextAction: "이 목업 확인 후 본 구현",
+          introUrl: null,
+          appUrl: null,
+          links: [],
+        },
+      ];
+
+      let route = { view: "work", itemId: "edu-team-tms", panel: "intro" };
+
+      function countCat(catId) {
+        if (catId === "featured") return ITEMS.filter((i) => i.featured).length;
+        return ITEMS.filter((i) => i.category === catId).length;
+      }
+
+      function itemsForView(view) {
+        if (view === "featured") return ITEMS.filter((i) => i.featured);
+        if (view === "guide" || view === "resources") return [];
+        return ITEMS.filter((i) => i.category === view);
+      }
+
+      function renderSidebar() {
+        const el = document.getElementById("sidebar");
+        let html =
+          '<div class="logo-block"><h1>cxr542-hub</h1><p>TMS형 레이아웃 목업</p></div>';
+        html += '<p class="nav-section-label">카테고리</p>';
+        CATEGORIES.forEach((c) => {
+          const n = c.system && c.id !== "featured" ? "" : countCat(c.id);
+          html +=
+            '<button type="button" class="nav-item' +
+            (route.view === c.id ? " active" : "") +
+            '" data-view="' +
+            c.id +
+            '">' +
+            "<span>" +
+            c.label +
+            "</span>" +
+            (n !== "" ? '<span class="badge">' + n + "</span>" : "") +
+            "</button>";
+        });
+        html +=
+          '<div class="sidebar-footer"><button type="button" class="nav-item" disabled style="opacity:0.5">카테고리 편집 (구현 예정)</button></div>';
+        el.innerHTML = html;
+        el.querySelectorAll("[data-view]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            route.view = btn.dataset.view;
+            const items = itemsForView(route.view);
+            if (items.length) {
+              route.itemId = items[0].id;
+              route.panel = "intro";
+            }
+            render();
+          });
+        });
+      }
+
+      function renderItemTabs(items) {
+        const nav = document.getElementById("item-tabs");
+        if (!items.length) {
+          nav.hidden = true;
+          return;
+        }
+        nav.hidden = false;
+        nav.innerHTML = items
+          .map(
+            (it) =>
+              '<button type="button" class="item-tab' +
+              (route.itemId === it.id ? " active" : "") +
+              '" data-item="' +
+              it.id +
+              '">' +
+              it.title +
+              "</button>"
+          )
+          .join("");
+        nav.querySelectorAll("[data-item]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            route.itemId = btn.dataset.item;
+            route.panel = "intro";
+            render();
+          });
+        });
+      }
+
+      function renderPanelTabs(item) {
+        const nav = document.getElementById("panel-tabs");
+        const appBtn = nav.querySelector('[data-panel="app"]');
+        const hasApp = item && item.appUrl;
+        nav.hidden = !item;
+        if (!item) return;
+        appBtn.disabled = !hasApp;
+        nav.querySelectorAll(".panel-tab").forEach((b) => {
+          b.classList.toggle("active", b.dataset.panel === route.panel);
+          b.onclick = () => {
+            if (b.disabled) return;
+            route.panel = b.dataset.panel;
+            render();
+          };
+        });
+      }
+
+      function renderPanel() {
+        const body = document.getElementById("panel-body");
+        const routeLabel = document.getElementById("route-label");
+        routeLabel.textContent =
+          "#/" + route.view + "/" + (route.itemId || "") + "/" + route.panel;
+
+        if (route.view === "guide") {
+          document.getElementById("item-tabs").hidden = true;
+          document.getElementById("panel-tabs").hidden = true;
+          body.innerHTML =
+            '<div class="static-page"><h2>Zero-G 바이브 코딩</h2><p class="summary">가이드 이미지 2장 + 파이프라인 설명 (구현 시 기존 vibe 섹션 이전).</p></div>';
+          return;
+        }
+        if (route.view === "resources") {
+          document.getElementById("item-tabs").hidden = true;
+          document.getElementById("panel-tabs").hidden = true;
+          body.innerHTML =
+            '<div class="static-page"><h2>참고 링크</h2><ul class="link-list"><li><a href="#">Cursor Docs</a></li><li><a href="#">Google AI Studio</a></li></ul></div>';
+          return;
+        }
+
+        const items = itemsForView(route.view);
+        renderItemTabs(items);
+        const item = items.find((i) => i.id === route.itemId) || items[0];
+        if (!item) {
+          body.innerHTML = "<p class=\"summary\">이 카테고리에 항목이 없습니다.</p>";
+          document.getElementById("panel-tabs").hidden = true;
+          return;
+        }
+        route.itemId = item.id;
+        renderPanelTabs(item);
+
+        if (route.panel === "app" && item.appUrl) {
+          body.innerHTML =
+            "<h2>" +
+            item.title +
+            " — 접속</h2>" +
+            '<p class="summary">앱·배포 사이트는 새 탭에서 엽니다 (iframe 없음).</p>' +
+            '<p><a class="btn" href="' +
+            item.appUrl +
+            '" target="_blank" rel="noopener noreferrer">새 탭에서 열기 — ' +
+            item.appUrl +
+            "</a></p>" +
+            "<ul class=\"link-list\">" +
+            item.links
+              .map((l) => "<li><a href=\"" + l.url + "\" target=\"_blank\" rel=\"noopener\">" + l.label + "</a></li>")
+              .join("") +
+            "</ul>";
+          return;
+        }
+
+        let html =
+          "<h2>" +
+          item.title +
+          "</h2>" +
+          '<div class="meta-row"><span class="pill pill--' +
+          item.category +
+          '">' +
+          item.category +
+          "</span><span class=\"pill\">" +
+          item.status +
+          "</span>" +
+          item.tags.map((t) => '<span class="pill">' + t + "</span>").join("") +
+          "</div>" +
+          '<p class="summary">' +
+          item.summary +
+          "</p>";
+        if (item.nextAction) {
+          html += "<p class=\"summary\"><em>다음: " + item.nextAction + "</em></p>";
+        }
+        if (item.introUrl) {
+          html +=
+            '<p><a href="' +
+            item.introUrl +
+            '" target="_blank" rel="noopener noreferrer">소개 페이지 열기</a></p>';
+        }
+        if (item.links.length) {
+          html +=
+            "<h3 style=\"font-size:0.875rem;margin:1.25rem 0 0.5rem\">링크</h3><ul class=\"link-list\">" +
+            item.links
+              .map((l) => "<li><a href=\"" + l.url + "\" target=\"_blank\" rel=\"noopener\">" + l.label + "</a></li>")
+              .join("") +
+            "</ul>";
+        }
+        body.innerHTML = html;
+      }
+
+      function render() {
+        renderSidebar();
+        renderPanel();
+      }
+
+      document.getElementById("search").addEventListener("input", (e) => {
+        const q = e.target.value.trim().toLowerCase();
+        if (!q) return;
+        const hit = ITEMS.find(
+          (i) =>
+            i.title.toLowerCase().includes(q) ||
+            i.summary.toLowerCase().includes(q)
+        );
+        if (hit) {
+          route.view = hit.category;
+          route.itemId = hit.id;
+          route.panel = "intro";
+          render();
+        }
+      });
+
+      render();
+    </script>
+  </body>
+</html>
