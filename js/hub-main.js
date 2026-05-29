@@ -239,7 +239,7 @@
     }
     if (r.panel === "app") {
       var it = findItem(r.itemId);
-      if (!it || !it.primaryAppUrl) r.panel = "intro";
+      if (!it || !hasAppLinks(it)) r.panel = "intro";
     }
   }
 
@@ -446,7 +446,7 @@
 
     nav.hidden = false;
     var appBtn = nav.querySelector('[data-panel="app"]');
-    var hasApp = !!(item && item.primaryAppUrl && item.embedAllowed !== false);
+    var hasApp = !!(item && hasAppLinks(item));
     appBtn.disabled = !hasApp;
 
     nav.querySelectorAll(".hub-panel-tab").forEach(function (btn) {
@@ -511,6 +511,46 @@
     );
   }
 
+  function hasAppLinks(item) {
+    return !!(item && (item.primaryAppUrl || (item.appUrls && item.appUrls.length)));
+  }
+
+  function launchCardHtml(label, url, isPrimary) {
+    return (
+      '<div class="hub-launch-card' +
+      (isPrimary ? " hub-launch-card--primary" : "") +
+      '">' +
+      '<div class="hub-launch-card__head">' +
+      "<strong>" +
+      escapeHtml(label) +
+      "</strong>" +
+      '<a class="btn btn--primary hub-launch-card__go" href="' +
+      escapeHtml(url) +
+      '" target="_blank" rel="noopener noreferrer">새 탭에서 열기</a>' +
+      "</div>" +
+      '<p class="hub-launch-card__url">' +
+      escapeHtml(url) +
+      "</p>" +
+      "</div>"
+    );
+  }
+
+  function launchListHtml(links, primaryUrl) {
+    var seen = {};
+    var cards = [];
+    if (primaryUrl) {
+      seen[primaryUrl] = true;
+      cards.push(launchCardHtml("기본 접속", primaryUrl, true));
+    }
+    (links || []).forEach(function (l) {
+      if (!l || !l.url || seen[l.url]) return;
+      seen[l.url] = true;
+      cards.push(launchCardHtml(l.label || l.url, l.url, false));
+    });
+    if (!cards.length) return "";
+    return '<div class="hub-launch-list">' + cards.join("") + "</div>";
+  }
+
   function introPanelHtml(item) {
     var status = statusLabels[item.status] || item.status;
     var tags = (item.tags || [])
@@ -547,11 +587,10 @@
 
     if (item.introUrl) {
       html +=
-        '<div class="hub-intro-frame"><iframe src="' +
-        escapeHtml(item.introUrl) +
-        '" title="' +
-        escapeHtml(item.title) +
-        ' 소개" loading="lazy"></iframe></div>';
+        '<p class="hub-panel-note">상세 소개는 별도 페이지에서 확인합니다.</p>' +
+        '<div class="hub-launch-list">' +
+        launchCardHtml("소개 페이지", item.introUrl, true) +
+        "</div>";
     }
 
     if (state.categoryEditMode) {
@@ -577,45 +616,17 @@
   }
 
   function appPanelHtml(item) {
-    var html = "<h2>" + escapeHtml(item.title) + " — 접속</h2>";
+    var html = "<h2>" + escapeHtml(item.title) + " — 바로가기</h2>";
+    var links = item.appUrls || [];
 
-    if (!item.primaryAppUrl) {
+    if (!hasAppLinks(item)) {
       html += '<p class="hub-empty">접속 URL이 없습니다. 소개 탭을 확인하세요.</p>';
       return html;
     }
 
     html +=
-      '<div class="hub-app-frame" id="hub-app-frame">' +
-      '<div class="hub-app-frame__bar">' +
-      escapeHtml(item.primaryAppUrl) +
-      ' · <a href="' +
-      escapeHtml(item.primaryAppUrl) +
-      '" target="_blank" rel="noopener">새 탭</a></div>' +
-      '<iframe id="hub-app-iframe" src="' +
-      escapeHtml(item.primaryAppUrl) +
-      '" title="' +
-      escapeHtml(item.title) +
-      '"></iframe>' +
-      "</div>" +
-      '<p class="hub-summary" id="hub-app-fallback" hidden>iframe에 표시되지 않으면 아래 링크를 사용하세요.</p>';
-
-    var links = item.appUrls || [];
-    if (links.length) {
-      html +=
-        '<ul class="hub-link-list">' +
-        links
-          .map(function (l) {
-            return (
-              "<li><a href=\"" +
-              escapeHtml(l.url) +
-              '" target="_blank" rel="noopener">' +
-              escapeHtml(l.label) +
-              "</a></li>"
-            );
-          })
-          .join("") +
-        "</ul>";
-    }
+      '<p class="hub-panel-note">앱·배포 사이트는 새 탭에서 엽니다.</p>' +
+      launchListHtml(links, item.primaryAppUrl);
 
     return html;
   }
@@ -652,7 +663,6 @@
 
     if (r.panel === "app") {
       body.innerHTML = appPanelHtml(item);
-      setupIframeFallback();
       return;
     }
 
@@ -667,20 +677,6 @@
         renderAll();
       });
     }
-  }
-
-  function setupIframeFallback() {
-    var iframe = document.getElementById("hub-app-iframe");
-    var fallback = document.getElementById("hub-app-fallback");
-    if (!iframe || !fallback) return;
-    var shown = false;
-    function showFallback() {
-      if (shown) return;
-      shown = true;
-      fallback.hidden = false;
-    }
-    iframe.addEventListener("error", showFallback);
-    setTimeout(showFallback, 4500);
   }
 
   function renderAll() {
