@@ -13,6 +13,7 @@ const projectsPath = path.join(hubRoot, "ai", "projects.json");
 const outPath = path.join(hubRoot, "ai", "catalog.json");
 const overridesPath = path.join(hubRoot, "ai", "category-overrides.json");
 const navLabelsPath = path.join(hubRoot, "ai", "nav-labels.json");
+const visibilityPath = path.join(hubRoot, "ai", "hub-visibility.json");
 
 const CATEGORY_BY_ID = {
   "today-shoes": "hobby",
@@ -96,6 +97,15 @@ function loadNavLabels() {
   return raw.labels;
 }
 
+function loadHubVisibility() {
+  const raw = loadJson(visibilityPath);
+  if (!raw) return { hiddenItems: [], hiddenNav: [] };
+  return {
+    hiddenItems: Array.isArray(raw.hiddenItems) ? raw.hiddenItems : [],
+    hiddenNav: Array.isArray(raw.hiddenNav) ? raw.hiddenNav : [],
+  };
+}
+
 function deriveLinkFields(item) {
   const links = item.links || [];
   const intro = links.find((l) => l.label === "소개");
@@ -134,6 +144,7 @@ function deriveLinkFields(item) {
 function main() {
   const fileOverrides = loadCategoryOverrides();
   const navLabels = loadNavLabels();
+  const hubVisibility = loadHubVisibility();
   const services = loadJson(servicesPath) || { items: [], resources: [] };
   const projects = loadJson(projectsPath) || { items: [] };
   const byId = new Map();
@@ -197,6 +208,7 @@ function main() {
     ],
     navLabels: { ...defaultNav, ...navLabels },
     categoryOverrides: fileOverrides,
+    hubVisibility,
     items,
     resources: services.resources || [],
   };

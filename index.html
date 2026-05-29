@@ -35,7 +35,7 @@
           />
           <span class="hub-route-hint" id="hub-route-hint" aria-live="polite"></span>
           <button type="button" class="btn btn--ghost" id="hub-category-edit-toggle">
-            카테고리 편집
+            항목·메뉴 관리
           </button>
           <button
             type="button"
@@ -45,6 +45,15 @@
             hidden
           >
             카테고리 JSON
+          </button>
+          <button
+            type="button"
+            class="btn btn--ghost"
+            id="hub-visibility-export"
+            title="hub-visibility.json"
+            hidden
+          >
+            숨김 JSON
           </button>
         </div>
         <nav class="hub-item-tabs" id="hub-item-tabs" aria-label="항목" hidden></nav>
@@ -58,13 +67,26 @@
 
     <div class="hub-modal-backdrop" id="nav-labels-modal" hidden>
       <div class="hub-modal" role="dialog" aria-labelledby="nav-labels-title">
-        <h3 id="nav-labels-title">사이드바 메뉴 이름</h3>
+        <h3 id="nav-labels-title">사이드바 메뉴</h3>
+        <p class="hub-summary" style="margin: 0 0 0.75rem; font-size: 0.8125rem">
+          이름 변경 · 「메뉴 숨김」으로 사이드바에서 삭제
+        </p>
         <form id="nav-labels-form"></form>
         <div class="hub-modal__actions">
           <button type="button" class="btn btn--secondary" id="nav-labels-save">적용</button>
-          <button type="button" class="btn btn--ghost" id="nav-labels-export">JSON 보내기</button>
-          <button type="button" class="btn btn--ghost" id="nav-labels-reset">기본값</button>
+          <button type="button" class="btn btn--ghost" id="nav-labels-export">메뉴 JSON</button>
+          <button type="button" class="btn btn--ghost" id="nav-labels-reset">이름 초기화</button>
           <button type="button" class="btn btn--ghost" id="nav-labels-close">닫기</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hub-modal-backdrop" id="hidden-restore-modal" hidden>
+      <div class="hub-modal" role="dialog" aria-labelledby="hidden-restore-title">
+        <h3 id="hidden-restore-title">숨긴 항목·메뉴</h3>
+        <div id="hidden-restore-body"></div>
+        <div class="hub-modal__actions">
+          <button type="button" class="btn btn--ghost" id="hidden-restore-close">닫기</button>
         </div>
       </div>
     </div>
@@ -74,6 +96,6 @@
     </footer>
 
     <script src="js/main.js"></script>
-    <script src="js/hub-main.js?v=20260529"></script>
+    <script src="js/hub-main.js?v=20260530"></script>
   </body>
 </html>

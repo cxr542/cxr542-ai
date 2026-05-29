@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "updated": "2026-05-29",
+  "comment": "hiddenItems: 항목 탭에서 숨김. hiddenNav: 사이드바 메뉴 id 숨김. UI에서 JSON 보내기 후 저장.",
+  "hiddenItems": [],
+  "hiddenNav": []
+}

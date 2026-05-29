@@ -4,6 +4,7 @@
   var NAV_LABELS_KEY = "cxr542-hub-nav-labels";
   var CATEGORY_OVERRIDES_KEY = "cxr542-hub-category-overrides";
   var CATEGORY_EDIT_KEY = "cxr542-hub-category-edit";
+  var VISIBILITY_KEY = "cxr542-hub-visibility";
 
   var statusLabels = {
     learning: "학습 중",
@@ -29,6 +30,10 @@
     localCategoryOverrides: {},
     baseCategories: {},
     categoryEditMode: false,
+    hiddenItemIds: [],
+    hiddenNavIds: [],
+    fileHiddenItemIds: [],
+    fileHiddenNavIds: [],
     route: { view: "work", itemId: "", panel: "intro" },
     searchQuery: "",
     profileUrl: "https://cxr542.github.io/",
@@ -57,9 +62,96 @@
     return state.localCategoryOverrides[item.id] || item.category;
   }
 
+  function loadVisibilityStore() {
+    var stored = loadJson(VISIBILITY_KEY, null);
+    if (stored && typeof stored === "object") {
+      return {
+        hiddenItems: stored.hiddenItems || [],
+        hiddenNav: stored.hiddenNav || [],
+      };
+    }
+    return { hiddenItems: [], hiddenNav: [] };
+  }
+
+  function saveVisibilityStore() {
+    localStorage.setItem(
+      VISIBILITY_KEY,
+      JSON.stringify({
+        hiddenItems: state.hiddenItemIds,
+        hiddenNav: state.hiddenNavIds,
+      })
+    );
+  }
+
+  function mergeVisibilityFromFile(data) {
+    var local = loadVisibilityStore();
+    var fileItems = (data && data.hiddenItems) || state.fileHiddenItemIds || [];
+    var fileNav = (data && data.hiddenNav) || state.fileHiddenNavIds || [];
+    var set = new Set(fileItems.concat(local.hiddenItems));
+    state.hiddenItemIds = [...set];
+    var navSet = new Set(fileNav.concat(local.hiddenNav));
+    state.hiddenNavIds = [...navSet];
+  }
+
+  function isItemHidden(id) {
+    return state.hiddenItemIds.indexOf(id) !== -1;
+  }
+
+  function isNavHidden(id) {
+    return state.hiddenNavIds.indexOf(id) !== -1;
+  }
+
+  function hideItem(id) {
+    if (!id || isItemHidden(id)) return;
+    state.hiddenItemIds.push(id);
+    saveVisibilityStore();
+    applyItemCategories();
+  }
+
+  function restoreItem(id) {
+    state.hiddenItemIds = state.hiddenItemIds.filter(function (x) {
+      return x !== id;
+    });
+    saveVisibilityStore();
+    applyItemCategories();
+  }
+
+  function hideNav(id) {
+    if (!id || isNavHidden(id)) return;
+    state.hiddenNavIds.push(id);
+    saveVisibilityStore();
+  }
+
+  function restoreNav(id) {
+    state.hiddenNavIds = state.hiddenNavIds.filter(function (x) {
+      return x !== id;
+    });
+    saveVisibilityStore();
+  }
+
   function applyItemCategories() {
-    state.items = state.catalogItems.map(function (item) {
-      return Object.assign({}, item, { category: effectiveCategory(item) });
+    state.items = state.catalogItems
+      .map(function (item) {
+        return Object.assign({}, item, { category: effectiveCategory(item) });
+      })
+      .filter(function (item) {
+        return !isItemHidden(item.id);
+      });
+  }
+
+  function firstVisibleCategoryId() {
+    var id = categoryIds.find(function (cid) {
+      return !isNavHidden(cid) && countCategory(cid) > 0;
+    });
+    if (id) return id;
+    return categoryIds.find(function (cid) {
+      return !isNavHidden(cid);
+    });
+  }
+
+  function firstVisibleSystemView() {
+    return systemViews.find(function (id) {
+      return !isNavHidden(id);
     });
   }
 
@@ -113,7 +205,11 @@
   }
 
   function defaultRoute() {
-    return { view: "work", itemId: "", panel: "intro" };
+    return {
+      view: firstVisibleCategoryId() || "work",
+      itemId: "",
+      panel: "intro",
+    };
   }
 
   function ensureValidRoute() {
@@ -123,7 +219,13 @@
       r.panel = "intro";
       return;
     }
-    if (categoryIds.indexOf(r.view) === -1) {
+    if (isNavHidden(r.view)) {
+      var next = firstVisibleCategoryId() || firstVisibleSystemView() || "work";
+      r.view = next;
+      r.itemId = "";
+      r.panel = "intro";
+    }
+    if (categoryIds.indexOf(r.view) === -1 && systemViews.indexOf(r.view) === -1) {
       state.route = defaultRoute();
       return;
     }
@@ -153,6 +255,7 @@
       '<p class="hub-nav-label">카테고리</p>';
 
     categoryIds.forEach(function (catId) {
+      if (isNavHidden(catId)) return;
       var cat = state.categories.find(function (c) {
         return c.id === catId;
       });
@@ -171,6 +274,7 @@
 
     html += '<p class="hub-nav-label">기타</p>';
     ["guide", "resources"].forEach(function (id) {
+      if (isNavHidden(id)) return;
       html +=
         '<button type="button" class="hub-nav-item' +
         (state.route.view === id ? " is-active" : "") +
@@ -183,7 +287,8 @@
 
     html +=
       '<div class="hub-sidebar__footer">' +
-      '<button type="button" class="btn btn--ghost" id="hub-nav-labels-open" style="width:100%">메뉴 이름 수정</button>' +
+      '<button type="button" class="btn btn--ghost" id="hub-nav-labels-open" style="width:100%">사이드바 메뉴 설정</button>' +
+      '<button type="button" class="btn btn--ghost" id="hub-hidden-restore-open" style="width:100%">숨긴 항목 복구</button>' +
       '<a class="btn btn--ghost" href="' +
       escapeHtml(state.profileUrl) +
       '" rel="noopener noreferrer" style="text-align:center">' +
@@ -209,6 +314,10 @@
     if (openLabels) {
       openLabels.addEventListener("click", openNavLabelsModal);
     }
+    var openRestore = document.getElementById("hub-hidden-restore-open");
+    if (openRestore) {
+      openRestore.addEventListener("click", openHiddenRestoreModal);
+    }
   }
 
   function renderItemTabs() {
@@ -227,44 +336,79 @@
     }
 
     nav.hidden = false;
+    nav.classList.toggle("hub-item-tabs--manage", state.categoryEditMode);
     nav.innerHTML = items
       .map(function (it) {
+        var active = state.route.itemId === it.id;
+        var removeBtn = state.categoryEditMode
+          ? '<button type="button" class="hub-item-tab__remove" data-remove-item="' +
+            escapeHtml(it.id) +
+            '" aria-label="' +
+            escapeHtml(it.title) +
+            ' 숨기기" title="목록에서 숨기기">×</button>'
+          : "";
+        var catSelect = state.categoryEditMode
+          ? '<select class="hub-cat-select" data-cat-item="' +
+            escapeHtml(it.id) +
+            '">' +
+            categoryIds
+              .map(function (cid) {
+                return (
+                  '<option value="' +
+                  cid +
+                  '"' +
+                  (it.category === cid ? " selected" : "") +
+                  ">" +
+                  escapeHtml(getNavLabel(cid)) +
+                  "</option>"
+                );
+              })
+              .join("") +
+            "</select>"
+          : "";
         return (
-          '<button type="button" class="hub-item-tab' +
-          (state.route.itemId === it.id ? " is-active" : "") +
-          '" data-item-id="' +
+          '<span class="hub-item-tab-chip' +
+          (active ? " is-active" : "") +
+          '">' +
+          removeBtn +
+          catSelect +
+          '<button type="button" class="hub-item-tab" data-item-id="' +
           escapeHtml(it.id) +
           '">' +
           escapeHtml(it.title) +
-          (state.categoryEditMode
-            ? ' <select class="hub-cat-select" data-cat-item="' +
-              escapeHtml(it.id) +
-              '">' +
-              categoryIds
-                .map(function (cid) {
-                  return (
-                    '<option value="' +
-                    cid +
-                    '"' +
-                    (it.category === cid ? " selected" : "") +
-                    ">" +
-                    escapeHtml(getNavLabel(cid)) +
-                    "</option>"
-                  );
-                })
-                .join("") +
-              "</select>"
-            : "") +
-          "</button>"
+          "</button></span>"
         );
       })
       .join("");
 
     nav.querySelectorAll(".hub-item-tab").forEach(function (btn) {
-      btn.addEventListener("click", function (e) {
-        if (e.target.classList.contains("hub-cat-select")) return;
+      btn.addEventListener("click", function () {
         state.route.itemId = btn.getAttribute("data-item-id");
         state.route.panel = "intro";
+        setHash();
+        renderAll();
+      });
+    });
+
+    nav.querySelectorAll(".hub-item-tab__remove").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var id = btn.getAttribute("data-remove-item");
+        if (!id) return;
+        var hiddenTarget = state.catalogItems.find(function (i) {
+          return i.id === id;
+        });
+        if (
+          !window.confirm(
+            "「" +
+              (hiddenTarget ? hiddenTarget.title : id) +
+              "」을 목록에서 숨길까요? (복구: 사이드바 → 숨긴 항목 복구)"
+          )
+        ) {
+          return;
+        }
+        hideItem(id);
+        ensureValidRoute();
         setHash();
         renderAll();
       });
@@ -410,6 +554,11 @@
         ' 소개" loading="lazy"></iframe></div>';
     }
 
+    if (state.categoryEditMode) {
+      html +=
+        '<p style="margin:0 0 1rem"><button type="button" class="btn btn--ghost" id="hub-hide-current-item">이 항목 숨기기</button></p>';
+    }
+
     html += '<div class="hub-repo-footer">';
     if (item.repoUrl) {
       html +=
@@ -508,6 +657,16 @@
     }
 
     body.innerHTML = introPanelHtml(item);
+    var hideBtn = document.getElementById("hub-hide-current-item");
+    if (hideBtn) {
+      hideBtn.addEventListener("click", function () {
+        if (!window.confirm("이 항목을 목록에서 숨길까요?")) return;
+        hideItem(item.id);
+        ensureValidRoute();
+        setHash();
+        renderAll();
+      });
+    }
   }
 
   function setupIframeFallback() {
@@ -537,14 +696,23 @@
 
     form.innerHTML = navLabelKeys
       .map(function (key) {
+        var hideName = "hide_" + key;
         return (
-          "<label>" +
+          '<div class="hub-modal-field">' +
+          "<span>" +
           escapeHtml(key) +
+          "</span>" +
           '<input type="text" name="' +
           escapeHtml(key) +
           '" value="' +
           escapeHtml(getNavLabel(key)) +
-          '" /></label>'
+          '" />' +
+          '<label class="hub-modal-hide"><input type="checkbox" name="' +
+          hideName +
+          '"' +
+          (isNavHidden(key) ? " checked" : "") +
+          " /> 메뉴 숨김</label>" +
+          "</div>"
         );
       })
       .join("");
@@ -565,9 +733,16 @@
       if (input && input.value.trim()) {
         state.navLabels[key] = input.value.trim();
       }
+      var hideBox = form.querySelector('[name="hide_' + key + '"]');
+      if (hideBox && hideBox.checked) {
+        if (!isNavHidden(key)) hideNav(key);
+      } else if (isNavHidden(key)) {
+        restoreNav(key);
+      }
     });
     localStorage.setItem(NAV_LABELS_KEY, JSON.stringify(state.navLabels));
     closeNavLabelsModal();
+    ensureValidRoute();
     renderAll();
   }
 
@@ -589,6 +764,86 @@
       payload.labels[key] = getNavLabel(key);
     });
     downloadJson(payload, "nav-labels.json");
+  }
+
+  function exportHubVisibility() {
+    downloadJson(
+      {
+        version: 1,
+        updated: new Date().toISOString().slice(0, 10),
+        comment: "ai/hub-visibility.json",
+        hiddenItems: state.hiddenItemIds,
+        hiddenNav: state.hiddenNavIds,
+      },
+      "hub-visibility.json"
+    );
+  }
+
+  function openHiddenRestoreModal() {
+    var modal = document.getElementById("hidden-restore-modal");
+    var body = document.getElementById("hidden-restore-body");
+    if (!modal || !body) return;
+
+    var itemRows = state.hiddenItemIds
+      .map(function (id) {
+        var it = state.catalogItems.find(function (i) {
+          return i.id === id;
+        });
+        return (
+          "<li><span>" +
+          escapeHtml((it && it.title) || id) +
+          '</span><button type="button" class="btn btn--ghost" data-restore-item="' +
+          escapeHtml(id) +
+          '">복구</button></li>'
+        );
+      })
+      .join("");
+
+    var navRows = state.hiddenNavIds
+      .map(function (id) {
+        return (
+          "<li><span>" +
+          escapeHtml(getNavLabel(id) || id) +
+          '</span><button type="button" class="btn btn--ghost" data-restore-nav="' +
+          escapeHtml(id) +
+          '">복구</button></li>'
+        );
+      })
+      .join("");
+
+    body.innerHTML =
+      "<h4 style=\"margin:0 0 0.5rem;font-size:0.8125rem\">숨긴 항목</h4>" +
+      (itemRows
+        ? '<ul class="hub-restore-list">' + itemRows + "</ul>"
+        : '<p class="hub-summary">없음</p>') +
+      "<h4 style=\"margin:1rem 0 0.5rem;font-size:0.8125rem\">숨긴 사이드바 메뉴</h4>" +
+      (navRows
+        ? '<ul class="hub-restore-list">' + navRows + "</ul>"
+        : '<p class="hub-summary">없음</p>');
+
+    body.querySelectorAll("[data-restore-item]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        restoreItem(btn.getAttribute("data-restore-item"));
+        openHiddenRestoreModal();
+        ensureValidRoute();
+        renderAll();
+      });
+    });
+    body.querySelectorAll("[data-restore-nav]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        restoreNav(btn.getAttribute("data-restore-nav"));
+        openHiddenRestoreModal();
+        ensureValidRoute();
+        renderAll();
+      });
+    });
+
+    modal.hidden = false;
+  }
+
+  function closeHiddenRestoreModal() {
+    var modal = document.getElementById("hidden-restore-modal");
+    if (modal) modal.hidden = true;
   }
 
   function exportCategoryOverrides() {
@@ -629,16 +884,27 @@
     });
 
     var catExport = document.getElementById("hub-category-export");
+    var visExport = document.getElementById("hub-visibility-export");
     document.getElementById("hub-category-edit-toggle").addEventListener("click", function () {
       state.categoryEditMode = !state.categoryEditMode;
       localStorage.setItem(CATEGORY_EDIT_KEY, state.categoryEditMode ? "1" : "0");
       this.classList.toggle("is-active", state.categoryEditMode);
       if (catExport) catExport.hidden = !state.categoryEditMode;
+      if (visExport) visExport.hidden = !state.categoryEditMode;
       renderItemTabs();
+      renderPanel();
     });
     if (catExport) {
       catExport.addEventListener("click", exportCategoryOverrides);
     }
+    if (visExport) {
+      visExport.addEventListener("click", exportHubVisibility);
+    }
+
+    document.getElementById("hidden-restore-close").addEventListener("click", closeHiddenRestoreModal);
+    document.getElementById("hidden-restore-modal").addEventListener("click", function (e) {
+      if (e.target.id === "hidden-restore-modal") closeHiddenRestoreModal();
+    });
 
     document.getElementById("nav-labels-save").addEventListener("click", saveNavLabelsFromForm);
     document.getElementById("nav-labels-close").addEventListener("click", closeNavLabelsModal);
@@ -687,6 +953,12 @@
           loadJson(NAV_LABELS_KEY, {})
         );
 
+        if (data.hubVisibility) {
+          state.fileHiddenItemIds = data.hubVisibility.hiddenItems || [];
+          state.fileHiddenNavIds = data.hubVisibility.hiddenNav || [];
+        }
+        mergeVisibilityFromFile(data.hubVisibility);
+
         state.catalogItems.forEach(function (item) {
           state.baseCategories[item.id] = item.categoryBase || item.category;
         });
@@ -699,6 +971,8 @@
         if (editBtn) editBtn.classList.toggle("is-active", state.categoryEditMode);
         var catExportEl = document.getElementById("hub-category-export");
         if (catExportEl) catExportEl.hidden = !state.categoryEditMode;
+        var visExportEl = document.getElementById("hub-visibility-export");
+        if (visExportEl) visExportEl.hidden = !state.categoryEditMode;
 
         var updatedEl = document.getElementById("catalog-updated");
         if (updatedEl && data.updated) {

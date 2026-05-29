@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-25",
+  "updated": "2026-05-29",
   "profileUrl": "https://cxr542.github.io/",
   "hubTitle": "cxr542-hub",
   "categories": [
@@ -30,6 +30,10 @@
     "profile": "프로필"
   },
   "categoryOverrides": {},
+  "hubVisibility": {
+    "hiddenItems": [],
+    "hiddenNav": []
+  },
   "items": [
     {
       "id": "education-kpi",
@@ -53,18 +57,15 @@
     {
       "id": "edu-team-tms",
       "title": "교육팀 TMS",
-      "summary": "교육팀 TMS — 팀 빌딩비 장부·주간 업무일지",
+      "summary": "팀 빌딩비 장부·주간 업무일지(KPI M/M)",
       "status": "demo",
-      "category": "work",
       "tags": [
         "Education",
-        "Dev"
+        "Dev",
+        "React",
+        "Deploy"
       ],
       "links": [
-        {
-          "label": "소개",
-          "url": "https://cxr542.github.io/cxr542-ai/intro/edu-team-tms.html"
-        },
         {
           "label": "조회",
           "url": "https://okestro-edu-team-tms.vercel.app/"
@@ -80,9 +81,14 @@
         {
           "label": "Repo",
           "url": "https://github.com/cxr542/edu-team-tms"
+        },
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/edu-team-tms.html"
         }
       ],
       "source": "services",
+      "category": "work",
       "categoryBase": "work",
       "introUrl": "https://cxr542.github.io/cxr542-ai/intro/edu-team-tms.html",
       "repoUrl": "https://github.com/cxr542/edu-team-tms",
@@ -750,6 +756,29 @@
         }
       ],
       "embedAllowed": true
+    },
+    {
+      "id": "ppt-test",
+      "title": "Ppt Test",
+      "summary": "Cursorstudy experiments/ppt-test",
+      "status": "learning",
+      "tags": [
+        "Dev"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/ppt-test.html"
+        }
+      ],
+      "source": "projects",
+      "category": "study",
+      "categoryBase": "study",
+      "introUrl": "https://cxr542.github.io/cxr542-ai/intro/ppt-test.html",
+      "repoUrl": null,
+      "primaryAppUrl": null,
+      "appUrls": [],
+      "embedAllowed": false
     },
     {
       "id": "note-pythagorean-proof",
