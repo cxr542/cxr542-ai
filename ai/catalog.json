@@ -1247,6 +1247,10 @@
   ],
   "resources": [
     {
+      "label": "idea-bank (아이디어 관리)",
+      "url": "https://cxr542.github.io/cxr542-ai/projects/idea-bank/"
+    },
+    {
       "label": "AI-Synapse Wiki",
       "url": "https://cxr542.github.io/cxr542-ai/projects/ai-synapse-wiki/"
     },
