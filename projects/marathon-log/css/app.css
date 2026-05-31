@@ -1,4 +1,18 @@
-/* marathon-log — 콘텐츠 (셸: ../_shared/css/project-shell.css) */
+/* marathon-log — 콘텐츠 (셸: ../shared/css/project-shell.css) */
+
+body.project-app.theme-marathon {
+  margin: 0;
+  min-height: 100dvh;
+  font-size: 15px;
+  color: #f0f0f5;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+}
+
+body.project-app.theme-marathon .app-shell {
+  display: grid;
+  grid-template-columns: 13.75rem 1fr;
+  min-height: calc(100dvh - 2.25rem);
+}
 
 :root {
   --card: rgba(255, 255, 255, 0.04);
