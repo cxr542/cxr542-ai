@@ -48,6 +48,18 @@
     });
   }
 
+  function updateNavCounts(ideas) {
+    var total = ideas.length;
+    var pinned = 0;
+    ideas.forEach(function (idea) {
+      if (idea.pinned) pinned += 1;
+    });
+    var allEl = $("nav-count-all");
+    var pinnedEl = $("nav-count-pinned");
+    if (allEl) allEl.textContent = String(total);
+    if (pinnedEl) pinnedEl.textContent = String(pinned);
+  }
+
   function renderCatFilter() {
     var chips = [
       { id: "all", label: "전체", kind: "cat" },
@@ -456,12 +468,13 @@
       );
     });
     renderCatFilter();
-    if (state.view === "sketch") {
-      if (!state.draft && !state.isNew) loadSketch();
-      else renderSketchForm();
-      return;
-    }
     IdeaBankDb.listIdeas().then(function (ideas) {
+      updateNavCounts(ideas);
+      if (state.view === "sketch") {
+        if (!state.draft && !state.isNew) loadSketch();
+        else renderSketchForm();
+        return;
+      }
       renderList(ideas);
     });
   }

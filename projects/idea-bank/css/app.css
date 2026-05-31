@@ -204,10 +204,26 @@ html.sidebar-collapsed-boot .sidebar-rail__label {
   text-align: center;
 }
 .nav-item__label {
+  flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.nav-item__badge {
+  flex-shrink: 0;
+  min-width: 1.25rem;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+.nav-item.is-active .nav-item__badge {
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.28);
 }
 .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.04); }
 .nav-item.is-active { color: var(--text); background: rgba(251, 191, 36, 0.12); border-color: rgba(251, 191, 36, 0.35); }

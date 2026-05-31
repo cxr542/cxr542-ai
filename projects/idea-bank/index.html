@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/app.css?v=sidebar-3" />
+    <link rel="stylesheet" href="css/app.css?v=nav-count" />
   </head>
   <body>
     <p class="app-banner">
@@ -34,6 +34,7 @@
           <button type="button" class="nav-item is-active" data-view="list" title="전체 아이디어">
             <span class="nav-item__icon" aria-hidden="true">📋</span>
             <span class="nav-item__label">전체 아이디어</span>
+            <span class="nav-item__badge" id="nav-count-all" aria-label="아이디어 개수">0</span>
           </button>
           <button type="button" class="nav-item" data-view="sketch" title="아이디어 쓰기">
             <span class="nav-item__icon" aria-hidden="true">✏️</span>
@@ -42,6 +43,7 @@
           <button type="button" class="nav-item" data-view="pinned" title="고정함">
             <span class="nav-item__icon" aria-hidden="true">📌</span>
             <span class="nav-item__label">고정함</span>
+            <span class="nav-item__badge" id="nav-count-pinned" aria-label="고정 개수">0</span>
           </button>
         </nav>
         <a class="nav-item nav-item--hub" href="../../" title="cxr542-hub로 돌아가기">
