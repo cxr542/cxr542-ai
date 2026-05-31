@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>idea-sketch — 앱 셸 목업</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #050508;
+        --sidebar: #0c0c12;
+        --border: rgba(255, 255, 255, 0.1);
+        --text: #f0f0f5;
+        --muted: #9a9aa8;
+        --green: #10b981;
+        --accent: #e8a930;
+        --cat-ideas: #fbbf24;
+        --font: "IBM Plex Sans", system-ui, sans-serif;
+        --font-display: "Sora", var(--font);
+        --sidebar-w: 220px;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: var(--font); font-size: 14px; color: var(--text); background: var(--bg); }
+      .mock-banner {
+        padding: 0.5rem 1rem; text-align: center; font-size: 0.8125rem; color: var(--muted);
+        background: rgba(251, 191, 36, 0.1); border-bottom: 1px solid var(--border);
+      }
+      .mock-banner strong { color: var(--cat-ideas); }
+      .mock-banner a { color: var(--accent); margin: 0 0.35rem; }
+      .app-shell { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: calc(100dvh - 36px); }
+      .sidebar {
+        display: flex; flex-direction: column; padding: 1rem 0.75rem; background: var(--sidebar);
+        border-right: 1px solid rgba(251, 191, 36, 0.15);
+      }
+      .logo-block h1 { margin: 0; font-family: var(--font-display); font-size: 1.05rem; }
+      .logo-block p { margin: 0.3rem 0 0.85rem; font-size: 0.75rem; color: var(--muted); }
+      .nav-item {
+        display: block; width: 100%; margin: 0.15rem 0; padding: 0.55rem 0.65rem; font: inherit; font-size: 0.875rem;
+        text-align: left; color: var(--muted); background: transparent; border: 1px solid transparent;
+        border-radius: 8px; cursor: pointer;
+      }
+      .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+      .nav-item.is-active { color: var(--text); background: rgba(251, 191, 36, 0.12); border-color: rgba(251, 191, 36, 0.35); }
+      .nav-item.is-muted { opacity: 0.45; cursor: default; }
+      .sidebar-footer { margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+      .sidebar-footer a {
+        display: block; padding: 0.5rem 0.65rem; font-size: 0.8125rem; color: var(--muted); text-decoration: none;
+        border-radius: 8px;
+      }
+      .sidebar-footer a:hover { color: var(--green); background: rgba(16,185,129,0.08); }
+      .main { display: flex; flex-direction: column; min-width: 0; }
+      .toolbar {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.65rem 1rem;
+        border-bottom: 1px solid var(--border); background: rgba(5,5,8,0.6);
+      }
+      .toolbar input {
+        flex: 1; min-width: 8rem; max-width: 16rem; padding: 0.45rem 0.65rem; font: inherit; font-size: 0.875rem;
+        color: var(--text); background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 8px;
+      }
+      .toolbar .btn {
+        padding: 0.45rem 0.75rem; font: inherit; font-size: 0.8125rem; color: var(--muted);
+        background: transparent; border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+      }
+      .toolbar .btn:hover { color: var(--text); }
+      .content { flex: 1; padding: 1.25rem; overflow-y: auto; }
+      .placeholder {
+        max-width: 40rem; padding: 2rem 1.5rem; border: 2px dashed var(--border); border-radius: 16px;
+        text-align: center; color: var(--muted);
+      }
+      .placeholder h2 { margin: 0 0 0.5rem; font-family: var(--font-display); font-size: 1.125rem; color: var(--text); }
+      .placeholder p { margin: 0.5rem 0; line-height: 1.6; font-size: 0.875rem; }
+      .sketch-preview {
+        max-width: 40rem; margin: 0 auto; text-align: left;
+      }
+      .sketch-preview h2 { margin: 0 0 0.5rem; font-family: var(--font-display); }
+      .sketch-body {
+        padding: 1rem; margin: 1rem 0; border: 1px solid var(--border); border-radius: 12px;
+        background: rgba(0,0,0,0.28); line-height: 1.65; color: var(--muted); min-height: 6rem;
+      }
+      .img-grid { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+      .img-thumb {
+        width: 72px; height: 72px; border-radius: 8px; background: rgba(167,139,250,0.15);
+        border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+        font-size: 0.625rem; color: var(--muted);
+      }
+      @media (max-width: 720px) { .app-shell { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <p class="mock-banner">
+      <strong>앱 셸 목업</strong> — TMS형 레이아웃 · CRUD·이미지는 Phase 2b
+      <a href="hub-readonly-mockup.html">허브 읽기전용</a>
+      <a href="marathon-log-app-mockup.html">마라톤 앱</a>
+    </p>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="logo-block">
+          <h1>idea-sketch</h1>
+          <p>아이디어 스케치 앱</p>
+        </div>
+        <button type="button" class="nav-item is-active" data-view="list">전체 아이디어</button>
+        <button type="button" class="nav-item" data-view="sketch">스케치 편집</button>
+        <button type="button" class="nav-item" data-view="pinned">고정</button>
+        <button type="button" class="nav-item is-muted" data-view="stats">통계 (예정)</button>
+        <div class="sidebar-footer">
+          <a href="hub-readonly-mockup.html">← cxr542-hub</a>
+        </div>
+      </aside>
+      <div class="main">
+        <div class="toolbar">
+          <input type="search" placeholder="제목·내용 검색…" />
+          <button type="button" class="btn">JSON 내보내기</button>
+          <button type="button" class="btn">＋ 새 스케치</button>
+        </div>
+        <div class="content" id="content"></div>
+      </div>
+    </div>
+    <script>
+      var VIEWS = {
+        list: {
+          title: "아이디어 목록",
+          html:
+            '<div class="placeholder">' +
+            "<h2>목록 화면 (Phase 2b)</h2>" +
+            "<p>카드 = 제목 + 본문 앞 2줄 + 썸네일</p>" +
+            "<p>예: 「마라톤 기록장」「허브 admin」…</p></div>",
+        },
+        sketch: {
+          title: "스케치 편집",
+          html:
+            '<div class="sketch-preview">' +
+            "<h2>마라톤 기록장</h2>" +
+            '<p style="color:var(--muted);font-size:0.8125rem;margin:0">제목 + 자유 본문 (양식 강제 없음)</p>' +
+            '<div class="sketch-body">' +
+            "Keep에 흩어진 대회 기록을 JSON으로 관리하고 싶다.<br><br>" +
+            "오늘뭐신지(신발)와 역할 분리. 로컬 저장 + export." +
+            "</div>" +
+            '<p style="font-size:0.8125rem;color:var(--muted)">이미지 첨부 (목업)</p>' +
+            '<div class="img-grid">' +
+            '<div class="img-thumb">screenshot</div>' +
+            '<div class="img-thumb">+ 붙여넣기</div>' +
+            "</div></div>",
+        },
+        pinned: {
+          title: "고정",
+          html: '<div class="placeholder"><h2>고정 아이디어</h2><p>pin 토글 (Phase 2b)</p></div>',
+        },
+        stats: {
+          title: "통계",
+          html: '<div class="placeholder"><h2>통계</h2><p>나중에</p></div>',
+        },
+      };
+
+      function showView(id) {
+        document.querySelectorAll(".nav-item[data-view]").forEach(function (btn) {
+          btn.classList.toggle("is-active", btn.getAttribute("data-view") === id);
+        });
+        document.getElementById("content").innerHTML = VIEWS[id].html;
+      }
+
+      document.querySelectorAll(".nav-item[data-view]").forEach(function (btn) {
+        if (btn.classList.contains("is-muted")) return;
+        btn.onclick = function () {
+          showView(btn.getAttribute("data-view"));
+        };
+      });
+
+      showView("list");
+    </script>
+  </body>
+</html>

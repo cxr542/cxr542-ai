@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cxr542-hub — 읽기 전용 목업 (3카테고리)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #050508;
+        --sidebar: #0c0c12;
+        --border: rgba(255, 255, 255, 0.1);
+        --text: #f0f0f5;
+        --muted: #9a9aa8;
+        --green: #10b981;
+        --accent: #e8a930;
+        --cat-work: #5b9fd4;
+        --cat-study: #a78bfa;
+        --cat-hobby: #6ee7b7;
+        --font: "IBM Plex Sans", system-ui, sans-serif;
+        --font-display: "Sora", var(--font);
+        --sidebar-w: 220px;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: var(--font); font-size: 14px; color: var(--text); background: var(--bg); }
+      .mock-banner {
+        padding: 0.5rem 1rem; text-align: center; font-size: 0.8125rem; color: var(--muted);
+        background: rgba(16, 185, 129, 0.1); border-bottom: 1px solid var(--border);
+      }
+      .mock-banner strong { color: var(--green); }
+      .mock-banner a { color: var(--accent); margin: 0 0.35rem; }
+      .hub-shell { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: calc(100dvh - 36px); }
+      .sidebar { padding: 1rem 0.75rem; background: var(--sidebar); border-right: 1px solid rgba(16, 185, 129, 0.12); }
+      .logo-block h1 { margin: 0; font-family: var(--font-display); font-size: 1.125rem; }
+      .logo-block p { margin: 0.35rem 0 0.75rem; font-size: 0.75rem; color: var(--muted); }
+      .nav-label { margin: 0.5rem 0.35rem 0.25rem; font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+      .nav-item {
+        display: flex; justify-content: space-between; width: 100%; margin: 0.15rem 0; padding: 0.55rem 0.65rem;
+        font: inherit; font-size: 0.875rem; text-align: left; color: var(--muted); background: transparent;
+        border: 1px solid transparent; border-radius: 8px; cursor: pointer;
+      }
+      .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+      .nav-item.active { color: var(--text); background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.28); }
+      .nav-item.active.cat-study { background: rgba(167, 139, 250, 0.12); border-color: rgba(167, 139, 250, 0.35); }
+      .nav-item.active.cat-work { background: rgba(91, 159, 212, 0.12); border-color: rgba(91, 159, 212, 0.35); }
+      .nav-item.active.cat-hobby { background: rgba(110, 231, 183, 0.12); border-color: rgba(110, 231, 183, 0.35); }
+      .badge { font-size: 0.6875rem; padding: 0.1rem 0.4rem; border-radius: 999px; background: rgba(255,255,255,0.08); }
+      .sidebar-note { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+      .main { display: flex; flex-direction: column; min-width: 0; }
+      .toolbar {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.65rem 1rem;
+        border-bottom: 1px solid var(--border); background: rgba(5,5,8,0.6);
+      }
+      .toolbar input {
+        flex: 1; min-width: 10rem; max-width: 18rem; padding: 0.45rem 0.65rem; font: inherit; font-size: 0.875rem;
+        color: var(--text); background: rgba(0,0,0,0.35); border: 1px solid var(--border); border-radius: 8px;
+      }
+      .route-hint { font-size: 0.75rem; color: var(--muted); }
+      .readonly-note { font-size: 0.75rem; color: var(--green); padding: 0.25rem 0.5rem; border: 1px solid rgba(16,185,129,0.35); border-radius: 6px; }
+      .subchips { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); background: rgba(167,139,250,0.06); }
+      .subchips[hidden] { display: none; }
+      .subchip {
+        padding: 0.35rem 0.7rem; font: inherit; font-size: 0.75rem; color: var(--muted); background: transparent;
+        border: 1px solid var(--border); border-radius: 999px; cursor: pointer;
+      }
+      .subchip.is-active { color: var(--text); background: rgba(167,139,250,0.15); border-color: rgba(167,139,250,0.45); }
+      .item-tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0.5rem 1rem; border-bottom: 1px solid var(--border); }
+      .item-tab {
+        padding: 0.4rem 0.75rem; font: inherit; font-size: 0.8125rem; color: var(--muted); background: transparent;
+        border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+      }
+      .item-tab.is-active { color: var(--text); background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15); }
+      .panel-tabs { display: flex; gap: 0.25rem; padding: 0.5rem 1rem 0; }
+      .panel-tab { padding: 0.45rem 0.85rem; font: inherit; font-size: 0.8125rem; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 8px 8px 0 0; cursor: pointer; }
+      .panel-tab.is-active { color: var(--text); background: rgba(255,255,255,0.04); border-color: var(--border); border-bottom-color: transparent; }
+      .panel-tab.disabled { opacity: 0.45; cursor: default; text-decoration: line-through; }
+      .panel-body { flex: 1; padding: 1rem 1.25rem 2rem; overflow-y: auto; border-top: 1px solid var(--border); margin-top: -1px; }
+      .panel-body h2 { margin: 0 0 0.75rem; font-family: var(--font-display); font-size: 1.25rem; }
+      .meta-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+      .pill { padding: 0.2rem 0.55rem; font-size: 0.75rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+      .pill--work { color: var(--cat-work); border-color: var(--cat-work); }
+      .pill--study { color: var(--cat-study); border-color: var(--cat-study); }
+      .pill--hobby { color: var(--cat-hobby); border-color: var(--cat-hobby); }
+      .summary { margin: 0 0 1rem; max-width: 58ch; line-height: 1.65; color: var(--muted); }
+      .lead { margin: 0 0 1.25rem; max-width: 58ch; line-height: 1.65; color: var(--muted); font-size: 0.9375rem; }
+      .launch-list { display: flex; flex-direction: column; gap: 0.65rem; max-width: 36rem; }
+      .launch-card {
+        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;
+        padding: 0.9rem 1rem; border: 1px solid var(--border); border-radius: 12px; background: rgba(0,0,0,0.28);
+      }
+      .launch-card--primary { border-color: rgba(16,185,129,0.45); background: rgba(16,185,129,0.08); }
+      .launch-card a.btn {
+        padding: 0.5rem 0.9rem; font-size: 0.8125rem; font-weight: 500; color: #050508; background: var(--green);
+        border-radius: 8px; text-decoration: none;
+      }
+      .launch-card a.btn--ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+      .panel-note { font-size: 0.8125rem; color: var(--muted); margin: 0 0 0.5rem; }
+      @media (max-width: 720px) { .hub-shell { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <p class="mock-banner">
+      <strong>허브 읽기 전용</strong> — work / study / hobby · ideas 없음
+      <a href="idea-bank-mockup.html">idea-bank</a>
+      <a href="../">실제 허브</a>
+    </p>
+    <div class="hub-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+      <div class="main">
+        <div class="toolbar">
+          <input type="search" placeholder="이름, 태그, 설명 검색…" />
+          <span class="route-hint" id="route-hint"></span>
+          <span class="readonly-note">읽기 전용</span>
+        </div>
+        <nav class="subchips" id="subchips" hidden></nav>
+        <nav class="item-tabs" id="item-tabs"></nav>
+        <nav class="panel-tabs" id="panel-tabs">
+          <button type="button" class="panel-tab is-active" data-panel="intro">소개</button>
+          <button type="button" class="panel-tab" data-panel="app">접속 / 앱</button>
+        </nav>
+        <div class="panel-body" id="panel-body"></div>
+      </div>
+    </div>
+    <script>
+      var DATA = {
+        categories: [
+          { id: "work", label: "업무 도우미", count: 5 },
+          { id: "study", label: "공부·실험", count: 19 },
+          { id: "hobby", label: "러닝·취미", count: 2 },
+        ],
+        studyGroups: [
+          { id: "all", label: "전체" },
+          { id: "dev", label: "개발·배포" },
+          { id: "ai-tools", label: "AI·도구" },
+          { id: "notes", label: "학습 메모" },
+        ],
+        items: {
+          "edu-team-tms": {
+            cat: "work",
+            title: "교육팀 TMS",
+            summary: "팀 빌딩비 장부·주간 업무일지(KPI M/M).",
+            lead: "허브에서는 소개와 링크만. 장부 입력은 Vercel 앱에서.",
+            tags: ["Education", "React"],
+            appUrl: "https://okestro-edu-team-tms.vercel.app/",
+            appLabel: "앱 열기 (Vercel)",
+            links: [{ label: "Repo", href: "https://github.com/cxr542/edu-team-tms" }],
+          },
+          react_test: {
+            cat: "study", sub: "dev",
+            title: "React · Vite 클리커",
+            summary: "모바일 클리커 게임 — Vite + React 실습.",
+            lead: "공부·실험 데모. CRUD가 아닌 정적 데모 링크.",
+            tags: ["Dev", "React"],
+            appUrl: "../projects/react_test/",
+            appLabel: "데모 열기",
+            links: [],
+          },
+          cursor: {
+            cat: "study", sub: "ai-tools",
+            title: "Cursor Agent",
+            summary: "Rules, Hooks, 에이전트 워크플로 실험.",
+            lead: "외부 문서·프로필 링크 중심.",
+            tags: ["Cursor"],
+            appUrl: "https://cursor.com/docs",
+            appLabel: "Cursor Docs",
+            links: [],
+          },
+          "today-shoes": {
+            cat: "hobby",
+            title: "오늘뭐신지",
+            summary: "러닝 신발·거리 기록.",
+            lead: "취미 앱. 허브에서 소개 + Pages 링크.",
+            tags: ["Running"],
+            appUrl: "../projects/today-shoes/",
+            appLabel: "앱 열기",
+            links: [],
+          },
+        },
+        itemsByCat: {
+          work: ["edu-team-tms"],
+          study: ["react_test", "cursor"],
+          hobby: ["today-shoes"],
+        },
+      };
+
+      var state = { cat: "work", itemId: "edu-team-tms", panel: "intro", sub: "all" };
+
+      function itemsInView() {
+        var ids = DATA.itemsByCat[state.cat] || [];
+        if (state.cat === "study" && state.sub !== "all") {
+          ids = ids.filter(function (id) { return DATA.items[id].sub === state.sub; });
+        }
+        return ids;
+      }
+
+      function renderSidebar() {
+        document.getElementById("sidebar").innerHTML =
+          '<div class="logo-block"><h1>cxr542-hub</h1><p>Personal portal · read-only</p></div>' +
+          '<p class="nav-label">카테고리</p>' +
+          DATA.categories.map(function (c) {
+            return (
+              '<button type="button" class="nav-item' +
+              (state.cat === c.id ? " active cat-" + c.id : "") +
+              '" data-cat="' + c.id + '"><span>' + c.label +
+              '</span><span class="badge">' + c.count + "</span></button>"
+            );
+          }).join("") +
+          '<p class="sidebar-note">아이디어뱅크 카테고리 없음.<br>승격 전 아이디어는 idea-bank 앱에서만.</p>';
+        document.querySelectorAll(".nav-item[data-cat]").forEach(function (btn) {
+          btn.onclick = function () {
+            state.cat = btn.getAttribute("data-cat");
+            state.sub = "all";
+            var ids = itemsInView();
+            state.itemId = ids[0] || "";
+            state.panel = "intro";
+            render();
+          };
+        });
+      }
+
+      function renderSubchips() {
+        var el = document.getElementById("subchips");
+        if (state.cat !== "study") { el.hidden = true; return; }
+        el.hidden = false;
+        el.innerHTML = DATA.studyGroups.map(function (g) {
+          return '<button type="button" class="subchip' +
+            (state.sub === g.id ? " is-active" : "") +
+            '" data-sub="' + g.id + '">' + g.label + "</button>";
+        }).join("");
+        el.querySelectorAll(".subchip").forEach(function (btn) {
+          btn.onclick = function () {
+            state.sub = btn.getAttribute("data-sub");
+            var ids = itemsInView();
+            state.itemId = ids[0] || "";
+            render();
+          };
+        });
+      }
+
+      function renderItemTabs() {
+        var ids = itemsInView();
+        var el = document.getElementById("item-tabs");
+        el.innerHTML = ids.map(function (id) {
+          return '<button type="button" class="item-tab' +
+            (state.itemId === id ? " is-active" : "") +
+            '" data-id="' + id + '">' + DATA.items[id].title + "</button>";
+        }).join("");
+        el.querySelectorAll(".item-tab").forEach(function (btn) {
+          btn.onclick = function () {
+            state.itemId = btn.getAttribute("data-id");
+            state.panel = "intro";
+            render();
+          };
+        });
+      }
+
+      function renderPanel() {
+        var it = DATA.items[state.itemId];
+        var body = document.getElementById("panel-body");
+        document.getElementById("route-hint").textContent =
+          "#/" + state.cat + "/" + (state.itemId || "") + (state.panel === "app" ? "/app" : "");
+
+        var appTab = document.querySelector('.panel-tab[data-panel="app"]');
+        appTab.classList.toggle("disabled", !it || !it.appUrl);
+        document.querySelectorAll(".panel-tab").forEach(function (btn) {
+          btn.classList.toggle("is-active", btn.getAttribute("data-panel") === state.panel);
+        });
+
+        if (!it) {
+          body.innerHTML = '<p class="summary">이 카테고리에 항목이 없습니다.</p>';
+          return;
+        }
+
+        if (state.panel === "app") {
+          var cards =
+            '<div class="launch-card launch-card--primary"><span>' + it.appLabel +
+            '</span><a class="btn" href="' + it.appUrl + '" target="_blank" rel="noopener">새 탭에서 열기</a></div>';
+          (it.links || []).forEach(function (l) {
+            cards +=
+              '<div class="launch-card"><span>' + l.label +
+              '</span><a class="btn btn--ghost" href="' + l.href + '" target="_blank" rel="noopener">열기</a></div>';
+          });
+          body.innerHTML =
+            "<h2>" + it.title + " — 접속</h2>" +
+            '<p class="panel-note">앱·사이트는 새 탭에서 엽니다.</p>' +
+            '<div class="launch-list">' + cards + "</div>";
+          return;
+        }
+
+        body.innerHTML =
+          "<h2>" + it.title + "</h2>" +
+          '<div class="meta-row">' +
+          '<span class="pill pill--' + it.cat + '">' + state.cat + "</span>" +
+          it.tags.map(function (t) { return '<span class="pill">' + t + "</span>"; }).join("") +
+          "</div>" +
+          '<p class="summary">' + it.summary + "</p>" +
+          '<p class="lead">' + it.lead + "</p>";
+      }
+
+      function render() {
+        renderSidebar();
+        renderSubchips();
+        renderItemTabs();
+        renderPanel();
+      }
+
+      document.querySelectorAll(".panel-tab").forEach(function (btn) {
+        btn.onclick = function () {
+          if (btn.classList.contains("disabled")) return;
+          state.panel = btn.getAttribute("data-panel");
+          render();
+        };
+      });
+
+      render();
+    </script>
+  </body>
+</html>
