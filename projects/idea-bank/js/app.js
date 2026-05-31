@@ -48,27 +48,51 @@
     });
   }
 
+  function countIdeasByStatus(ideas) {
+    var active = 0;
+    var promoted = 0;
+    ideas.forEach(function (idea) {
+      if (idea.status === "promoted") promoted += 1;
+      else active += 1;
+    });
+    return { total: ideas.length, active: active, promoted: promoted };
+  }
+
   function updateNavCounts(ideas) {
-    var total = ideas.length;
+    var counts = countIdeasByStatus(ideas);
     var pinned = 0;
     ideas.forEach(function (idea) {
       if (idea.pinned) pinned += 1;
     });
     var allEl = $("nav-count-all");
     var pinnedEl = $("nav-count-pinned");
-    if (allEl) allEl.textContent = String(total);
+    if (allEl) {
+      allEl.textContent = String(counts.total);
+      allEl.title =
+        counts.total === 0
+          ? "저장된 아이디어 없음"
+          : "전체 " +
+            counts.total +
+            "건 (노트 중 " +
+            counts.active +
+            " · 승격 " +
+            counts.promoted +
+            ") — 승격된 아이디어도 포함";
+    }
     if (pinnedEl) pinnedEl.textContent = String(pinned);
   }
 
-  function renderCatFilter() {
+  function renderCatFilter(ideas) {
+    ideas = ideas || [];
+    var counts = countIdeasByStatus(ideas);
     var chips = [
-      { id: "all", label: "전체", kind: "cat" },
-      { id: "work", label: CAT_LABEL.work, kind: "cat" },
-      { id: "study", label: CAT_LABEL.study, kind: "cat" },
-      { id: "hobby", label: CAT_LABEL.hobby, kind: "cat" },
-      { id: "all", label: "상태·전체", kind: "status" },
-      { id: "active", label: "🌱 노트 중", kind: "status" },
-      { id: "promoted", label: "🚀 승격됨", kind: "status" },
+      { id: "all", label: "전체", kind: "cat", n: null },
+      { id: "work", label: CAT_LABEL.work, kind: "cat", n: null },
+      { id: "study", label: CAT_LABEL.study, kind: "cat", n: null },
+      { id: "hobby", label: CAT_LABEL.hobby, kind: "cat", n: null },
+      { id: "all", label: "상태·전체", kind: "status", n: counts.total },
+      { id: "active", label: "🌱 노트 중", kind: "status", n: counts.active },
+      { id: "promoted", label: "🚀 승격됨", kind: "status", n: counts.promoted },
     ];
     $("cat-filter").innerHTML = chips
       .map(function (c) {
@@ -76,6 +100,10 @@
           c.kind === "cat"
             ? state.filter === c.id
             : state.statusFilter === c.id;
+        var nBadge =
+          c.n === null
+            ? ""
+            : ' <span class="cat-chip__n">' + c.n + "</span>";
         return (
           '<button type="button" class="cat-chip cat-chip--' +
           c.kind +
@@ -86,6 +114,7 @@
           c.id +
           '">' +
           escapeHtml(c.label) +
+          nBadge +
           "</button>"
         );
       })
@@ -102,14 +131,29 @@
   }
 
   function renderList(ideas) {
+    var statusCounts = countIdeasByStatus(ideas);
     var filtered = filterIdeas(ideas);
     filtered.sort(function (a, b) {
       if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
       return (b.updatedAt || "").localeCompare(a.updatedAt || "");
     });
     if (!filtered.length) {
-      $("content").innerHTML =
-        '<p class="empty">💭 아직 적어 둔 아이디어가 없어요.<br />✨ <strong>새 아이디어</strong>로 첫 메모를 남겨 보세요.</p>';
+      var emptyMsg =
+        '<p class="empty">💭 이 목록에 맞는 아이디어가 없어요.</p>';
+      if (
+        state.view === "list" &&
+        state.statusFilter === "active" &&
+        statusCounts.promoted > 0
+      ) {
+        emptyMsg +=
+          '<p class="list-meta">🚀 승격 완료 ' +
+          statusCounts.promoted +
+          "건은 「승격됨」 필터에서 보세요. 승격해도 노트에서 자동 삭제되지 않습니다.</p>";
+      } else {
+        emptyMsg +=
+          '<p class="list-meta">✨ <strong>새 아이디어</strong>로 첫 메모를 남겨 보세요.</p>';
+      }
+      $("content").innerHTML = emptyMsg;
       return;
     }
     $("content").innerHTML =
@@ -467,9 +511,9 @@
           (v === "sketch" && state.view === "sketch")
       );
     });
-    renderCatFilter();
     IdeaBankDb.listIdeas().then(function (ideas) {
       updateNavCounts(ideas);
+      renderCatFilter(ideas);
       if (state.view === "sketch") {
         if (!state.draft && !state.isNew) loadSketch();
         else renderSketchForm();

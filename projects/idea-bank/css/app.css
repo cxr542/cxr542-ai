@@ -312,6 +312,14 @@ html.sidebar-collapsed-boot .nav-item {
   background: transparent; border: 1px solid var(--border); border-radius: 999px; cursor: pointer;
 }
 .cat-chip.is-active { color: var(--text); background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.45); }
+.cat-chip__n {
+  font-size: 0.6875rem;
+  padding: 0.05rem 0.35rem;
+  margin-left: 0.15rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+  font-variant-numeric: tabular-nums;
+}
 .content { flex: 1; padding: 1rem 1.25rem 2rem; overflow-y: auto; }
 .list-meta { font-size: 0.8125rem; color: var(--muted); margin: 0 0 0.75rem; }
 .idea-card {
