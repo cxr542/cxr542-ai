@@ -789,13 +789,49 @@
     };
   }
 
-  IdeaBankDb.seedIfEmpty()
+  function updateStorageBanner(mode) {
+    var meta = document.querySelector(".app-banner__meta");
+    if (!meta) return;
+    var storeLabel =
+      mode === "indexeddb"
+        ? "IndexedDB"
+        : mode === "localstorage"
+          ? "localStorage"
+          : "저장 불가";
+    meta.textContent =
+      "🔒 " +
+      storeLabel +
+      " · 내 브라우저에만" +
+      (mode === "localstorage"
+        ? " (IndexedDB 제한 → localStorage)"
+        : "") +
+      " · 🎯 준비되면 허브로";
+  }
+
+  function showInitError(err) {
+    console.error(err);
+    var msg = (err && err.message) || String(err);
+    var hint =
+      "데이터를 저장할 수 없습니다. 브라우저에서 이 사이트의 저장소(쿠키·사이트 데이터)를 허용해 주세요.";
+    if (location.protocol === "file:") {
+      hint =
+        "HTML 파일을 직접 연 경우 저장소가 막힙니다. GitHub Pages URL 또는 npm run preview로 열어 주세요.";
+    }
+    $("content").innerHTML =
+      '<p class="empty">' +
+      escapeHtml(hint) +
+      (msg ? "<br><small>" + escapeHtml(msg) + "</small>" : "") +
+      "</p>";
+  }
+
+  IdeaBankDb.getStorageMode()
+    .then(function (mode) {
+      updateStorageBanner(mode);
+      return IdeaBankDb.seedIfEmpty();
+    })
     .then(function () {
       bindUi();
       render();
     })
-    .catch(function () {
-      $("content").innerHTML =
-        '<p class="empty">IndexedDB를 사용할 수 없습니다. 브라우저 설정을 확인하세요.</p>';
-    });
+    .catch(showInitError);
 })();

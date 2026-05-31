@@ -4,7 +4,83 @@
   var DB_NAME = "idea-bank";
   var DB_VERSION = 1;
   var STORE = "ideas";
+  var LS_IDEAS_KEY = "idea-bank-ideas";
   var dbPromise = null;
+  var storageMode = "indexeddb";
+  var storageReady = null;
+
+  function probeIndexedDB() {
+    return new Promise(function (resolve) {
+      if (!global.indexedDB) {
+        resolve(false);
+        return;
+      }
+      var name = "__idea_bank_probe_" + Date.now();
+      var req;
+      try {
+        req = indexedDB.open(name, 1);
+      } catch (e) {
+        resolve(false);
+        return;
+      }
+      req.onerror = function () {
+        resolve(false);
+      };
+      req.onupgradeneeded = function (e) {
+        e.target.result.createObjectStore("t");
+      };
+      req.onsuccess = function (e) {
+        var db = e.target.result;
+        db.close();
+        try {
+          indexedDB.deleteDatabase(name);
+        } catch (err) {
+          /* ignore */
+        }
+        resolve(true);
+      };
+    });
+  }
+
+  function initStorage() {
+    if (storageReady) return storageReady;
+    storageReady = probeIndexedDB().then(function (ok) {
+      if (ok) {
+        storageMode = "indexeddb";
+        return "indexeddb";
+      }
+      try {
+        localStorage.setItem("__idea_bank_probe__", "1");
+        localStorage.removeItem("__idea_bank_probe__");
+        storageMode = "localstorage";
+        return "localstorage";
+      } catch (e) {
+        storageMode = "none";
+        return "none";
+      }
+    });
+    return storageReady;
+  }
+
+  function getStorageMode() {
+    return initStorage().then(function () {
+      return storageMode;
+    });
+  }
+
+  function lsRead() {
+    try {
+      var raw = localStorage.getItem(LS_IDEAS_KEY);
+      var list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function lsWrite(list) {
+    localStorage.setItem(LS_IDEAS_KEY, JSON.stringify(list));
+  }
 
   function openDb() {
     if (dbPromise) return dbPromise;
@@ -12,7 +88,7 @@
       var req = indexedDB.open(DB_NAME, DB_VERSION);
       req.onerror = function () {
         dbPromise = null;
-        reject(req.error);
+        reject(req.error || new Error("idb-open"));
       };
       req.onupgradeneeded = function (e) {
         var db = e.target.result;
@@ -104,92 +180,148 @@
     return id;
   }
 
+  function defaultSeed() {
+    var now = new Date().toISOString();
+    return [
+      {
+        id: "marathon-log",
+        title: "마라톤 기록장",
+        body:
+          "Keep에 흩어진 대회 기록을 JSON으로 관리하고 싶다.\n\n오늘뭐신지(신발)와 역할 분리. 로컬 저장 + export.\n→ projects/marathon-log MVP 배포, hub hobby 승격 완료.",
+        targetCategory: "hobby",
+        hubProjectId: "marathon-log",
+        status: "promoted",
+        promotedAt: now,
+        promoteProgress: {
+          app: true,
+          "projects-json": true,
+          "intro-manifest": true,
+          "catalog-map": true,
+          "build-hub": true,
+          push: true,
+        },
+        pinned: true,
+        tags: ["Running", "product"],
+        images: [],
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: "hub-admin",
+        title: "허브 admin 모드",
+        body: "catalog 편집을 Git 없이…",
+        targetCategory: "work",
+        hubProjectId: "hub-admin",
+        status: "active",
+        promoteProgress: {
+          app: false,
+          "projects-json": false,
+          "intro-manifest": false,
+          "catalog-map": false,
+          "build-hub": false,
+          push: false,
+        },
+        pinned: false,
+        tags: ["product"],
+        images: [],
+        createdAt: now,
+        updatedAt: now,
+      },
+    ];
+  }
+
   function listIdeas() {
-    return runTx("readonly", function (store) {
-      return idbRequest(store.getAll()).then(function (rows) {
-        return rows || [];
+    return initStorage().then(function (mode) {
+      if (mode === "localstorage") {
+        return lsRead();
+      }
+      if (mode === "none") {
+        return Promise.reject(new Error("storage-unavailable"));
+      }
+      return runTx("readonly", function (store) {
+        return idbRequest(store.getAll()).then(function (rows) {
+          return rows || [];
+        });
       });
     });
   }
 
   function getIdea(id) {
-    return runTx("readonly", function (store) {
-      return idbRequest(store.get(id));
+    return initStorage().then(function (mode) {
+      if (mode === "localstorage") {
+        return lsRead().find(function (idea) {
+          return idea.id === id;
+        });
+      }
+      if (mode === "none") {
+        return Promise.reject(new Error("storage-unavailable"));
+      }
+      return runTx("readonly", function (store) {
+        return idbRequest(store.get(id));
+      });
     });
   }
 
   function putIdea(idea) {
-    return runTx("readwrite", function (store) {
-      return idbRequest(store.put(idea));
+    return initStorage().then(function (mode) {
+      if (mode === "localstorage") {
+        var list = lsRead();
+        var i = list.findIndex(function (item) {
+          return item.id === idea.id;
+        });
+        if (i >= 0) list[i] = idea;
+        else list.push(idea);
+        lsWrite(list);
+        return;
+      }
+      if (mode === "none") {
+        return Promise.reject(new Error("storage-unavailable"));
+      }
+      return runTx("readwrite", function (store) {
+        return idbRequest(store.put(idea));
+      });
     });
   }
 
   function deleteIdea(id) {
-    return runTx("readwrite", function (store) {
-      return idbRequest(store.delete(id));
+    return initStorage().then(function (mode) {
+      if (mode === "localstorage") {
+        lsWrite(
+          lsRead().filter(function (idea) {
+            return idea.id !== id;
+          })
+        );
+        return;
+      }
+      if (mode === "none") {
+        return Promise.reject(new Error("storage-unavailable"));
+      }
+      return runTx("readwrite", function (store) {
+        return idbRequest(store.delete(id));
+      });
     });
   }
 
   function clearAll() {
-    return runTx("readwrite", function (store) {
-      return idbRequest(store.clear());
+    return initStorage().then(function (mode) {
+      if (mode === "localstorage") {
+        lsWrite([]);
+        return;
+      }
+      if (mode === "none") {
+        return Promise.reject(new Error("storage-unavailable"));
+      }
+      return runTx("readwrite", function (store) {
+        return idbRequest(store.clear());
+      });
     });
   }
 
   function seedIfEmpty() {
     return listIdeas().then(function (items) {
       if (items.length) return items;
-      var now = new Date().toISOString();
-      var seed = [
-        {
-          id: "marathon-log",
-          title: "마라톤 기록장",
-          body:
-            "Keep에 흩어진 대회 기록을 JSON으로 관리하고 싶다.\n\n오늘뭐신지(신발)와 역할 분리. 로컬 저장 + export.\n→ projects/marathon-log MVP 배포, hub hobby 승격 완료.",
-          targetCategory: "hobby",
-          hubProjectId: "marathon-log",
-          status: "promoted",
-          promotedAt: now,
-          promoteProgress: {
-            app: true,
-            "projects-json": true,
-            "intro-manifest": true,
-            "catalog-map": true,
-            "build-hub": true,
-            push: true,
-          },
-          pinned: true,
-          tags: ["Running", "product"],
-          images: [],
-          createdAt: now,
-          updatedAt: now,
-        },
-        {
-          id: "hub-admin",
-          title: "허브 admin 모드",
-          body: "catalog 편집을 Git 없이…",
-          targetCategory: "work",
-          hubProjectId: "hub-admin",
-          status: "active",
-          promoteProgress: {
-            app: false,
-            "projects-json": false,
-            "intro-manifest": false,
-            "catalog-map": false,
-            "build-hub": false,
-            push: false,
-          },
-          pinned: false,
-          tags: ["product"],
-          images: [],
-          createdAt: now,
-          updatedAt: now,
-        },
-      ];
-      return runTx("readwrite", function (store) {
-        seed.forEach(function (idea) {
-          store.put(idea);
-        });
+      var seed = defaultSeed();
+      return Promise.all(seed.map(putIdea)).then(function () {
         return seed;
       });
     });
@@ -244,5 +376,6 @@
     slugFromTitle: slugFromTitle,
     exportPayload: exportPayload,
     importPayload: importPayload,
+    getStorageMode: getStorageMode,
   };
 })(window);
