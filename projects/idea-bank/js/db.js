@@ -4,11 +4,14 @@
   var DB_NAME = "idea-bank";
   var DB_VERSION = 1;
   var STORE = "ideas";
+  var dbPromise = null;
 
   function openDb() {
-    return new Promise(function (resolve, reject) {
+    if (dbPromise) return dbPromise;
+    dbPromise = new Promise(function (resolve, reject) {
       var req = indexedDB.open(DB_NAME, DB_VERSION);
       req.onerror = function () {
+        dbPromise = null;
         reject(req.error);
       };
       req.onupgradeneeded = function (e) {
@@ -22,53 +25,63 @@
       req.onsuccess = function () {
         resolve(req.result);
       };
+      req.onblocked = function () {
+        console.warn("idea-bank: IndexedDB upgrade blocked — close other tabs.");
+      };
     });
+    return dbPromise;
   }
 
-  /** Run store work in one IDB transaction (avoids tx closing before requests finish). */
-  function withStore(mode, fn) {
-    return openDb().then(function (db) {
-      return new Promise(function (resolve, reject) {
-        var tx = db.transaction(STORE, mode);
-        var store = tx.objectStore(STORE);
-        var outcome;
-        try {
-          outcome = fn(store);
-        } catch (err) {
-          reject(err);
-          return;
-        }
-        if (outcome && typeof outcome.then === "function") {
-          outcome.then(resolve, reject);
-          tx.onerror = function () {
-            reject(tx.error);
-          };
-          tx.onabort = function () {
-            reject(tx.error);
-          };
-          return;
-        }
-        tx.oncomplete = function () {
-          resolve(outcome);
-        };
-        tx.onerror = function () {
-          reject(tx.error);
-        };
-        tx.onabort = function () {
-          reject(tx.error);
-        };
-      });
-    });
-  }
-
-  function reqToPromise(req) {
+  function idbRequest(req) {
     return new Promise(function (resolve, reject) {
       req.onsuccess = function () {
         resolve(req.result);
       };
       req.onerror = function () {
-        reject(req.error);
+        reject(req.error || new Error("IndexedDB request failed"));
       };
+    });
+  }
+
+  function runTx(mode, run) {
+    return openDb().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var tx = db.transaction(STORE, mode);
+        var store = tx.objectStore(STORE);
+        var settled = false;
+        function finish(err, value) {
+          if (settled) return;
+          settled = true;
+          if (err) reject(err);
+          else resolve(value);
+        }
+        try {
+          var outcome = run(store);
+          if (outcome && typeof outcome.then === "function") {
+            outcome.then(
+              function (value) {
+                finish(null, value);
+              },
+              function (err) {
+                finish(err);
+              }
+            );
+          } else {
+            tx.oncomplete = function () {
+              finish(null, outcome);
+            };
+          }
+        } catch (err) {
+          finish(err);
+          return;
+        }
+        tx.onerror = function () {
+          finish(tx.error || new Error("IndexedDB transaction failed"));
+        };
+        tx.onabort = function () {
+          finish(tx.error || new Error("IndexedDB transaction aborted"));
+        };
+      });
     });
   }
 
@@ -92,34 +105,34 @@
   }
 
   function listIdeas() {
-    return withStore("readonly", function (store) {
-      return reqToPromise(store.getAll()).then(function (rows) {
+    return runTx("readonly", function (store) {
+      return idbRequest(store.getAll()).then(function (rows) {
         return rows || [];
       });
     });
   }
 
   function getIdea(id) {
-    return withStore("readonly", function (store) {
-      return reqToPromise(store.get(id));
+    return runTx("readonly", function (store) {
+      return idbRequest(store.get(id));
     });
   }
 
   function putIdea(idea) {
-    return withStore("readwrite", function (store) {
-      return reqToPromise(store.put(idea));
+    return runTx("readwrite", function (store) {
+      return idbRequest(store.put(idea));
     });
   }
 
   function deleteIdea(id) {
-    return withStore("readwrite", function (store) {
-      return reqToPromise(store.delete(id));
+    return runTx("readwrite", function (store) {
+      return idbRequest(store.delete(id));
     });
   }
 
   function clearAll() {
-    return withStore("readwrite", function (store) {
-      return reqToPromise(store.clear());
+    return runTx("readwrite", function (store) {
+      return idbRequest(store.clear());
     });
   }
 
@@ -173,7 +186,7 @@
           updatedAt: now,
         },
       ];
-      return withStore("readwrite", function (store) {
+      return runTx("readwrite", function (store) {
         seed.forEach(function (idea) {
           store.put(idea);
         });

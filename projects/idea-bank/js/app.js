@@ -3,6 +3,7 @@
 
   var CAT_LABEL = { work: "업무 도우미", study: "공부·실험", hobby: "러닝·취미" };
   var SIDEBAR_COLLAPSED_KEY = "idea-bank-sidebar-collapsed";
+  var renderSeq = 0;
   var state = {
     view: "list",
     filter: "all",
@@ -84,11 +85,15 @@
     return t.length > 120 ? t.slice(0, 120) + "…" : t;
   }
 
+  function ideaStatus(idea) {
+    return idea && idea.status === "promoted" ? "promoted" : "active";
+  }
+
   function filterIdeas(ideas) {
     return ideas.filter(function (idea) {
       if (state.view === "pinned" && !idea.pinned) return false;
-      if (state.statusFilter === "active" && idea.status === "promoted") return false;
-      if (state.statusFilter === "promoted" && idea.status !== "promoted") return false;
+      if (state.statusFilter === "active" && ideaStatus(idea) === "promoted") return false;
+      if (state.statusFilter === "promoted" && ideaStatus(idea) !== "promoted") return false;
       if (state.filter !== "all" && idea.targetCategory !== state.filter) return false;
       if (state.search) {
         var q = state.search.toLowerCase();
@@ -120,7 +125,7 @@
     var active = 0;
     var promoted = 0;
     ideas.forEach(function (idea) {
-      if (idea.status === "promoted") promoted += 1;
+      if (ideaStatus(idea) === "promoted") promoted += 1;
       else active += 1;
     });
     return { total: ideas.length, active: active, promoted: promoted };
@@ -234,6 +239,7 @@
   }
 
   function renderList(ideas) {
+    ideas = Array.isArray(ideas) ? ideas : [];
     var statusCounts = countIdeasByStatus(ideas);
     var filtered = filterIdeas(ideas);
     filtered.sort(function (a, b) {
@@ -288,11 +294,13 @@
               ? '<span class="pill pill--promoted">승격 완료</span>'
               : "") +
             '<span class="pill pill--' +
-            idea.targetCategory +
+            escapeHtml(idea.targetCategory || "study") +
             '">' +
-            escapeHtml(CAT_LABEL[idea.targetCategory] || idea.targetCategory) +
+            escapeHtml(
+              CAT_LABEL[idea.targetCategory] || idea.targetCategory || "기타"
+            ) +
             "</span>" +
-            (idea.status !== "promoted"
+            (ideaStatus(idea) !== "promoted"
               ? '<span class="pill pill--progress">' +
                 promote().progressDoneCount(
                   promote().normalizeProgress(idea.promoteProgress)
@@ -645,6 +653,7 @@
   }
 
   function render() {
+    var seq = ++renderSeq;
     document.querySelectorAll(".nav-item[data-view]").forEach(function (btn) {
       var v = btn.getAttribute("data-view");
       btn.classList.toggle(
@@ -656,22 +665,30 @@
     });
     IdeaBankDb.listIdeas()
       .then(function (ideas) {
-        updateNavCounts(ideas);
-        renderCatFilter(ideas);
-        if (state.view === "sketch") {
-          if (!state.draft && !state.isNew) {
-            loadSketch();
-          } else {
-            renderSketchForm();
+        if (seq !== renderSeq) return;
+        try {
+          updateNavCounts(ideas);
+          renderCatFilter(ideas);
+          if (state.view === "sketch") {
+            if (!state.draft && !state.isNew) {
+              loadSketch();
+            } else {
+              renderSketchForm();
+            }
+            return;
           }
-          return;
+          renderList(ideas);
+        } catch (err) {
+          console.error(err);
+          $("content").innerHTML =
+            '<p class="empty">목록을 표시하는 중 오류가 났습니다. 새로고침해 주세요.</p>';
         }
-        renderList(ideas);
       })
       .catch(function (err) {
+        if (seq !== renderSeq) return;
         console.error(err);
         $("content").innerHTML =
-          '<p class="empty">목록을 불러오지 못했습니다. 페이지를 새로고침해 주세요.</p>';
+          '<p class="empty">저장소에서 목록을 읽지 못했습니다. 다른 idea-bank 탭을 닫고 새로고침해 주세요.</p>';
       });
   }
 
