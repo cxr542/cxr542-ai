@@ -632,6 +632,55 @@ body.hub-tms .skip-link {
   padding: 2rem 0;
 }
 
+.hub-search-hits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-width: 42rem;
+}
+
+.hub-search-hit {
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+}
+
+.hub-search-hit__btn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.65rem;
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  font: inherit;
+  text-align: left;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.hub-search-hit__btn:hover {
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.hub-search-hit__title {
+  flex: 1;
+  min-width: 8rem;
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+.hub-search-hit__summary {
+  margin: 0;
+  padding: 0 0.9rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
 .hub-modal-backdrop {
   position: fixed;
   inset: 0;

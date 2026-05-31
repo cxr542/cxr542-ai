@@ -97,6 +97,10 @@
   function updateMobileTitle() {
     var el = document.getElementById("hub-mobile-title");
     if (!el) return;
+    if (isGlobalSearchActive()) {
+      el.textContent = "검색: " + state.searchQuery;
+      return;
+    }
     var r = state.route;
     var title = getNavLabel(r.view) || r.view;
     if (categoryIds.indexOf(r.view) !== -1 && r.itemId) {
@@ -252,9 +256,28 @@
     return g ? g.label : subId;
   }
 
+  function isGlobalSearchActive() {
+    return !!state.searchQuery;
+  }
+
+  function itemsMatchingGlobalSearch() {
+    if (!state.searchQuery) return [];
+    return state.items
+      .filter(matchesSearch)
+      .sort(function (a, b) {
+        return (a.title || "").localeCompare(b.title || "", "ko");
+      });
+  }
+
   function renderSubcategoryChips() {
     var nav = document.getElementById("hub-subcategory-chips");
     if (!nav) return;
+
+    if (isGlobalSearchActive()) {
+      nav.hidden = true;
+      nav.innerHTML = "";
+      return;
+    }
 
     if (state.route.view !== "study" || !state.studyGroups.length) {
       nav.hidden = true;
@@ -456,6 +479,12 @@
     var nav = document.getElementById("hub-item-tabs");
     if (!nav) return;
 
+    if (isGlobalSearchActive()) {
+      nav.hidden = true;
+      nav.innerHTML = "";
+      return;
+    }
+
     if (systemViews.indexOf(state.route.view) !== -1) {
       nav.hidden = true;
       return;
@@ -597,15 +626,93 @@
   function matchesSearch(item) {
     if (!state.searchQuery) return true;
     var q = state.searchQuery;
+    var catLabel = getNavLabel(item.category) || item.category || "";
     var hay =
+      (item.id || "") +
+      " " +
       (item.title || "") +
       " " +
       (item.summary || "") +
       " " +
       (item.nextAction || "") +
       " " +
+      catLabel +
+      " " +
       (item.tags || []).join(" ");
     return hay.toLowerCase().indexOf(q) !== -1;
+  }
+
+  function pickSearchResult(itemId) {
+    var it = findItem(itemId);
+    if (!it) return;
+    var searchEl = document.getElementById("hub-search");
+    state.searchQuery = "";
+    if (searchEl) searchEl.value = "";
+    state.route.view = it.category;
+    state.route.itemId = it.id;
+    state.route.panel = "intro";
+    setHash();
+    closeHubNav();
+    renderAll();
+  }
+
+  function renderGlobalSearchPanel(body) {
+    var q = state.searchQuery;
+    var hits = itemsMatchingGlobalSearch();
+    var hint = document.getElementById("hub-route-hint");
+    var panelTabs = document.getElementById("hub-panel-tabs");
+    if (panelTabs) panelTabs.hidden = true;
+    if (hint) hint.textContent = "검색 · " + hits.length + "건";
+
+    if (!hits.length) {
+      body.innerHTML =
+        "<h2>전체 검색</h2>" +
+        '<p class="hub-empty">「' +
+        escapeHtml(q) +
+        "」에 맞는 항목이 없습니다.</p>" +
+        '<p class="hub-panel-note">제목·요약·태그·id·카테고리 이름으로 찾습니다.</p>';
+      return;
+    }
+
+    body.innerHTML =
+      "<h2>전체 검색</h2>" +
+      '<p class="hub-summary">' +
+      hits.length +
+      "건 · 「" +
+      escapeHtml(q) +
+      "」 — 업무·공부·취미 전체</p>" +
+      '<ul class="hub-search-hits">' +
+      hits
+        .map(function (it) {
+          var pillClass = "hub-pill hub-pill--" + (it.category || "study");
+          return (
+            '<li class="hub-search-hit">' +
+            '<button type="button" class="hub-search-hit__btn" data-search-pick="' +
+            escapeHtml(it.id) +
+            '">' +
+            '<span class="hub-search-hit__title">' +
+            escapeHtml(it.title) +
+            "</span>" +
+            '<span class="' +
+            pillClass +
+            '">' +
+            escapeHtml(getNavLabel(it.category) || it.category) +
+            "</span>" +
+            "</button>" +
+            (it.summary
+              ? '<p class="hub-search-hit__summary">' + escapeHtml(it.summary) + "</p>"
+              : "") +
+            "</li>"
+          );
+        })
+        .join("") +
+      "</ul>";
+
+    body.querySelectorAll("[data-search-pick]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        pickSearchResult(btn.getAttribute("data-search-pick"));
+      });
+    });
   }
 
   function renderGuide() {
@@ -1057,7 +1164,12 @@
     var r = state.route;
     var hashPath = "#/" + r.view;
     if (itemIdForRoute(r)) hashPath += "/" + r.itemId + (r.panel === "app" ? "/app" : "");
-    if (hint) hint.textContent = hashPath;
+    if (hint && !isGlobalSearchActive()) hint.textContent = hashPath;
+
+    if (isGlobalSearchActive()) {
+      renderGlobalSearchPanel(body);
+      return;
+    }
 
     if (r.view === "guide") {
       body.innerHTML = renderGuide();
@@ -1355,8 +1467,7 @@
 
     document.getElementById("hub-search").addEventListener("input", function (e) {
       state.searchQuery = e.target.value.trim().toLowerCase();
-      renderItemTabs();
-      renderPanel();
+      renderAll();
     });
 
     var catExport = document.getElementById("hub-category-export");
