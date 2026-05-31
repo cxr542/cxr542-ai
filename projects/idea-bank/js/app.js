@@ -526,25 +526,38 @@
   }
 
   function applySidebarCollapsed(collapsed) {
-    var shell = document.querySelector(".app-shell");
-    var toggle = document.getElementById("sidebar-toggle");
+    var shell = document.getElementById("app-shell");
+    var toggles = [
+      document.getElementById("sidebar-toggle"),
+      document.getElementById("sidebar-toggle-toolbar"),
+    ];
     if (shell) shell.classList.toggle("is-sidebar-collapsed", collapsed);
-    if (toggle) {
+    document.documentElement.classList.toggle("sidebar-collapsed-boot", collapsed);
+    toggles.forEach(function (toggle) {
+      if (!toggle) return;
       toggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
-      toggle.setAttribute("aria-label", collapsed ? "메뉴 펼치기" : "메뉴 접기");
-      toggle.title = collapsed ? "메뉴 펼치기" : "메뉴 접기";
+      var label = collapsed ? "메뉴 펼치기" : "메뉴 접기";
+      toggle.setAttribute("aria-label", label);
+      toggle.title = label;
+    });
+    var rail = document.getElementById("sidebar-toggle");
+    if (rail) {
+      var railLabel = rail.querySelector(".sidebar-rail__label");
+      if (railLabel) railLabel.textContent = collapsed ? "펼침" : "접기";
     }
   }
 
   function bindSidebarToggle() {
-    var toggle = document.getElementById("sidebar-toggle");
-    if (!toggle) return;
     var collapsed = localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "1";
     applySidebarCollapsed(collapsed);
-    toggle.addEventListener("click", function () {
-      collapsed = !document.querySelector(".app-shell").classList.contains("is-sidebar-collapsed");
+    function onToggle() {
+      collapsed = !document.getElementById("app-shell").classList.contains("is-sidebar-collapsed");
       localStorage.setItem(SIDEBAR_COLLAPSED_KEY, collapsed ? "1" : "0");
       applySidebarCollapsed(collapsed);
+    }
+    ["sidebar-toggle", "sidebar-toggle-toolbar"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener("click", onToggle);
     });
   }
 
