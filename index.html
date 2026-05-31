@@ -2,7 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta
       name="description"
       content="cxr542-hub — AI로 만든 서비스·실험·취미를 카테고리별로 모은 개인 포털"
@@ -16,16 +16,31 @@
     />
     <link rel="stylesheet" href="styles/main.css" />
     <link rel="stylesheet" href="styles/glass.css" />
-    <link rel="stylesheet" href="styles/layout-shell.css" />
+    <link rel="stylesheet" href="styles/layout-shell.css?v=hub-mobile-2" />
   </head>
   <body class="hub-tms">
     <a class="skip-link" href="#hub-panel-body">본문으로 건너뛰기</a>
+
+    <div class="hub-nav-backdrop" id="hub-nav-backdrop" hidden aria-hidden="true"></div>
 
     <div class="hub-shell">
       <aside class="hub-sidebar" id="hub-sidebar" aria-label="카테고리 메뉴"></aside>
 
       <div class="hub-main">
         <div class="hub-toolbar">
+          <div class="hub-toolbar__lead">
+            <button
+              type="button"
+              class="hub-nav-toggle"
+              id="hub-nav-toggle"
+              aria-controls="hub-sidebar"
+              aria-expanded="false"
+              aria-label="카테고리 메뉴 열기"
+            >
+              <span class="hub-nav-toggle__icon" aria-hidden="true"></span>
+            </button>
+            <span class="hub-mobile-title" id="hub-mobile-title" aria-live="polite"></span>
+          </div>
           <label class="visually-hidden" for="hub-search">검색</label>
           <input
             type="search"
@@ -34,8 +49,10 @@
             autocomplete="off"
           />
           <span class="hub-route-hint" id="hub-route-hint" aria-live="polite"></span>
+          <div class="hub-toolbar__actions">
           <button type="button" class="btn btn--ghost" id="hub-category-edit-toggle">
-            항목·메뉴 관리
+            <span class="hub-btn-label hub-btn-label--long">항목·메뉴 관리</span>
+            <span class="hub-btn-label hub-btn-label--short">관리</span>
           </button>
           <button
             type="button"
@@ -64,6 +81,7 @@
           >
             소개 JSON
           </button>
+          </div>
         </div>
         <nav class="hub-subcategory-chips" id="hub-subcategory-chips" aria-label="하위 분류" hidden></nav>
         <nav class="hub-item-tabs" id="hub-item-tabs" aria-label="항목" hidden></nav>
@@ -106,6 +124,6 @@
     </footer>
 
     <script src="js/main.js"></script>
-    <script src="js/hub-main.js?v=hub-3cat"></script>
+    <script src="js/hub-main.js?v=hub-mobile-2"></script>
   </body>
 </html>

@@ -144,6 +144,55 @@
       }
     },
     {
+      "id": "marathon-log",
+      "title": "마라톤 기록장",
+      "summary": "대회 기록·PB·통계 — 로컬 IndexedDB + JSON 백업",
+      "category": "hobby",
+      "status": "demo",
+      "tags": [
+        "Running"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/marathon-log.html"
+        },
+        {
+          "label": "앱",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/marathon-log/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/cxr542-ai"
+        }
+      ],
+      "source": "projects",
+      "categoryBase": "hobby",
+      "introUrl": "https://cxr542.github.io/cxr542-ai/intro/marathon-log.html",
+      "repoUrl": "https://github.com/cxr542/cxr542-ai",
+      "primaryAppUrl": "https://cxr542.github.io/cxr542-ai/projects/marathon-log/",
+      "appUrls": [
+        {
+          "label": "앱",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/marathon-log/"
+        }
+      ],
+      "introPage": {
+        "title": "마라톤 기록장",
+        "lead": "대회 날짜·거리·칩 기록·목표·메모를 한곳에. 오늘뭐신지(신발)와 분리된 러닝 기록 장부.",
+        "links": [
+          {
+            "label": "앱 열기",
+            "href": "https://cxr542.github.io/cxr542-ai/projects/marathon-log/"
+          },
+          {
+            "label": "Repo",
+            "href": "https://github.com/cxr542/cxr542-ai"
+          }
+        ]
+      }
+    },
+    {
       "id": "today-shoes",
       "title": "오늘뭐신지",
       "summary": "러닝화 3장(정면·좌·우) → Gemini 분석 → 신발장. Expo 웹 · GitHub Pages",

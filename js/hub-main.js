@@ -54,6 +54,58 @@
       .replace(/"/g, "&quot;");
   }
 
+  var HUB_COMPACT_MQ = "(max-width: 1024px), (hover: none) and (pointer: coarse)";
+
+  function isMobileNavLayout() {
+    return window.matchMedia(HUB_COMPACT_MQ).matches;
+  }
+
+  function closeHubNav() {
+    document.body.classList.remove("hub-nav-open");
+    var toggle = document.getElementById("hub-nav-toggle");
+    if (toggle) {
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "카테고리 메뉴 열기");
+    }
+    var backdrop = document.getElementById("hub-nav-backdrop");
+    if (backdrop) {
+      backdrop.hidden = true;
+      backdrop.setAttribute("aria-hidden", "true");
+    }
+  }
+
+  function openHubNav() {
+    if (!isMobileNavLayout()) return;
+    document.body.classList.add("hub-nav-open");
+    var toggle = document.getElementById("hub-nav-toggle");
+    if (toggle) {
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.setAttribute("aria-label", "카테고리 메뉴 닫기");
+    }
+    var backdrop = document.getElementById("hub-nav-backdrop");
+    if (backdrop) {
+      backdrop.hidden = false;
+      backdrop.setAttribute("aria-hidden", "false");
+    }
+  }
+
+  function toggleHubNav() {
+    if (document.body.classList.contains("hub-nav-open")) closeHubNav();
+    else openHubNav();
+  }
+
+  function updateMobileTitle() {
+    var el = document.getElementById("hub-mobile-title");
+    if (!el) return;
+    var r = state.route;
+    var title = getNavLabel(r.view) || r.view;
+    if (categoryIds.indexOf(r.view) !== -1 && r.itemId) {
+      var item = findItem(r.itemId);
+      if (item && item.title) title = item.title;
+    }
+    el.textContent = title;
+  }
+
   function loadJson(key, fallback) {
     try {
       var raw = localStorage.getItem(key);
@@ -385,6 +437,7 @@
         state.route.panel = "intro";
         ensureValidRoute();
         setHash();
+        closeHubNav();
         renderAll();
       });
     });
@@ -1069,9 +1122,11 @@
     renderSubcategoryChips();
     renderItemTabs();
     renderPanel();
+    updateMobileTitle();
   }
 
   function openNavLabelsModal() {
+    closeHubNav();
     var modal = document.getElementById("nav-labels-modal");
     var form = document.getElementById("nav-labels-form");
     if (!modal || !form) return;
@@ -1162,6 +1217,7 @@
   }
 
   function openHiddenRestoreModal() {
+    closeHubNav();
     var modal = document.getElementById("hidden-restore-modal");
     var body = document.getElementById("hidden-restore-body");
     if (!modal || !body) return;
@@ -1275,6 +1331,28 @@
   }
 
   function bindUi() {
+    var navToggle = document.getElementById("hub-nav-toggle");
+    var navBackdrop = document.getElementById("hub-nav-backdrop");
+    if (navToggle) {
+      navToggle.addEventListener("click", toggleHubNav);
+    }
+    if (navBackdrop) {
+      navBackdrop.addEventListener("click", closeHubNav);
+    }
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeHubNav();
+    });
+    var compactMq = window.matchMedia(HUB_COMPACT_MQ);
+    function onCompactChange() {
+      if (!isMobileNavLayout()) closeHubNav();
+    }
+    window.addEventListener("resize", onCompactChange);
+    if (compactMq.addEventListener) {
+      compactMq.addEventListener("change", onCompactChange);
+    } else if (compactMq.addListener) {
+      compactMq.addListener(onCompactChange);
+    }
+
     document.getElementById("hub-search").addEventListener("input", function (e) {
       state.searchQuery = e.target.value.trim().toLowerCase();
       renderItemTabs();

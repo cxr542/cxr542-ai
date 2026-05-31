@@ -184,5 +184,19 @@
         "href": "https://cxr542.github.io/cxr542-ai/projects/notes/viewer.html#pythagorean-proof.md"
       }
     ]
+  },
+  "marathon-log": {
+    "title": "마라톤 기록장",
+    "lead": "대회 날짜·거리·칩 기록·목표·메모를 한곳에. 오늘뭐신지(신발)와 분리된 러닝 기록 장부.",
+    "links": [
+      {
+        "label": "앱 열기",
+        "href": "https://cxr542.github.io/cxr542-ai/projects/marathon-log/"
+      },
+      {
+        "label": "Repo",
+        "href": "https://github.com/cxr542/cxr542-ai"
+      }
+    ]
   }
 }

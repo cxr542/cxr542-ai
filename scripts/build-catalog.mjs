@@ -42,6 +42,7 @@ const SUBCATEGORY_BY_ID = {
 };
 
 const CATEGORY_BY_ID = {
+  "marathon-log": "hobby",
   "today-shoes": "hobby",
   "ppt-academizer": "work",
   "edu-team-tms": "work",

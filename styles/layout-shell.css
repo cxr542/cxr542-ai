@@ -2,7 +2,32 @@
 
 body.hub-tms {
   margin: 0;
+  min-height: 100dvh;
   overflow: hidden;
+}
+
+.hub-nav-toggle {
+  display: none;
+}
+
+.hub-mobile-title {
+  display: none;
+}
+
+.hub-nav-backdrop {
+  display: none;
+}
+
+.hub-btn-label--short {
+  display: none;
+}
+
+.hub-toolbar__lead {
+  display: contents;
+}
+
+.hub-toolbar__actions {
+  display: contents;
 }
 
 body.hub-tms .skip-link {
@@ -709,15 +734,186 @@ body.hub-tms .skip-link {
   font-size: 0.8125rem;
 }
 
-@media (max-width: 720px) {
+/* 좁은 화면 + 터치 기기(폰 「데스크톱 사이트」 포함) */
+@media (max-width: 1024px), ((hover: none) and (pointer: coarse)) {
   .hub-shell {
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+  }
+
+  .hub-main,
+  .hub-sidebar {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .hub-main {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .hub-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .hub-nav-toggle__icon {
+    display: block;
+    width: 1.125rem;
+    height: 2px;
+    background: currentColor;
+    border-radius: 1px;
+    box-shadow: 0 -5px 0 currentColor, 0 5px 0 currentColor;
+  }
+
+  .hub-mobile-title {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    padding-right: 0.25rem;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hub-toolbar__lead {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1 1 auto;
+    min-width: 0;
+    order: 0;
+  }
+
+  .hub-toolbar {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.5rem;
+    padding: max(0.5rem, env(safe-area-inset-top, 0px)) 0.75rem 0.5rem;
+  }
+
+  .hub-toolbar input[type="search"] {
+    flex: 1 1 100%;
+    order: 2;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .hub-route-hint {
+    display: none;
+  }
+
+  .hub-toolbar__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    order: 1;
+    margin-left: auto;
+  }
+
+  .hub-toolbar__actions .btn {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8125rem;
+  }
+
+  .hub-btn-label--long {
+    display: none;
+  }
+
+  .hub-btn-label--short {
+    display: inline;
   }
 
   .hub-sidebar {
-    max-height: 40vh;
-    border-right: none;
-    border-bottom: 1px solid var(--color-border-subtle);
+    position: fixed;
+    z-index: 120;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(88vw, 17.5rem);
+    max-height: none;
+    margin: 0;
+    padding-top: max(1rem, env(safe-area-inset-top, 0px));
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+    border-right: 1px solid rgba(16, 185, 129, 0.12);
+    border-bottom: none;
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.45);
+    transform: translateX(-105%);
+    transition: transform 0.22s ease;
+    pointer-events: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.hub-nav-open .hub-sidebar {
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .hub-nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    background: rgba(0, 0, 0, 0.62);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+
+  .hub-nav-backdrop:not([hidden]) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .hub-main {
+    min-height: 0;
+  }
+
+  .hub-item-tabs {
+    max-height: min(36vh, 220px);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .hub-subcategory-chips,
+  .hub-panel-tabs {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .hub-panel-body {
+    padding: 1rem 0.75rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .hub-intro-link-row {
+    grid-template-columns: 1fr;
+  }
+
+  .hub-launch-card__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hub-launch-card__go {
+    width: 100%;
+    text-align: center;
   }
 }

@@ -100,9 +100,9 @@
           id: "marathon-log",
           title: "마라톤 기록장",
           body:
-            "Keep에 흩어진 대회 기록을 JSON으로 관리하고 싶다.\n\n오늘뭐신지(신발)와 역할 분리. 로컬 저장 + export.\nMVP 후 hub hobby로 승격.",
+            "Keep에 흩어진 대회 기록을 JSON으로 관리하고 싶다.\n\n오늘뭐신지(신발)와 역할 분리. 로컬 저장 + export.\n→ projects/marathon-log MVP 배포, hub hobby 승격 완료.",
           targetCategory: "hobby",
-          status: "active",
+          status: "promoted",
           pinned: true,
           tags: ["Running", "product"],
           images: [],

@@ -89,6 +89,30 @@
       ]
     },
     {
+      "id": "marathon-log",
+      "title": "마라톤 기록장",
+      "summary": "대회 기록·PB·통계 — 로컬 IndexedDB + JSON 백업",
+      "category": "hobby",
+      "status": "demo",
+      "tags": [
+        "Running"
+      ],
+      "links": [
+        {
+          "label": "소개",
+          "url": "https://cxr542.github.io/cxr542-ai/intro/marathon-log.html"
+        },
+        {
+          "label": "앱",
+          "url": "https://cxr542.github.io/cxr542-ai/projects/marathon-log/"
+        },
+        {
+          "label": "Repo",
+          "url": "https://github.com/cxr542/cxr542-ai"
+        }
+      ]
+    },
+    {
       "id": "cloud-chatbot",
       "title": "Cloud Learning Chatbot",
       "summary": "RAG·퀴즈·요약·관리자 대시보드 — FastAPI + Gemini (Render Docker)",
