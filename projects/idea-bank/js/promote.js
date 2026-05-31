@@ -138,11 +138,11 @@
 
     var html =
       '<section class="promote-panel" aria-labelledby="promote-heading">' +
-      '<h3 id="promote-heading">허브 승격 체크리스트</h3>' +
-      '<p class="promote-panel__lead">idea-bank는 허브에 자동 등록되지 않습니다. 아래를 Git에 반영하면 ' +
+      '<h3 id="promote-heading">🚀 허브 승격 체크리스트</h3>' +
+      '<p class="promote-panel__lead">아이디어 노트는 자동으로 허브에 안 올라갑니다. 서비스로 만들 준비가 되면 아래를 Git에 반영해 ' +
       '<strong>' +
       escapeHtml(hubCategoryLabel(cat, CAT_LABEL)) +
-      "</strong> 탭에 나타납니다.</p>" +
+      "</strong> 탭에 공개하세요.</p>" +
       '<p class="promote-panel__meta">프로젝트 ID: <code>' +
       escapeHtml(id) +
       "</code> · 진행 " +

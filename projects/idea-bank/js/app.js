@@ -54,8 +54,8 @@
       { id: "study", label: CAT_LABEL.study, kind: "cat" },
       { id: "hobby", label: CAT_LABEL.hobby, kind: "cat" },
       { id: "all", label: "상태·전체", kind: "status" },
-      { id: "active", label: "승격 대기", kind: "status" },
-      { id: "promoted", label: "승격 완료", kind: "status" },
+      { id: "active", label: "🌱 노트 중", kind: "status" },
+      { id: "promoted", label: "🚀 승격됨", kind: "status" },
     ];
     $("cat-filter").innerHTML = chips
       .map(function (c) {
@@ -95,7 +95,8 @@
       return (b.updatedAt || "").localeCompare(a.updatedAt || "");
     });
     if (!filtered.length) {
-      $("content").innerHTML = '<p class="empty">아이디어가 없습니다. ＋ 새 아이디어로 추가하세요.</p>';
+      $("content").innerHTML =
+        '<p class="empty">💭 아직 적어 둔 아이디어가 없어요.<br />✨ <strong>새 아이디어</strong>로 첫 메모를 남겨 보세요.</p>';
       return;
     }
     $("content").innerHTML =
@@ -188,7 +189,7 @@
     $("content").innerHTML =
       '<div class="sketch-form">' +
       "<h2>" +
-      (state.isNew ? "새 아이디어" : escapeHtml(d.title)) +
+      (state.isNew ? "✨ 새 아이디어" : escapeHtml(d.title)) +
       "</h2>" +
       '<label class="field-label">제목</label>' +
       '<input class="field-input" id="f-title" type="text" value="' +
