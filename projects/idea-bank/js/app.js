@@ -173,7 +173,7 @@
     } else {
       html +=
         filteredCount +
-        "개 표시 <span class="list-meta__dim">(전체 " +
+        '개 표시 <span class="list-meta__dim">(전체 ' +
         total +
         "건 중)</span></p>";
     }
@@ -557,16 +557,22 @@
           (v === "sketch" && state.view === "sketch")
       );
     });
-    IdeaBankDb.listIdeas().then(function (ideas) {
-      updateNavCounts(ideas);
-      renderCatFilter(ideas);
-      if (state.view === "sketch") {
-        if (!state.draft && !state.isNew) loadSketch();
-        else renderSketchForm();
-        return;
-      }
-      renderList(ideas);
-    });
+    IdeaBankDb.listIdeas()
+      .then(function (ideas) {
+        updateNavCounts(ideas);
+        renderCatFilter(ideas);
+        if (state.view === "sketch") {
+          if (!state.draft && !state.isNew) loadSketch();
+          else renderSketchForm();
+          return;
+        }
+        renderList(ideas);
+      })
+      .catch(function (err) {
+        console.error(err);
+        $("content").innerHTML =
+          '<p class="empty">목록을 불러오지 못했습니다. 페이지를 새로고침해 주세요.</p>';
+      });
   }
 
   function exportJson() {
@@ -624,7 +630,7 @@
       };
       state.images = [];
       state.view = "sketch";
-      renderSketchForm();
+      render();
     });
   }
 
