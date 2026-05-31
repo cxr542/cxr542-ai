@@ -2,6 +2,7 @@
   "use strict";
 
   var CAT_LABEL = { work: "업무 도우미", study: "공부·실험", hobby: "러닝·취미" };
+  var SIDEBAR_COLLAPSED_KEY = "idea-bank-sidebar-collapsed";
   var state = {
     view: "list",
     filter: "all",
@@ -524,7 +525,31 @@
     });
   }
 
+  function applySidebarCollapsed(collapsed) {
+    var shell = document.querySelector(".app-shell");
+    var toggle = document.getElementById("sidebar-toggle");
+    if (shell) shell.classList.toggle("is-sidebar-collapsed", collapsed);
+    if (toggle) {
+      toggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
+      toggle.setAttribute("aria-label", collapsed ? "메뉴 펼치기" : "메뉴 접기");
+      toggle.title = collapsed ? "메뉴 펼치기" : "메뉴 접기";
+    }
+  }
+
+  function bindSidebarToggle() {
+    var toggle = document.getElementById("sidebar-toggle");
+    if (!toggle) return;
+    var collapsed = localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "1";
+    applySidebarCollapsed(collapsed);
+    toggle.addEventListener("click", function () {
+      collapsed = !document.querySelector(".app-shell").classList.contains("is-sidebar-collapsed");
+      localStorage.setItem(SIDEBAR_COLLAPSED_KEY, collapsed ? "1" : "0");
+      applySidebarCollapsed(collapsed);
+    });
+  }
+
   function bindUi() {
+    bindSidebarToggle();
     document.querySelectorAll(".nav-item[data-view]").forEach(function (btn) {
       btn.onclick = function () {
         state.view = btn.getAttribute("data-view");

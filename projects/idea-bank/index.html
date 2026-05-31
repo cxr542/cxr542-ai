@@ -23,14 +23,37 @@
       <span class="app-banner__meta">🔒 내 브라우저에만 · 🎯 준비되면 허브로</span>
     </p>
     <div class="app-shell">
-      <aside class="sidebar">
-        <div class="logo-block">
-          <h1>💡 idea-bank</h1>
-          <p>개발 전 아이디어 노트</p>
+      <aside class="sidebar" id="sidebar" aria-label="서비스 메뉴">
+        <div class="sidebar__head">
+          <div class="logo-block">
+            <h1><span class="logo-block__icon" aria-hidden="true">💡</span><span class="logo-block__text">idea-bank</span></h1>
+            <p class="logo-block__sub">개발 전 아이디어 노트</p>
+          </div>
+          <button
+            type="button"
+            class="sidebar-toggle"
+            id="sidebar-toggle"
+            aria-expanded="true"
+            aria-controls="sidebar"
+            title="메뉴 접기"
+          >
+            <span class="sidebar-toggle__chev" aria-hidden="true"></span>
+          </button>
         </div>
-        <button type="button" class="nav-item is-active" data-view="list">📋 전체 아이디어</button>
-        <button type="button" class="nav-item" data-view="sketch">✏️ 아이디어 쓰기</button>
-        <button type="button" class="nav-item" data-view="pinned">📌 고정함</button>
+        <nav class="sidebar-nav" aria-label="주 메뉴">
+          <button type="button" class="nav-item is-active" data-view="list" title="전체 아이디어">
+            <span class="nav-item__icon" aria-hidden="true">📋</span>
+            <span class="nav-item__label">전체 아이디어</span>
+          </button>
+          <button type="button" class="nav-item" data-view="sketch" title="아이디어 쓰기">
+            <span class="nav-item__icon" aria-hidden="true">✏️</span>
+            <span class="nav-item__label">아이디어 쓰기</span>
+          </button>
+          <button type="button" class="nav-item" data-view="pinned" title="고정함">
+            <span class="nav-item__icon" aria-hidden="true">📌</span>
+            <span class="nav-item__label">고정함</span>
+          </button>
+        </nav>
         <p class="sidebar-note">
           📝 메모·구상·망상까지 OK. 다듬어지면 🚀 승격 체크리스트로 cxr542-hub에 올리세요. (승격 전엔 허브에 안
           보입니다)
