@@ -95,7 +95,7 @@
       return (b.updatedAt || "").localeCompare(a.updatedAt || "");
     });
     if (!filtered.length) {
-      $("content").innerHTML = '<p class="empty">아이디어가 없습니다. ＋ 새 스케치로 추가하세요.</p>';
+      $("content").innerHTML = '<p class="empty">아이디어가 없습니다. ＋ 새 아이디어로 추가하세요.</p>';
       return;
     }
     $("content").innerHTML =
@@ -203,7 +203,7 @@
       '<div class="cat-radios" id="cat-radios">' +
       renderCatRadios(d.targetCategory) +
       "</div>" +
-      '<label class="field-label">본문 스케치</label>' +
+      '<label class="field-label">본문</label>' +
       '<textarea class="sketch-body" id="f-body">' +
       escapeHtml(d.body || "") +
       "</textarea>" +
