@@ -1,5 +1,5 @@
 {
-  "updated": "2026-05-29",
+  "updated": "2026-05-31",
   "profileUrl": "https://cxr542.github.io/",
   "hubTitle": "cxr542-hub",
   "categories": [
@@ -14,17 +14,12 @@
     {
       "id": "hobby",
       "label": "러닝·취미"
-    },
-    {
-      "id": "ideas",
-      "label": "아이디어뱅크"
     }
   ],
   "navLabels": {
     "work": "업무 도우미",
     "study": "공부·실험",
     "hobby": "러닝·취미",
-    "ideas": "아이디어뱅크",
     "guide": "Zero-G 바이브 코딩",
     "resources": "참고 링크",
     "profile": "프로필"
@@ -144,46 +139,6 @@
           {
             "label": "Repo",
             "href": "https://github.com/cxr542/edu-team-tms"
-          }
-        ]
-      }
-    },
-    {
-      "id": "marathon-log",
-      "title": "마라톤 기록장",
-      "summary": "iPhone 메모·Google Keep에 흩어진 대회 기록을 한곳에서 관리. 로컬 저장, PB·연도 통계, JSON 백업.",
-      "status": "idea",
-      "category": "ideas",
-      "tags": [
-        "product",
-        "Running",
-        "personal"
-      ],
-      "nextAction": "UI 목업 확정 → sample-races.json → Vite MVP(대회 CRUD)",
-      "links": [],
-      "intro": {
-        "problem": "iPhone 메모·Google Keep에 대회명·기록·메모가 항목마다 형식이 달라 PB, 연도별 횟수, 거리별 검색이 어렵다.",
-        "hypothesis": "대회 단위 JSON + 로컬 웹 앱이면 cxr542-hub에서 hobby(오늘뭐신지)와 역할을 분리하며 관리할 수 있다.",
-        "experiment": "Keep에서 샘플 10건 정리 → 목록·추가·편집·통계 MVP → JSON export/import.",
-        "success": "projects/marathon-log Pages 배포 URL + Repo 링크 생기면 러닝·취미로 승격."
-      },
-      "categoryBase": "ideas",
-      "source": "ideas",
-      "introUrl": null,
-      "repoUrl": null,
-      "primaryAppUrl": null,
-      "appUrls": [],
-      "introPage": {
-        "title": "마라톤 기록장",
-        "lead": "실행 전 아이디어 — 메모앱 대체용 웹 장부. 오늘뭐신지(신발)와 역할을 분리합니다.",
-        "links": [
-          {
-            "label": "앱 UI 목업",
-            "href": "https://cxr542.github.io/cxr542-ai/preview/marathon-log-app-mockup.html"
-          },
-          {
-            "label": "허브 소개 목업",
-            "href": "https://cxr542.github.io/cxr542-ai/preview/marathon-log-hub-mockup.html"
           }
         ]
       }

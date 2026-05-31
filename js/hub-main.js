@@ -6,7 +6,6 @@
   var CATEGORY_EDIT_KEY = "cxr542-hub-category-edit";
   var VISIBILITY_KEY = "cxr542-hub-visibility";
   var INTRO_OVERRIDES_KEY = "cxr542-hub-intro-overrides";
-  var IDEAS_DRAFTS_KEY = "cxr542-hub-idea-drafts";
   var STUDY_SUB_KEY = "cxr542-hub-study-subcategory";
 
   var statusLabels = {
@@ -18,9 +17,9 @@
     wip: "진행 중",
   };
 
-  var categoryIds = ["work", "study", "hobby", "ideas"];
+  var categoryIds = ["work", "study", "hobby"];
   var systemViews = ["guide", "resources"];
-  var navLabelKeys = ["work", "study", "hobby", "ideas", "guide", "resources"];
+  var navLabelKeys = ["work", "study", "hobby", "guide", "resources"];
 
   var state = {
     catalogItems: [],
@@ -39,7 +38,6 @@
     fileHiddenNavIds: [],
     introDefaults: {},
     localIntroOverrides: {},
-    ideaDrafts: [],
     studyGroups: [],
     studySubFilter: "all",
     route: { view: "work", itemId: "", panel: "intro" },
@@ -137,107 +135,14 @@
     saveVisibilityStore();
   }
 
-  function loadIdeaDrafts() {
-    var raw = loadJson(IDEAS_DRAFTS_KEY, []);
-    return Array.isArray(raw) ? raw : [];
-  }
-
-  function saveIdeaDrafts() {
-    localStorage.setItem(IDEAS_DRAFTS_KEY, JSON.stringify(state.ideaDrafts));
-    updateIdeasExportButton();
-  }
-
-  function updateIdeasExportButton() {
-    var btn = document.getElementById("hub-ideas-export");
-    if (!btn) return;
-    btn.hidden = state.ideaDrafts.length === 0;
-  }
-
-  function allItemIds() {
-    var ids = {};
-    state.catalogItems.forEach(function (i) {
-      ids[i.id] = true;
-    });
-    state.ideaDrafts.forEach(function (d) {
-      ids[d.id] = true;
-    });
-    return ids;
-  }
-
-  function slugFromTitle(title) {
-    var base = String(title)
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9\uac00-\ud7a3-]/g, "")
-      .replace(/-+/g, "-")
-      .replace(/^-|-$/g, "")
-      .slice(0, 36);
-    if (!base) base = "idea";
-    var id = base;
-    var ids = allItemIds();
-    var n = 2;
-    while (ids[id]) {
-      id = base + "-" + n;
-      n += 1;
-    }
-    return id;
-  }
-
-  function draftToCatalogItem(draft) {
-    var blocks = [
-      { label: "문제", text: draft.intro && draft.intro.problem },
-      { label: "가설", text: draft.intro && draft.intro.hypothesis },
-      { label: "최소 실험", text: draft.intro && draft.intro.experiment },
-      { label: "성공 기준", text: draft.intro && draft.intro.success },
-    ].filter(function (b) {
-      return b.text;
-    });
-    return {
-      id: draft.id,
-      title: draft.title,
-      summary: draft.summary,
-      status: "idea",
-      category: "ideas",
-      categoryBase: "ideas",
-      tags: draft.tags || [],
-      nextAction: draft.nextAction || "",
-      links: [],
-      source: "draft",
-      isDraft: true,
-      introUrl: null,
-      repoUrl: null,
-      primaryAppUrl: null,
-      appUrls: [],
-      introPage: {
-        title: draft.title,
-        lead: draft.summary,
-        links: [],
-        blocks: blocks,
-      },
-    };
-  }
-
-  function mergeCatalogWithDrafts() {
-    return state.catalogItems.concat(state.ideaDrafts.map(draftToCatalogItem));
-  }
-
   function applyItemCategories() {
-    state.items = mergeCatalogWithDrafts()
+    state.items = state.catalogItems
       .map(function (item) {
         return Object.assign({}, item, { category: effectiveCategory(item) });
       })
       .filter(function (item) {
         return !isItemHidden(item.id);
       });
-  }
-
-  function removeIdeaDraft(id) {
-    state.ideaDrafts = state.ideaDrafts.filter(function (d) {
-      return d.id !== id;
-    });
-    saveIdeaDrafts();
-    applyItemCategories();
   }
 
   function firstVisibleCategoryId() {
@@ -461,7 +366,6 @@
 
     html +=
       '<div class="hub-sidebar__footer">' +
-      '<button type="button" class="btn btn--secondary" id="hub-quick-idea-sidebar" style="width:100%">＋ 아이디어 등록</button>' +
       '<button type="button" class="btn btn--ghost" id="hub-nav-labels-open" style="width:100%">사이드바 메뉴 설정</button>' +
       '<button type="button" class="btn btn--ghost" id="hub-hidden-restore-open" style="width:100%">숨긴 항목 복구</button>' +
       '<a class="btn btn--ghost" href="' +
@@ -493,10 +397,6 @@
     if (openRestore) {
       openRestore.addEventListener("click", openHiddenRestoreModal);
     }
-    var quickSidebar = document.getElementById("hub-quick-idea-sidebar");
-    if (quickSidebar) {
-      quickSidebar.addEventListener("click", openQuickIdeaModal);
-    }
   }
 
   function renderItemTabs() {
@@ -519,9 +419,6 @@
     nav.innerHTML = items
       .map(function (it) {
         var active = state.route.itemId === it.id;
-        var draftMark = it.isDraft
-          ? ' <span class="hub-item-tab__draft">임시</span>'
-          : "";
         var removeBtn = state.categoryEditMode
           ? '<button type="button" class="hub-item-tab__remove" data-remove-item="' +
             escapeHtml(it.id) +
@@ -551,7 +448,6 @@
         return (
           '<span class="hub-item-tab-chip' +
           (active ? " is-active" : "") +
-          (it.isDraft ? " hub-item-tab-chip--draft" : "") +
           '">' +
           removeBtn +
           catSelect +
@@ -559,7 +455,6 @@
           escapeHtml(it.id) +
           '">' +
           escapeHtml(it.title) +
-          draftMark +
           "</button></span>"
         );
       })
@@ -1043,11 +938,6 @@
       escapeHtml(item.summary) +
       "</p>";
 
-    if (item.isDraft) {
-      html +=
-        '<p class="hub-draft-banner">브라우저에만 저장된 임시 아이디어입니다. <strong>ideas JSON</strong>으로보내 <code>ai/ideas.json</code>에 반영하세요.</p>';
-    }
-
     if (item.nextAction) {
       html +=
         '<p class="hub-summary"><em>다음: ' +
@@ -1066,10 +956,7 @@
         "</div>";
     }
 
-    if (item.isDraft) {
-      html +=
-        '<p style="margin:1rem 0"><button type="button" class="btn btn--ghost" id="hub-delete-draft-item">임시 아이디어 삭제</button></p>';
-    } else if (state.categoryEditMode) {
+    if (state.categoryEditMode) {
       html += renderIntroEditorHtml(item, intro);
       html +=
         '<p style="margin:1rem 0"><button type="button" class="btn btn--ghost" id="hub-hide-current-item">이 항목 숨기기</button></p>';
@@ -1149,16 +1036,7 @@
         }
         return;
       }
-      if (r.view === "ideas") {
-        body.innerHTML =
-          '<p class="hub-empty">아이디어뱅크가 비어 있습니다.</p>' +
-          '<p class="hub-panel-note">떠오른 아이디어를 바로 적어 두세요.</p>' +
-          '<p><button type="button" class="btn btn--secondary" id="hub-empty-add-idea">＋ 아이디어 등록</button></p>';
-        var addBtn = document.getElementById("hub-empty-add-idea");
-        if (addBtn) addBtn.addEventListener("click", openQuickIdeaModal);
-      } else {
-        body.innerHTML = '<p class="hub-empty">이 카테고리에 항목이 없습니다.</p>';
-      }
+      body.innerHTML = '<p class="hub-empty">이 카테고리에 항목이 없습니다.</p>';
       return;
     }
     r.itemId = item.id;
@@ -1171,18 +1049,8 @@
     }
 
     body.innerHTML = introPanelHtml(item);
-    if (state.categoryEditMode && !item.isDraft) {
+    if (state.categoryEditMode) {
       bindIntroEditor(item);
-    }
-    var deleteDraftBtn = document.getElementById("hub-delete-draft-item");
-    if (deleteDraftBtn) {
-      deleteDraftBtn.addEventListener("click", function () {
-        if (!window.confirm("이 임시 아이디어를 삭제할까요?")) return;
-        removeIdeaDraft(item.id);
-        ensureValidRoute();
-        setHash();
-        renderAll();
-      });
     }
     var hideBtn = document.getElementById("hub-hide-current-item");
     if (hideBtn) {
@@ -1360,98 +1228,6 @@
     if (modal) modal.hidden = true;
   }
 
-  function openQuickIdeaModal() {
-    var modal = document.getElementById("quick-idea-modal");
-    var form = document.getElementById("quick-idea-form");
-    if (!modal || !form) return;
-    form.reset();
-    modal.hidden = false;
-    var titleInput = form.querySelector('[name="title"]');
-    if (titleInput) titleInput.focus();
-  }
-
-  function closeQuickIdeaModal() {
-    var modal = document.getElementById("quick-idea-modal");
-    if (modal) modal.hidden = true;
-  }
-
-  function readQuickIdeaForm() {
-    var form = document.getElementById("quick-idea-form");
-    if (!form) return null;
-    var title = form.querySelector('[name="title"]').value.trim();
-    var summary = form.querySelector('[name="summary"]').value.trim();
-    if (!title || !summary) return null;
-    var tagsRaw = form.querySelector('[name="tags"]').value.trim();
-    var tags = tagsRaw
-      ? tagsRaw.split(/[,，]/).map(function (t) {
-          return t.trim();
-        }).filter(Boolean)
-      : [];
-    return {
-      id: slugFromTitle(title),
-      title: title,
-      summary: summary,
-      nextAction: form.querySelector('[name="nextAction"]').value.trim(),
-      tags: tags,
-      intro: {
-        problem: form.querySelector('[name="problem"]').value.trim(),
-        hypothesis: form.querySelector('[name="hypothesis"]').value.trim(),
-        experiment: form.querySelector('[name="experiment"]').value.trim(),
-        success: form.querySelector('[name="success"]').value.trim(),
-      },
-      createdAt: new Date().toISOString(),
-    };
-  }
-
-  function saveQuickIdeaFromForm() {
-    var draft = readQuickIdeaForm();
-    if (!draft) {
-      window.alert("제목과 한 줄 요약은 필수입니다.");
-      return;
-    }
-    var existing = state.ideaDrafts.findIndex(function (d) {
-      return d.id === draft.id;
-    });
-    if (existing >= 0) {
-      state.ideaDrafts[existing] = draft;
-    } else {
-      state.ideaDrafts.push(draft);
-    }
-    saveIdeaDrafts();
-    closeQuickIdeaModal();
-    state.route.view = "ideas";
-    state.route.itemId = draft.id;
-    state.route.panel = "intro";
-    ensureValidRoute();
-    setHash();
-    renderAll();
-  }
-
-  function exportIdeasJson() {
-    var items = state.ideaDrafts.map(function (d) {
-      return {
-        id: d.id,
-        title: d.title,
-        summary: d.summary,
-        status: "idea",
-        category: "ideas",
-        tags: d.tags || [],
-        nextAction: d.nextAction || "",
-        links: [],
-        intro: d.intro || {},
-      };
-    });
-    downloadJson(
-      {
-        version: 1,
-        updated: new Date().toISOString().slice(0, 10),
-        comment: "ai/ideas.json items에 붙여넣기 → npm run build:hub",
-        items: items,
-      },
-      "ideas.json"
-    );
-  }
-
   function exportIntroOverrides() {
     var overrides = {};
     Object.keys(state.localIntroOverrides).forEach(function (id) {
@@ -1528,29 +1304,6 @@
       introExport.addEventListener("click", exportIntroOverrides);
     }
 
-    var ideasExport = document.getElementById("hub-ideas-export");
-    if (ideasExport) {
-      ideasExport.addEventListener("click", exportIdeasJson);
-    }
-
-    var quickOpen = document.getElementById("hub-quick-idea-open");
-    if (quickOpen) {
-      quickOpen.addEventListener("click", openQuickIdeaModal);
-    }
-    document.getElementById("quick-idea-save").addEventListener("click", saveQuickIdeaFromForm);
-    document.getElementById("quick-idea-close").addEventListener("click", closeQuickIdeaModal);
-    document.getElementById("quick-idea-modal").addEventListener("click", function (e) {
-      if (e.target.id === "quick-idea-modal") closeQuickIdeaModal();
-    });
-
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") closeQuickIdeaModal();
-      if (e.key === "i" && (e.ctrlKey || e.metaKey) && e.shiftKey) {
-        e.preventDefault();
-        openQuickIdeaModal();
-      }
-    });
-
     document.getElementById("hidden-restore-close").addEventListener("click", closeHiddenRestoreModal);
     document.getElementById("hidden-restore-modal").addEventListener("click", function (e) {
       if (e.target.id === "hidden-restore-modal") closeHiddenRestoreModal();
@@ -1576,11 +1329,9 @@
   function init() {
     state.localCategoryOverrides = loadJson(CATEGORY_OVERRIDES_KEY, {});
     state.localIntroOverrides = loadJson(INTRO_OVERRIDES_KEY, {});
-    state.ideaDrafts = loadIdeaDrafts();
     state.studySubFilter = localStorage.getItem(STUDY_SUB_KEY) || "all";
     state.navLabels = loadJson(NAV_LABELS_KEY, {});
     state.categoryEditMode = localStorage.getItem(CATEGORY_EDIT_KEY) === "1";
-    updateIdeasExportButton();
 
     var parsed = parseHash();
     state.route = parsed || defaultRoute();
@@ -1633,7 +1384,6 @@
         if (visExportEl) visExportEl.hidden = !state.categoryEditMode;
         var introExportEl = document.getElementById("hub-intro-export");
         if (introExportEl) introExportEl.hidden = !state.categoryEditMode;
-        updateIdeasExportButton();
 
         var updatedEl = document.getElementById("catalog-updated");
         if (updatedEl && data.updated) {

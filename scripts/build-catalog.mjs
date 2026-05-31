@@ -16,7 +16,6 @@ const navLabelsPath = path.join(hubRoot, "ai", "nav-labels.json");
 const visibilityPath = path.join(hubRoot, "ai", "hub-visibility.json");
 const introManifestPath = path.join(hubRoot, "intro", "manifest.json");
 const introOverridesPath = path.join(hubRoot, "ai", "intro-overrides.json");
-const ideasPath = path.join(hubRoot, "ai", "ideas.json");
 const studyGroupsPath = path.join(hubRoot, "ai", "study-groups.json");
 
 /** study 하위 분류 — 항목 id → subcategory id */
@@ -97,7 +96,6 @@ function mergeItem(base, overlay) {
 function resolveCategory(item) {
   if (item.category) return item.category;
   if (CATEGORY_BY_ID[item.id]) return CATEGORY_BY_ID[item.id];
-  if (item.status === "idea") return "ideas";
   return "study";
 }
 
@@ -143,22 +141,6 @@ function introPageFromEntry(item, entry) {
   };
 }
 
-function introPageFromIdeaItem(item) {
-  const intro = item.intro || {};
-  const blocks = [
-    { label: "문제", text: intro.problem },
-    { label: "가설", text: intro.hypothesis },
-    { label: "최소 실험", text: intro.experiment },
-    { label: "성공 기준", text: intro.success },
-  ].filter((b) => b.text);
-  return {
-    title: item.title,
-    lead: item.summary || "",
-    links: [],
-    blocks,
-  };
-}
-
 function loadStudyGroups() {
   const raw = loadJson(studyGroupsPath);
   if (!raw || !Array.isArray(raw.subcategories)) return [];
@@ -169,19 +151,6 @@ function resolveSubcategory(item, category) {
   if (category !== "study") return undefined;
   if (item.subcategory) return item.subcategory;
   return SUBCATEGORY_BY_ID[item.id] || "other";
-}
-
-function loadIdeasItems() {
-  const raw = loadJson(ideasPath);
-  if (!raw || !Array.isArray(raw.items)) return [];
-  return raw.items.map((item) => ({
-    ...item,
-    category: "ideas",
-    categoryBase: "ideas",
-    status: item.status || "idea",
-    source: "ideas",
-    links: item.links || [],
-  }));
 }
 
 function deriveLinkFields(item) {
@@ -239,20 +208,13 @@ function main() {
     byId.set(item.id, prev ? mergeItem(item, prev) : item);
   });
 
-  loadIdeasItems().forEach((item) => {
-    const prev = byId.get(item.id);
-    byId.set(item.id, prev ? mergeItem(item, prev) : item);
-  });
-
   const items = [...byId.values()]
     .map((item) => {
       const categoryBase = resolveCategory(item);
       const category = fileOverrides[item.id] || categoryBase;
       const { localFolder, deployable, deploySkip, ...rest } = item;
       const withCat = { ...rest, category, categoryBase };
-      let introPage =
-        introPageFromEntry(withCat, introManifest[item.id]) ||
-        (item.intro ? introPageFromIdeaItem(withCat) : undefined);
+      const introPage = introPageFromEntry(withCat, introManifest[item.id]);
       const subcategory = resolveSubcategory(withCat, category);
       return {
         ...withCat,
@@ -268,8 +230,7 @@ function main() {
   const tagSet = new Set();
   items.forEach((i) => (i.tags || []).forEach((t) => tagSet.add(t)));
 
-  const ideasFile = loadJson(ideasPath);
-  const updated = [services.updated, projects.updated, ideasFile && ideasFile.updated]
+  const updated = [services.updated, projects.updated]
     .filter(Boolean)
     .sort()
     .pop();
@@ -278,7 +239,6 @@ function main() {
     work: "업무 도우미",
     study: "공부·실험",
     hobby: "러닝·취미",
-    ideas: "아이디어뱅크",
     guide: "Zero-G 바이브 코딩",
     resources: "참고 링크",
     profile: "프로필",
@@ -292,7 +252,6 @@ function main() {
       { id: "work", label: navLabels.work || defaultNav.work },
       { id: "study", label: navLabels.study || defaultNav.study },
       { id: "hobby", label: navLabels.hobby || defaultNav.hobby },
-      { id: "ideas", label: navLabels.ideas || defaultNav.ideas },
     ],
     navLabels: { ...defaultNav, ...navLabels },
     categoryOverrides: fileOverrides,
