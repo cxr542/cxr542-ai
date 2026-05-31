@@ -25,9 +25,39 @@
     });
   }
 
-  function txStore(mode) {
+  /** Run store work in one IDB transaction (avoids tx closing before requests finish). */
+  function withStore(mode, fn) {
     return openDb().then(function (db) {
-      return db.transaction(STORE, mode).objectStore(STORE);
+      return new Promise(function (resolve, reject) {
+        var tx = db.transaction(STORE, mode);
+        var store = tx.objectStore(STORE);
+        var outcome;
+        try {
+          outcome = fn(store);
+        } catch (err) {
+          reject(err);
+          return;
+        }
+        if (outcome && typeof outcome.then === "function") {
+          outcome.then(resolve, reject);
+          tx.onerror = function () {
+            reject(tx.error);
+          };
+          tx.onabort = function () {
+            reject(tx.error);
+          };
+          return;
+        }
+        tx.oncomplete = function () {
+          resolve(outcome);
+        };
+        tx.onerror = function () {
+          reject(tx.error);
+        };
+        tx.onabort = function () {
+          reject(tx.error);
+        };
+      });
     });
   }
 
@@ -62,31 +92,33 @@
   }
 
   function listIdeas() {
-    return txStore("readonly").then(function (store) {
-      return reqToPromise(store.getAll());
+    return withStore("readonly", function (store) {
+      return reqToPromise(store.getAll()).then(function (rows) {
+        return rows || [];
+      });
     });
   }
 
   function getIdea(id) {
-    return txStore("readonly").then(function (store) {
+    return withStore("readonly", function (store) {
       return reqToPromise(store.get(id));
     });
   }
 
   function putIdea(idea) {
-    return txStore("readwrite").then(function (store) {
+    return withStore("readwrite", function (store) {
       return reqToPromise(store.put(idea));
     });
   }
 
   function deleteIdea(id) {
-    return txStore("readwrite").then(function (store) {
+    return withStore("readwrite", function (store) {
       return reqToPromise(store.delete(id));
     });
   }
 
   function clearAll() {
-    return txStore("readwrite").then(function (store) {
+    return withStore("readwrite", function (store) {
       return reqToPromise(store.clear());
     });
   }
@@ -124,7 +156,16 @@
           title: "허브 admin 모드",
           body: "catalog 편집을 Git 없이…",
           targetCategory: "work",
+          hubProjectId: "hub-admin",
           status: "active",
+          promoteProgress: {
+            app: false,
+            "projects-json": false,
+            "intro-manifest": false,
+            "catalog-map": false,
+            "build-hub": false,
+            push: false,
+          },
           pinned: false,
           tags: ["product"],
           images: [],
@@ -132,7 +173,10 @@
           updatedAt: now,
         },
       ];
-      return Promise.all(seed.map(putIdea)).then(function () {
+      return withStore("readwrite", function (store) {
+        seed.forEach(function (idea) {
+          store.put(idea);
+        });
         return seed;
       });
     });

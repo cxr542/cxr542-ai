@@ -206,8 +206,17 @@
       $("content").innerHTML = emptyMsg;
       return;
     }
+    var listHtml = listMetaHtml(filtered.length, ideas);
+    if (
+      state.view === "list" &&
+      filtered.length < ideas.length &&
+      state.statusFilter === "active"
+    ) {
+      listHtml +=
+        '<p class="list-meta">🚀 승격된 아이디어는 위 「🚀 승격됨」 칩을 눌러 보세요.</p>';
+    }
     $("content").innerHTML =
-      listMetaHtml(filtered.length, ideas) +
+      listHtml +
       filtered
         .map(function (idea) {
           return (
@@ -247,8 +256,9 @@
       card.onclick = function () {
         state.editId = card.getAttribute("data-id");
         state.isNew = false;
+        state.draft = null;
         state.view = "sketch";
-        loadSketch();
+        render();
       };
     });
   }
@@ -289,6 +299,16 @@
 
   function renderSketchForm() {
     var d = state.draft;
+    if (!d) {
+      $("content").innerHTML =
+        '<p class="empty">편집할 아이디어를 찾을 수 없습니다.</p>';
+      return;
+    }
+    if (typeof IdeaBankPromote === "undefined") {
+      $("content").innerHTML =
+        '<p class="empty">승격 모듈(promote.js)을 불러오지 못했습니다. 새로고침해 주세요.</p>';
+      return;
+    }
     $("content").innerHTML =
       '<div class="sketch-form">' +
       "<h2>" +
@@ -328,46 +348,62 @@
       IdeaBankPromote.renderPromotePanel(d, CAT_LABEL, escapeHtml) +
       "</div>";
 
-    bindPromotePanel();
+    try {
+      bindPromotePanel();
 
-    $("cat-radios").querySelectorAll(".cat-radio").forEach(function (btn) {
-      btn.onclick = function () {
-        state.draft.targetCategory = btn.getAttribute("data-cat");
-        syncDraftFromForm();
-        renderSketchForm();
-      };
-    });
-    $("btn-save").onclick = saveSketch;
-    $("btn-back").onclick = function () {
-      state.view = "list";
-      render();
-    };
-    var del = $("btn-delete");
-    if (del) {
-      del.onclick = function () {
-        if (!window.confirm("이 아이디어를 삭제할까요?")) return;
-        IdeaBankDb.deleteIdea(state.editId).then(function () {
+      var catRadios = $("cat-radios");
+      if (catRadios) {
+        catRadios.querySelectorAll(".cat-radio").forEach(function (btn) {
+          btn.onclick = function () {
+            state.draft.targetCategory = btn.getAttribute("data-cat");
+            syncDraftFromForm();
+            renderSketchForm();
+          };
+        });
+      }
+      var btnSave = $("btn-save");
+      if (btnSave) btnSave.onclick = saveSketch;
+      var btnBack = $("btn-back");
+      if (btnBack) {
+        btnBack.onclick = function () {
           state.view = "list";
           render();
+        };
+      }
+      var del = $("btn-delete");
+      if (del) {
+        del.onclick = function () {
+          if (!window.confirm("이 아이디어를 삭제할까요?")) return;
+          IdeaBankDb.deleteIdea(state.editId).then(function () {
+            state.view = "list";
+            render();
+          });
+        };
+      }
+      var imgGrid = $("img-grid");
+      if (imgGrid) {
+        imgGrid.querySelectorAll("[data-rm-img]").forEach(function (btn) {
+          btn.onclick = function (e) {
+            e.stopPropagation();
+            var i = Number(btn.getAttribute("data-rm-img"));
+            state.images.splice(i, 1);
+            renderSketchForm();
+          };
         });
-      };
+      }
+      var pasteHint = $("img-paste-hint");
+      if (pasteHint) {
+        pasteHint.onpaste = handlePaste;
+        pasteHint.onclick = function () {
+          pasteHint.focus();
+        };
+      }
+      document.onpaste = handlePaste;
+    } catch (err) {
+      console.error(err);
+      $("content").innerHTML +=
+        '<p class="empty">편집 화면 연결 중 오류가 났습니다. 콘솔을 확인하거나 새로고침해 주세요.</p>';
     }
-    $("img-grid").querySelectorAll("[data-rm-img]").forEach(function (btn) {
-      btn.onclick = function (e) {
-        e.stopPropagation();
-        var i = Number(btn.getAttribute("data-rm-img"));
-        state.images.splice(i, 1);
-        renderSketchForm();
-      };
-    });
-    var pasteHint = $("img-paste-hint");
-    if (pasteHint) {
-      pasteHint.onpaste = handlePaste;
-      pasteHint.onclick = function () {
-        pasteHint.focus();
-      };
-    }
-    document.onpaste = handlePaste;
   }
 
   function handlePaste(e) {
@@ -524,27 +560,40 @@
       renderSketchForm();
       return;
     }
-    IdeaBankDb.getIdea(state.editId).then(function (idea) {
-      if (!idea) {
-        state.view = "list";
-        render();
-        return;
-      }
-      state.draft = Object.assign(
-        {
-          promoteProgress: IdeaBankPromote.defaultProgress(),
-          hubProjectId: idea.id,
-          status: "active",
-        },
-        idea
-      );
-      state.draft.promoteProgress = IdeaBankPromote.normalizeProgress(
-        state.draft.promoteProgress
-      );
-      if (!state.draft.hubProjectId) state.draft.hubProjectId = state.draft.id;
-      state.images = Array.isArray(idea.images) ? idea.images.slice() : [];
-      renderSketchForm();
-    });
+    IdeaBankDb.getIdea(state.editId)
+      .then(function (idea) {
+        if (!idea) {
+          $("content").innerHTML =
+            '<p class="empty">아이디어 「' +
+            escapeHtml(state.editId || "") +
+            "」를 찾을 수 없습니다. 목록으로 돌아갑니다.</p>";
+          state.view = "list";
+          state.editId = null;
+          setTimeout(function () {
+            render();
+          }, 1200);
+          return;
+        }
+        state.draft = Object.assign(
+          {
+            promoteProgress: IdeaBankPromote.defaultProgress(),
+            hubProjectId: idea.id,
+            status: "active",
+          },
+          idea
+        );
+        state.draft.promoteProgress = IdeaBankPromote.normalizeProgress(
+          state.draft.promoteProgress
+        );
+        if (!state.draft.hubProjectId) state.draft.hubProjectId = state.draft.id;
+        state.images = Array.isArray(idea.images) ? idea.images.slice() : [];
+        renderSketchForm();
+      })
+      .catch(function (err) {
+        console.error(err);
+        $("content").innerHTML =
+          '<p class="empty">아이디어를 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요.</p>';
+      });
   }
 
   function render() {
@@ -562,8 +611,11 @@
         updateNavCounts(ideas);
         renderCatFilter(ideas);
         if (state.view === "sketch") {
-          if (!state.draft && !state.isNew) loadSketch();
-          else renderSketchForm();
+          if (!state.draft && !state.isNew) {
+            loadSketch();
+          } else {
+            renderSketchForm();
+          }
           return;
         }
         renderList(ideas);
@@ -609,29 +661,38 @@
   }
 
   function newSketch() {
-    IdeaBankDb.listIdeas().then(function (ideas) {
-      var ids = {};
-      ideas.forEach(function (i) {
-        ids[i.id] = true;
+    if (typeof IdeaBankPromote === "undefined") {
+      window.alert("승격 모듈을 불러오지 못했습니다. 페이지를 새로고침해 주세요.");
+      return;
+    }
+    IdeaBankDb.listIdeas()
+      .then(function (ideas) {
+        var ids = {};
+        ideas.forEach(function (i) {
+          ids[i.id] = true;
+        });
+        state.isNew = true;
+        state.editId = null;
+        var newId = IdeaBankDb.slugFromTitle("new-idea", ids);
+        state.draft = {
+          id: newId,
+          title: "",
+          body: "",
+          targetCategory: "study",
+          pinned: false,
+          status: "active",
+          hubProjectId: newId,
+          promoteProgress: IdeaBankPromote.defaultProgress(),
+          tags: [],
+        };
+        state.images = [];
+        state.view = "sketch";
+        render();
+      })
+      .catch(function (err) {
+        console.error(err);
+        window.alert("새 아이디어를 열 수 없습니다. 브라우저 저장소를 확인해 주세요.");
       });
-      state.isNew = true;
-      state.editId = null;
-      var newId = IdeaBankDb.slugFromTitle("새-아이디어", ids);
-      state.draft = {
-        id: newId,
-        title: "",
-        body: "",
-        targetCategory: "study",
-        pinned: false,
-        status: "active",
-        hubProjectId: newId,
-        promoteProgress: IdeaBankPromote.defaultProgress(),
-        tags: [],
-      };
-      state.images = [];
-      state.view = "sketch";
-      render();
-    });
   }
 
   function applySidebarCollapsed(collapsed) {
@@ -684,12 +745,17 @@
         render();
       };
     });
-    $("search").oninput = function (e) {
-      state.search = e.target.value.trim();
-      if (state.view === "list" || state.view === "pinned") render();
-    };
-    $("btn-new").onclick = newSketch;
-    $("btn-export").onclick = exportJson;
+    var searchEl = $("search");
+    if (searchEl) {
+      searchEl.oninput = function (e) {
+        state.search = e.target.value.trim();
+        if (state.view === "list" || state.view === "pinned") render();
+      };
+    }
+    var btnNew = $("btn-new");
+    if (btnNew) btnNew.onclick = newSketch;
+    var btnExport = $("btn-export");
+    if (btnExport) btnExport.onclick = exportJson;
     $("import-file").onchange = function (e) {
       var f = e.target.files && e.target.files[0];
       if (f) importJson(f);
