@@ -48,6 +48,21 @@
     });
   }
 
+  function resetListFilters() {
+    state.filter = "all";
+    state.statusFilter = "all";
+    state.search = "";
+    var searchEl = $("search");
+    if (searchEl) searchEl.value = "";
+  }
+
+  function countByCategory(ideas, catId) {
+    if (catId === "all") return ideas.length;
+    return ideas.filter(function (idea) {
+      return idea.targetCategory === catId;
+    }).length;
+  }
+
   function countIdeasByStatus(ideas) {
     var active = 0;
     var promoted = 0;
@@ -83,27 +98,32 @@
   }
 
   function renderCatFilter(ideas) {
+    var nav = $("cat-filter");
+    if (!nav) return;
+    if (state.view !== "list") {
+      nav.hidden = true;
+      nav.innerHTML = "";
+      return;
+    }
+    nav.hidden = false;
     ideas = ideas || [];
     var counts = countIdeasByStatus(ideas);
     var chips = [
-      { id: "all", label: "전체", kind: "cat", n: null },
-      { id: "work", label: CAT_LABEL.work, kind: "cat", n: null },
-      { id: "study", label: CAT_LABEL.study, kind: "cat", n: null },
-      { id: "hobby", label: CAT_LABEL.hobby, kind: "cat", n: null },
+      { id: "all", label: "전체", kind: "cat", n: ideas.length },
+      { id: "work", label: CAT_LABEL.work, kind: "cat", n: countByCategory(ideas, "work") },
+      { id: "study", label: CAT_LABEL.study, kind: "cat", n: countByCategory(ideas, "study") },
+      { id: "hobby", label: CAT_LABEL.hobby, kind: "cat", n: countByCategory(ideas, "hobby") },
       { id: "all", label: "상태·전체", kind: "status", n: counts.total },
       { id: "active", label: "🌱 노트 중", kind: "status", n: counts.active },
       { id: "promoted", label: "🚀 승격됨", kind: "status", n: counts.promoted },
     ];
-    $("cat-filter").innerHTML = chips
+    nav.innerHTML = chips
       .map(function (c) {
         var active =
           c.kind === "cat"
             ? state.filter === c.id
             : state.statusFilter === c.id;
-        var nBadge =
-          c.n === null
-            ? ""
-            : ' <span class="cat-chip__n">' + c.n + "</span>";
+        var nBadge = ' <span class="cat-chip__n">' + c.n + "</span>";
         return (
           '<button type="button" class="cat-chip cat-chip--' +
           c.kind +
@@ -128,6 +148,36 @@
         render();
       };
     });
+  }
+
+  function listMetaHtml(filteredCount, ideas) {
+    var total = ideas.length;
+    if (state.view === "pinned") {
+      var pinnedTotal = ideas.filter(function (i) {
+        return i.pinned;
+      }).length;
+      return (
+        '<p class="list-meta list-meta--context">📌 <strong>고정함</strong>만 표시 중 · ' +
+        filteredCount +
+        "개 (고정 " +
+        pinnedTotal +
+        " · 전체 " +
+        total +
+        "건)</p>"
+      );
+    }
+    var html =
+      '<p class="list-meta list-meta--context">📋 <strong>전체 아이디어</strong> · ';
+    if (filteredCount === total) {
+      html += filteredCount + "개</p>";
+    } else {
+      html +=
+        filteredCount +
+        "개 표시 <span class="list-meta__dim">(전체 " +
+        total +
+        "건 중)</span></p>";
+    }
+    return html;
   }
 
   function renderList(ideas) {
@@ -157,11 +207,7 @@
       return;
     }
     $("content").innerHTML =
-      '<p class="list-meta">' +
-      filtered.length +
-      "개" +
-      (state.view === "pinned" ? " · 고정" : "") +
-      "</p>" +
+      listMetaHtml(filtered.length, ideas) +
       filtered
         .map(function (idea) {
           return (
@@ -622,7 +668,9 @@
     bindSidebarToggle();
     document.querySelectorAll(".nav-item[data-view]").forEach(function (btn) {
       btn.onclick = function () {
-        state.view = btn.getAttribute("data-view");
+        var next = btn.getAttribute("data-view");
+        if (next === "list") resetListFilters();
+        state.view = next;
         if (state.view === "sketch" && !state.editId && !state.isNew) {
           newSketch();
           return;
