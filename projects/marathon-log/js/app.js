@@ -101,17 +101,28 @@
       el.classList.toggle("is-active", el.id === "screen-" + id);
     });
     var activeTab = tabForScreen(id);
-    document.querySelectorAll(".tab").forEach(function (btn) {
-      btn.classList.toggle("is-active", btn.getAttribute("data-tab") === activeTab);
-    });
+    if (global.ProjectShell) {
+      ProjectShell.setActiveView(activeTab);
+    }
+    document.body.classList.toggle("project-hide-mobile-tabs", id === "detail");
     var sub = {
       dashboard: "PB · 대회 기록 대시보드",
       input: state.editId ? "기록 수정" : "새 기록 입력",
       detail: "대회 상세",
     };
     $("header-sub").textContent = sub[id] || "";
-    document.querySelector(".tab-bar").style.display = id === "detail" ? "none" : "flex";
     closeDataMenu();
+  }
+
+  function navigateToView(view) {
+    if (view === "input" && state.screen !== "input") {
+      resetForm();
+    }
+    showScreen(view);
+    if (view === "input") {
+      renderNameSuggestions();
+      scheduleWeatherFetch(true);
+    }
   }
 
   function closeDataMenu() {
@@ -658,17 +669,9 @@
       showScreen("dashboard");
     });
 
-    document.querySelectorAll(".tab").forEach(function (btn) {
+    document.querySelectorAll(".project-nav-item[data-view]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        var tab = btn.getAttribute("data-tab");
-        if (tab === "input" && state.screen !== "input") {
-          resetForm();
-        }
-        showScreen(tab);
-        if (tab === "input") {
-          renderNameSuggestions();
-          scheduleWeatherFetch(true);
-        }
+        navigateToView(btn.getAttribute("data-view"));
       });
     });
 
@@ -773,30 +776,19 @@
   }
 
   function updateStorageBanner(mode) {
-    var banner = document.querySelector(".app-banner");
-    if (!banner) return;
+    var hint = document.querySelector(".app-banner .storage-hint");
+    if (!hint) return;
     var storeLabel =
       mode === "indexeddb"
         ? "IndexedDB"
         : mode === "localstorage"
           ? "localStorage"
           : "저장 불가";
-    var strong = banner.querySelector("strong");
-    if (strong) {
-      strong.textContent = "마라톤 기록장";
-    }
-    var hint = banner.querySelector(".storage-hint");
-    if (!hint) {
-      hint = document.createElement("span");
-      hint.className = "storage-hint";
-      banner.appendChild(hint);
-    }
     hint.textContent =
-      " — " +
       storeLabel +
       " · JSON 백업" +
       (mode === "localstorage"
-        ? " (IndexedDB 제한 → localStorage 사용)"
+        ? " (IndexedDB 제한 → localStorage)"
         : "");
   }
 
@@ -819,6 +811,16 @@
   }
 
   function init() {
+    if (global.ProjectShell) {
+      ProjectShell.init({
+        storageKey: "marathon-log-sidebar-collapsed",
+        shellId: "app-shell",
+        railToggleId: "sidebar-toggle",
+        toolbarToggleId: "sidebar-toggle-toolbar",
+        mobileTabs: true,
+        onViewChange: navigateToView,
+      });
+    }
     bindEvents();
     loadKmaKeyField();
     resetForm();

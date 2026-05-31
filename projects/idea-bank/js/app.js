@@ -654,15 +654,9 @@
 
   function render() {
     var seq = ++renderSeq;
-    document.querySelectorAll(".nav-item[data-view]").forEach(function (btn) {
-      var v = btn.getAttribute("data-view");
-      btn.classList.toggle(
-        "is-active",
-        (v === "list" && state.view === "list") ||
-          (v === "pinned" && state.view === "pinned") ||
-          (v === "sketch" && state.view === "sketch")
-      );
-    });
+    if (global.ProjectShell) {
+      ProjectShell.setActiveView(state.view);
+    }
     IdeaBankDb.listIdeas()
       .then(function (ideas) {
         if (seq !== renderSeq) return;
@@ -756,44 +750,15 @@
       });
   }
 
-  function applySidebarCollapsed(collapsed) {
-    var shell = document.getElementById("app-shell");
-    var toggles = [
-      document.getElementById("sidebar-toggle"),
-      document.getElementById("sidebar-toggle-toolbar"),
-    ];
-    if (shell) shell.classList.toggle("is-sidebar-collapsed", collapsed);
-    document.documentElement.classList.toggle("sidebar-collapsed-boot", collapsed);
-    toggles.forEach(function (toggle) {
-      if (!toggle) return;
-      toggle.setAttribute("aria-expanded", collapsed ? "false" : "true");
-      var label = collapsed ? "메뉴 펼치기" : "메뉴 접기";
-      toggle.setAttribute("aria-label", label);
-      toggle.title = label;
-    });
-    var rail = document.getElementById("sidebar-toggle");
-    if (rail) {
-      var railLabel = rail.querySelector(".sidebar-rail__label");
-      if (railLabel) railLabel.textContent = collapsed ? "펼침" : "접기";
-    }
-  }
-
-  function bindSidebarToggle() {
-    var collapsed = localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "1";
-    applySidebarCollapsed(collapsed);
-    function onToggle() {
-      collapsed = !document.getElementById("app-shell").classList.contains("is-sidebar-collapsed");
-      localStorage.setItem(SIDEBAR_COLLAPSED_KEY, collapsed ? "1" : "0");
-      applySidebarCollapsed(collapsed);
-    }
-    ["sidebar-toggle", "sidebar-toggle-toolbar"].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.addEventListener("click", onToggle);
-    });
-  }
-
   function bindUi() {
-    bindSidebarToggle();
+    if (global.ProjectShell) {
+      ProjectShell.init({
+        storageKey: SIDEBAR_COLLAPSED_KEY,
+        shellId: "app-shell",
+        railToggleId: "sidebar-toggle",
+        toolbarToggleId: "sidebar-toggle-toolbar",
+      });
+    }
     document.querySelectorAll(".nav-item[data-view]").forEach(function (btn) {
       btn.onclick = function () {
         var next = btn.getAttribute("data-view");
