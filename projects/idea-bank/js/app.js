@@ -5,6 +5,7 @@
   var state = {
     view: "list",
     filter: "all",
+    statusFilter: "all",
     search: "",
     editId: null,
     isNew: false,
@@ -32,6 +33,8 @@
   function filterIdeas(ideas) {
     return ideas.filter(function (idea) {
       if (state.view === "pinned" && !idea.pinned) return false;
+      if (state.statusFilter === "active" && idea.status === "promoted") return false;
+      if (state.statusFilter === "promoted" && idea.status !== "promoted") return false;
       if (state.filter !== "all" && idea.targetCategory !== state.filter) return false;
       if (state.search) {
         var q = state.search.toLowerCase();
@@ -45,15 +48,27 @@
   }
 
   function renderCatFilter() {
-    var chips = [{ id: "all", label: "전체" }];
-    ["work", "study", "hobby"].forEach(function (c) {
-      chips.push({ id: c, label: CAT_LABEL[c] });
-    });
+    var chips = [
+      { id: "all", label: "전체", kind: "cat" },
+      { id: "work", label: CAT_LABEL.work, kind: "cat" },
+      { id: "study", label: CAT_LABEL.study, kind: "cat" },
+      { id: "hobby", label: CAT_LABEL.hobby, kind: "cat" },
+      { id: "all", label: "상태·전체", kind: "status" },
+      { id: "active", label: "승격 대기", kind: "status" },
+      { id: "promoted", label: "승격 완료", kind: "status" },
+    ];
     $("cat-filter").innerHTML = chips
       .map(function (c) {
+        var active =
+          c.kind === "cat"
+            ? state.filter === c.id
+            : state.statusFilter === c.id;
         return (
-          '<button type="button" class="cat-chip' +
-          (state.filter === c.id ? " is-active" : "") +
+          '<button type="button" class="cat-chip cat-chip--' +
+          c.kind +
+          (active ? " is-active" : "") +
+          '" data-kind="' +
+          c.kind +
           '" data-filter="' +
           c.id +
           '">' +
@@ -64,7 +79,10 @@
       .join("");
     $("cat-filter").querySelectorAll(".cat-chip").forEach(function (btn) {
       btn.onclick = function () {
-        state.filter = btn.getAttribute("data-filter");
+        var kind = btn.getAttribute("data-kind");
+        var id = btn.getAttribute("data-filter");
+        if (kind === "status") state.statusFilter = id;
+        else state.filter = id;
         render();
       };
     });
@@ -100,11 +118,24 @@
             "</p>" +
             '<div class="pill-row">' +
             (idea.pinned ? '<span class="pill pill--pin">고정</span>' : "") +
+            (idea.status === "promoted"
+              ? '<span class="pill pill--promoted">승격 완료</span>'
+              : "") +
             '<span class="pill pill--' +
             idea.targetCategory +
             '">' +
             escapeHtml(CAT_LABEL[idea.targetCategory] || idea.targetCategory) +
-            "</span></div></div></article>"
+            "</span>" +
+            (idea.status !== "promoted" && IdeaBankPromote
+              ? '<span class="pill pill--progress">' +
+                IdeaBankPromote.progressDoneCount(
+                  IdeaBankPromote.normalizeProgress(idea.promoteProgress)
+                ) +
+                "/" +
+                IdeaBankPromote.PROMOTE_STEPS.length +
+                "</span>"
+              : "") +
+            "</div></div></article>"
           );
         })
         .join("");
@@ -163,6 +194,11 @@
       '<input class="field-input" id="f-title" type="text" value="' +
       escapeHtml(d.title || "") +
       '" />' +
+      '<label class="field-label">허브 프로젝트 ID (폴더·catalog id)</label>' +
+      '<input class="field-input field-input--mono" id="f-hub-id" type="text" value="' +
+      escapeHtml(d.hubProjectId || d.id || "") +
+      '" placeholder="예: marathon-log" />' +
+      '<p class="field-hint">projects/<strong>이 ID</strong>/ · ai/projects.json · intro/manifest</p>' +
       '<span class="field-label">목표 카테고리 (허브 승격 시)</span>' +
       '<div class="cat-radios" id="cat-radios">' +
       renderCatRadios(d.targetCategory) +
@@ -184,7 +220,11 @@
       (!state.isNew
         ? '<button type="button" class="btn btn--danger" id="btn-delete">삭제</button>'
         : "") +
-      "</div></div>";
+      "</div>" +
+      IdeaBankPromote.renderPromotePanel(d, CAT_LABEL, escapeHtml) +
+      "</div>";
+
+    bindPromotePanel();
 
     $("cat-radios").querySelectorAll(".cat-radio").forEach(function (btn) {
       btn.onclick = function () {
@@ -252,14 +292,71 @@
     }
   }
 
+  function bindPromotePanel() {
+    var panel = document.querySelector(".promote-panel");
+    if (!panel) return;
+
+    panel.querySelectorAll(".status-chip").forEach(function (btn) {
+      btn.onclick = function () {
+        state.draft.status = btn.getAttribute("data-status");
+        if (state.draft.status === "promoted" && !state.draft.promotedAt) {
+          state.draft.promotedAt = new Date().toISOString();
+        }
+        syncDraftFromForm();
+        renderSketchForm();
+      };
+    });
+
+    panel.querySelectorAll("[data-promote-step]").forEach(function (box) {
+      box.onchange = function () {
+        if (!state.draft.promoteProgress) {
+          state.draft.promoteProgress = IdeaBankPromote.defaultProgress();
+        }
+        state.draft.promoteProgress[box.getAttribute("data-promote-step")] = box.checked;
+      };
+    });
+
+    panel.querySelectorAll("[data-copy-snippet]").forEach(function (btn) {
+      btn.onclick = function () {
+        var stepId = btn.getAttribute("data-copy-snippet");
+        var pre = document.getElementById("snippet-" + stepId);
+        if (!pre) return;
+        IdeaBankPromote.copyText(pre.textContent).then(
+          function () {
+            btn.textContent = "복사됨";
+            setTimeout(function () {
+              btn.textContent = "복사";
+            }, 1500);
+          },
+          function () {
+            window.alert("복사에 실패했습니다. 코드 블록을 직접 선택해 복사하세요.");
+          }
+        );
+      };
+    });
+  }
+
   function syncDraftFromForm() {
     var t = $("f-title");
     var b = $("f-body");
     var p = $("f-pinned");
+    var hubId = $("f-hub-id");
     if (t) state.draft.title = t.value;
     if (b) state.draft.body = b.value;
     if (p) state.draft.pinned = p.checked;
+    if (hubId) {
+      state.draft.hubProjectId = hubId.value.trim() || state.draft.id;
+    }
     state.draft.images = state.images.slice();
+    var panel = document.querySelector(".promote-panel");
+    if (panel) {
+      if (!state.draft.promoteProgress) {
+        state.draft.promoteProgress = IdeaBankPromote.defaultProgress();
+      }
+      panel.querySelectorAll("[data-promote-step]").forEach(function (box) {
+        state.draft.promoteProgress[box.getAttribute("data-promote-step")] = box.checked;
+      });
+    }
   }
 
   function saveSketch() {
@@ -279,8 +376,13 @@
       });
       if (state.isNew) {
         idea.createdAt = now;
-        idea.status = "active";
+        if (!idea.status) idea.status = "active";
       }
+      if (!idea.promoteProgress) {
+        idea.promoteProgress = IdeaBankPromote.defaultProgress();
+      }
+      idea.hubProjectId = (idea.hubProjectId || idea.id || "").trim();
+      if (!idea.hubProjectId) idea.hubProjectId = idea.id;
       return IdeaBankDb.putIdea(idea).then(function () {
         state.editId = idea.id;
         state.isNew = false;
@@ -310,6 +412,8 @@
         targetCategory: "study",
         pinned: false,
         status: "active",
+        hubProjectId: "",
+        promoteProgress: IdeaBankPromote.defaultProgress(),
         tags: [],
       };
       state.images = [];
@@ -322,7 +426,18 @@
         render();
         return;
       }
-      state.draft = Object.assign({}, idea);
+      state.draft = Object.assign(
+        {
+          promoteProgress: IdeaBankPromote.defaultProgress(),
+          hubProjectId: idea.id,
+          status: "active",
+        },
+        idea
+      );
+      state.draft.promoteProgress = IdeaBankPromote.normalizeProgress(
+        state.draft.promoteProgress
+      );
+      if (!state.draft.hubProjectId) state.draft.hubProjectId = state.draft.id;
       state.images = Array.isArray(idea.images) ? idea.images.slice() : [];
       renderSketchForm();
     });
@@ -390,13 +505,16 @@
       });
       state.isNew = true;
       state.editId = null;
+      var newId = IdeaBankDb.slugFromTitle("새-아이디어", ids);
       state.draft = {
-        id: IdeaBankDb.slugFromTitle("새-아이디어", ids),
+        id: newId,
         title: "",
         body: "",
         targetCategory: "study",
         pinned: false,
         status: "active",
+        hubProjectId: newId,
+        promoteProgress: IdeaBankPromote.defaultProgress(),
         tags: [],
       };
       state.images = [];
