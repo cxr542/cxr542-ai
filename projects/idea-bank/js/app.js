@@ -26,6 +26,59 @@
       .replace(/"/g, "&quot;");
   }
 
+  var PROMOTE_STEP_IDS = [
+    "app",
+    "projects-json",
+    "intro-manifest",
+    "catalog-map",
+    "build-hub",
+    "push",
+  ];
+
+  var promoteFallback = {
+    PROMOTE_STEPS: PROMOTE_STEP_IDS.map(function (id) {
+      return { id: id };
+    }),
+    defaultProgress: function () {
+      var p = {};
+      PROMOTE_STEP_IDS.forEach(function (id) {
+        p[id] = false;
+      });
+      return p;
+    },
+    normalizeProgress: function (raw) {
+      var p = promoteFallback.defaultProgress();
+      if (raw && typeof raw === "object") {
+        PROMOTE_STEP_IDS.forEach(function (id) {
+          if (raw[id]) p[id] = true;
+        });
+      }
+      return p;
+    },
+    progressDoneCount: function (progress) {
+      var n = 0;
+      PROMOTE_STEP_IDS.forEach(function (id) {
+        if (progress && progress[id]) n += 1;
+      });
+      return n;
+    },
+    renderPromotePanel: function () {
+      return (
+        '<section class="promote-panel">' +
+        '<p class="promote-panel__lead">허브 체크리스트 스크립트(hub-checklist.js)가 로드되지 않았습니다. ' +
+        "브라우저 광고·추적 차단을 이 사이트에서 끄거나, 강력 새로고침(Ctrl+Shift+R) 후 다시 시도해 주세요.</p>" +
+        "</section>"
+      );
+    },
+    copyText: function () {
+      return Promise.reject(new Error("checklist unavailable"));
+    },
+  };
+
+  function promote() {
+    return typeof IdeaBankPromote !== "undefined" ? IdeaBankPromote : promoteFallback;
+  }
+
   function previewBody(body) {
     var t = (body || "").replace(/\s+/g, " ").trim();
     return t.length > 120 ? t.slice(0, 120) + "…" : t;
@@ -239,13 +292,13 @@
             '">' +
             escapeHtml(CAT_LABEL[idea.targetCategory] || idea.targetCategory) +
             "</span>" +
-            (idea.status !== "promoted" && IdeaBankPromote
+            (idea.status !== "promoted"
               ? '<span class="pill pill--progress">' +
-                IdeaBankPromote.progressDoneCount(
-                  IdeaBankPromote.normalizeProgress(idea.promoteProgress)
+                promote().progressDoneCount(
+                  promote().normalizeProgress(idea.promoteProgress)
                 ) +
                 "/" +
-                IdeaBankPromote.PROMOTE_STEPS.length +
+                promote().PROMOTE_STEPS.length +
                 "</span>"
               : "") +
             "</div></div></article>"
@@ -304,11 +357,6 @@
         '<p class="empty">편집할 아이디어를 찾을 수 없습니다.</p>';
       return;
     }
-    if (typeof IdeaBankPromote === "undefined") {
-      $("content").innerHTML =
-        '<p class="empty">승격 모듈(promote.js)을 불러오지 못했습니다. 새로고침해 주세요.</p>';
-      return;
-    }
     $("content").innerHTML =
       '<div class="sketch-form">' +
       "<h2>" +
@@ -345,7 +393,7 @@
         ? '<button type="button" class="btn btn--danger" id="btn-delete">삭제</button>'
         : "") +
       "</div>" +
-      IdeaBankPromote.renderPromotePanel(d, CAT_LABEL, escapeHtml) +
+      promote().renderPromotePanel(d, CAT_LABEL, escapeHtml) +
       "</div>";
 
     try {
@@ -450,7 +498,7 @@
     panel.querySelectorAll("[data-promote-step]").forEach(function (box) {
       box.onchange = function () {
         if (!state.draft.promoteProgress) {
-          state.draft.promoteProgress = IdeaBankPromote.defaultProgress();
+          state.draft.promoteProgress = promote().defaultProgress();
         }
         state.draft.promoteProgress[box.getAttribute("data-promote-step")] = box.checked;
       };
@@ -461,7 +509,7 @@
         var stepId = btn.getAttribute("data-copy-snippet");
         var pre = document.getElementById("snippet-" + stepId);
         if (!pre) return;
-        IdeaBankPromote.copyText(pre.textContent).then(
+        promote().copyText(pre.textContent).then(
           function () {
             btn.textContent = "복사됨";
             setTimeout(function () {
@@ -491,7 +539,7 @@
     var panel = document.querySelector(".promote-panel");
     if (panel) {
       if (!state.draft.promoteProgress) {
-        state.draft.promoteProgress = IdeaBankPromote.defaultProgress();
+        state.draft.promoteProgress = promote().defaultProgress();
       }
       panel.querySelectorAll("[data-promote-step]").forEach(function (box) {
         state.draft.promoteProgress[box.getAttribute("data-promote-step")] = box.checked;
@@ -519,7 +567,7 @@
         if (!idea.status) idea.status = "active";
       }
       if (!idea.promoteProgress) {
-        idea.promoteProgress = IdeaBankPromote.defaultProgress();
+        idea.promoteProgress = promote().defaultProgress();
       }
       idea.hubProjectId = (idea.hubProjectId || idea.id || "").trim();
       if (!idea.hubProjectId) idea.hubProjectId = idea.id;
@@ -553,7 +601,7 @@
         pinned: false,
         status: "active",
         hubProjectId: "",
-        promoteProgress: IdeaBankPromote.defaultProgress(),
+        promoteProgress: promote().defaultProgress(),
         tags: [],
       };
       state.images = [];
@@ -576,13 +624,13 @@
         }
         state.draft = Object.assign(
           {
-            promoteProgress: IdeaBankPromote.defaultProgress(),
+            promoteProgress: promote().defaultProgress(),
             hubProjectId: idea.id,
             status: "active",
           },
           idea
         );
-        state.draft.promoteProgress = IdeaBankPromote.normalizeProgress(
+        state.draft.promoteProgress = promote().normalizeProgress(
           state.draft.promoteProgress
         );
         if (!state.draft.hubProjectId) state.draft.hubProjectId = state.draft.id;
@@ -661,10 +709,6 @@
   }
 
   function newSketch() {
-    if (typeof IdeaBankPromote === "undefined") {
-      window.alert("승격 모듈을 불러오지 못했습니다. 페이지를 새로고침해 주세요.");
-      return;
-    }
     IdeaBankDb.listIdeas()
       .then(function (ideas) {
         var ids = {};
@@ -682,7 +726,7 @@
           pinned: false,
           status: "active",
           hubProjectId: newId,
-          promoteProgress: IdeaBankPromote.defaultProgress(),
+          promoteProgress: promote().defaultProgress(),
           tags: [],
         };
         state.images = [];
