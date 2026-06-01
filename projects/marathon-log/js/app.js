@@ -833,16 +833,17 @@
       ProjectShell.init({
         storageKey: "marathon-log-sidebar-collapsed",
         shellId: "app-shell",
-        railToggleId: "sidebar-toggle",
         toolbarToggleId: "sidebar-toggle-toolbar",
         mobileTabs: true,
+        enableCollapse: false,
         onViewChange: navigateToView,
       });
       ProjectShell.initBranding({
         storageKey: "marathon-log-branding",
-        defaults: { title: "마라톤 기록", subtitle: "PB · 대회 기록" },
-        bannerBrandSelector: ".app-banner__brand",
-        bannerIcon: "🏃",
+        defaults: {
+          title: "마라톤 기록",
+          tagline: "대회 기록 · PB · 통계",
+        },
       });
     }
     bindEvents();

@@ -11,13 +11,16 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../shared/css/project-shell.css?v=20260601b" />
-    <link rel="stylesheet" href="css/app.css?v=20260601b" />
+    <link rel="stylesheet" href="../shared/css/project-shell.css?v=20260601c" />
+    <link rel="stylesheet" href="css/app.css?v=20260601c" />
   </head>
   <body class="project-app project-app--mobile-tabs theme-marathon">
     <p class="app-banner">
-      <span class="app-banner__brand">🏃 마라톤 기록</span>
-      <span class="app-banner__tagline">대회 기록 · PB · 통계</span>
+      <span class="app-banner__brand">
+        <span class="app-banner__icon" aria-hidden="true">🏃</span>
+        <span class="app-banner__title" id="app-banner-title">마라톤 기록</span>
+      </span>
+      <span class="app-banner__tagline" id="app-banner-tagline">대회 기록 · PB · 통계</span>
       <span class="app-banner__meta storage-hint">로컬 저장 · JSON 백업</span>
     </p>
     <div
@@ -32,9 +35,9 @@
           <div class="logo-block project-logo">
             <h1>
               <span class="logo-block__icon project-logo__icon" aria-hidden="true">🏃</span>
-              <span class="logo-block__text project-logo__text project-brand-editable" id="app-brand-title">마라톤 기록</span>
+              <span class="logo-block__text project-logo__text" id="app-brand-title">마라톤 기록</span>
             </h1>
-            <p class="logo-block__sub project-logo__sub project-brand-editable" id="app-brand-sub">PB · 대회 기록</p>
+            <p class="logo-block__sub project-logo__sub" id="app-brand-sub">PB · 대회 기록</p>
           </div>
         </div>
         <nav class="sidebar-nav project-sidebar-nav" aria-label="주 메뉴">
@@ -53,19 +56,8 @@
           <span class="nav-item__label project-nav-item__label">허브로 돌아가기</span>
         </a>
         <p class="sidebar-note project-sidebar-note">
-          📍 로컬 저장 · JSON으로 백업·복원. 대회명은 목록에서 더블클릭해 바로 수정할 수 있습니다.
+          📍 로컬 저장 · JSON으로 백업·복원. 상단 배너 제목·설명은 더블클릭해 수정할 수 있습니다.
         </p>
-        <button
-          type="button"
-          class="sidebar-rail project-sidebar-rail"
-          id="sidebar-toggle"
-          aria-expanded="true"
-          aria-controls="sidebar"
-          title="메뉴 접기"
-        >
-          <span class="sidebar-rail__label project-sidebar-rail__label">접기</span>
-          <span class="sidebar-rail__icon project-sidebar-rail__icon" aria-hidden="true">‹</span>
-        </button>
       </aside>
       <div class="main project-main">
         <div class="toolbar project-toolbar marathon-toolbar">
@@ -188,21 +180,13 @@
 
     <input type="file" id="import-file-hidden" accept="application/json,.json" hidden />
 
-    <script>
-      (function () {
-        try {
-          if (localStorage.getItem("marathon-log-sidebar-collapsed") === "1") {
-            document.documentElement.classList.add("project-sidebar-collapsed-boot");
-          }
-        } catch (e) {}
-      })();
-    </script>
-    <script src="../shared/js/project-shell.js?v=20260601b"></script>
+
+    <script src="../shared/js/project-shell.js?v=20260601c"></script>
     <script src="js/time.js"></script>
     <script src="js/keep-seed.js"></script>
     <script src="js/events.js"></script>
     <script src="js/weather.js"></script>
     <script src="js/db.js"></script>
-    <script src="js/app.js?v=20260601b"></script>
+    <script src="js/app.js?v=20260601c"></script>
   </body>
 </html>

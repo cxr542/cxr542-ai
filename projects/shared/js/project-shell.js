@@ -99,11 +99,14 @@
   }
 
   function bindCollapse(storageKey) {
+    var collapseEnabled = cfg.enableCollapse !== false;
     var collapsed = false;
-    try {
-      collapsed = localStorage.getItem(storageKey) === "1";
-    } catch (e) {}
-    applyCollapsed(collapsed);
+    if (collapseEnabled) {
+      try {
+        collapsed = localStorage.getItem(storageKey) === "1";
+      } catch (e) {}
+      applyCollapsed(collapsed);
+    }
 
     function onToggle() {
       if (isDrawerMode()) {
@@ -111,6 +114,7 @@
         else openDrawer();
         return;
       }
+      if (!collapseEnabled) return;
       var shell = qs("#" + (cfg.shellId || "app-shell"));
       collapsed = shell && shell.classList.contains("is-sidebar-collapsed");
       collapsed = !collapsed;
@@ -120,12 +124,15 @@
       applyCollapsed(collapsed);
     }
 
-    var rail = qs("#" + (cfg.railToggleId || "sidebar-toggle"));
-    if (rail) rail.addEventListener("click", onToggle);
+    if (collapseEnabled) {
+      var rail = qs("#" + (cfg.railToggleId || "sidebar-toggle"));
+      if (rail) rail.addEventListener("click", onToggle);
+    }
     qsa(".project-nav-toggle, #" + (cfg.toolbarToggleId || "sidebar-toggle-toolbar")).forEach(
       function (btn) {
-        btn.addEventListener("click", function (e) {
+        btn.addEventListener("click", function () {
           if (isDrawerMode()) return;
+          if (!collapseEnabled) return;
           onToggle();
         });
       }
@@ -152,7 +159,9 @@
 
   function loadBranding(storageKey) {
     try {
-      return JSON.parse(localStorage.getItem(storageKey) || "{}");
+      var data = JSON.parse(localStorage.getItem(storageKey) || "{}");
+      if (data.subtitle && !data.tagline) data.tagline = data.subtitle;
+      return data;
     } catch (e) {
       return {};
     }
@@ -165,19 +174,20 @@
   }
 
   function syncBrandingUi(options, data) {
-    var titleEl = qs(options.titleSelector || "#app-brand-title");
-    var subEl = qs(options.subtitleSelector || "#app-brand-sub");
+    var titleEl = qs(options.titleSelector || "#app-banner-title");
+    var taglineEl = qs(options.taglineSelector || "#app-banner-tagline");
     var title = data.title || options.defaults.title || "";
-    var subtitle = data.subtitle || options.defaults.subtitle || "";
+    var tagline = data.tagline || data.subtitle || options.defaults.tagline || "";
     if (titleEl) titleEl.textContent = title;
-    if (subEl) subEl.textContent = subtitle;
+    if (taglineEl) taglineEl.textContent = tagline;
     if (options.pageTitle !== false && title) {
       document.title = title + (options.titleSuffix || "");
     }
-    var banner = options.bannerBrandSelector ? qs(options.bannerBrandSelector) : null;
-    if (banner && title) {
-      banner.textContent =
-        (options.bannerIcon ? options.bannerIcon + " " : "") + title;
+    if (options.syncSidebar !== false) {
+      var sideTitle = qs("#app-brand-title");
+      var sideSub = qs("#app-brand-sub");
+      if (sideTitle) sideTitle.textContent = title;
+      if (sideSub) sideSub.textContent = tagline;
     }
   }
 
@@ -187,6 +197,9 @@
     var input = document.createElement("input");
     input.type = "text";
     input.className = "project-brand-input";
+    if (el.classList.contains("app-banner__tagline")) {
+      input.classList.add("app-banner__tagline-input");
+    }
     input.value = el.textContent;
     el.style.display = "none";
     el.parentNode.insertBefore(input, el.nextSibling);
@@ -225,8 +238,8 @@
     var data = loadBranding(options.storageKey);
     syncBrandingUi(options, data);
 
-    var titleEl = qs(options.titleSelector || "#app-brand-title");
-    var subEl = qs(options.subtitleSelector || "#app-brand-sub");
+    var titleEl = qs(options.titleSelector || "#app-banner-title");
+    var taglineEl = qs(options.taglineSelector || "#app-banner-tagline");
 
     function persist(field, value) {
       var next = loadBranding(options.storageKey);
@@ -246,14 +259,14 @@
         });
       });
     }
-    if (subEl) {
-      subEl.classList.add("project-brand-editable");
-      subEl.setAttribute("title", "더블클릭하여 부제 수정");
-      subEl.addEventListener("dblclick", function (e) {
+    if (taglineEl) {
+      taglineEl.classList.add("project-brand-editable");
+      taglineEl.setAttribute("title", "더블클릭하여 설명 수정");
+      taglineEl.addEventListener("dblclick", function (e) {
         e.preventDefault();
         e.stopPropagation();
-        beginInlineEdit(subEl, function (val) {
-          persist("subtitle", val);
+        beginInlineEdit(taglineEl, function (val) {
+          persist("tagline", val);
         });
       });
     }

@@ -62,10 +62,51 @@
 }
 
 .project-app .app-banner__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-family: var(--shell-font-display);
   font-weight: 600;
   color: var(--app-accent);
   letter-spacing: -0.02em;
+}
+
+.project-app .app-banner__icon {
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.project-app .app-banner__title {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+.project-app .app-banner__tagline.project-brand-editable:hover,
+.project-app .app-banner__title.project-brand-editable:hover {
+  outline-color: rgba(var(--app-accent-rgb), 0.55);
+}
+
+.app-banner .project-brand-input {
+  min-width: 6rem;
+  max-width: min(42vw, 18rem);
+  font: inherit;
+  color: inherit;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.app-banner .app-banner__tagline + .project-brand-input,
+.app-banner .app-banner__title + .project-brand-input {
+  font-family: var(--shell-font-display);
+  font-weight: 600;
+  color: var(--app-accent);
+}
+
+.app-banner .app-banner__tagline.project-brand-editable + .project-brand-input,
+.app-banner .project-brand-input.app-banner__tagline-input {
+  font-family: var(--shell-font);
+  font-weight: 500;
+  color: var(--shell-text);
 }
 
 .project-app .app-banner__tagline {

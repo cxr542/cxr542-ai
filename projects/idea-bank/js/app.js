@@ -774,10 +774,11 @@
       });
       ProjectShell.initBranding({
         storageKey: "idea-bank-branding",
-        defaults: { title: "idea-bank", subtitle: "개발 전 아이디어 노트" },
+        defaults: {
+          title: "idea-bank",
+          tagline: "서비스 만들기 전, 생각을 모아 두는 아이디어 노트",
+        },
         titleSuffix: " · 아이디어 노트",
-        bannerBrandSelector: ".app-banner__brand",
-        bannerIcon: "💡",
       });
     }
     document.querySelectorAll(".nav-item[data-view]").forEach(function (btn) {
