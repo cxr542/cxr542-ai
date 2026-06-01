@@ -194,33 +194,32 @@
   function beginInlineEdit(el, onCommit) {
     if (!el || el.dataset.editing === "1") return;
     el.dataset.editing = "1";
-    var input = document.createElement("input");
-    input.type = "text";
-    input.className = "project-brand-input";
-    if (el.classList.contains("app-banner__tagline")) {
-      input.classList.add("app-banner__tagline-input");
-    }
-    input.value = el.textContent;
+    var isTagline = el.classList.contains("app-banner__tagline");
+    var field = document.createElement("input");
+    field.type = "text";
+    field.className = "project-brand-input";
+    if (isTagline) field.classList.add("app-banner__tagline-input");
+    field.value = el.textContent;
     el.style.display = "none";
-    el.parentNode.insertBefore(input, el.nextSibling);
-    input.focus();
-    input.select();
+    el.parentNode.insertBefore(field, el.nextSibling);
+    field.focus();
+    field.select();
 
     function finish(save) {
       if (save) {
-        var val = input.value.trim() || el.textContent;
+        var val = field.value.trim() || el.textContent;
         el.textContent = val;
         if (onCommit) onCommit(val);
       }
-      input.remove();
+      field.remove();
       el.style.display = "";
       delete el.dataset.editing;
     }
 
-    input.addEventListener("blur", function () {
+    field.addEventListener("blur", function () {
       finish(true);
     });
-    input.addEventListener("keydown", function (e) {
+    field.addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         e.preventDefault();
         finish(true);
@@ -229,6 +228,35 @@
         e.preventDefault();
         finish(false);
       }
+    });
+  }
+
+  function bindBrandField(el, label, onCommit) {
+    if (!el || el.closest(".project-brand-editable-wrap")) return;
+    el.classList.add("project-brand-editable");
+    el.setAttribute("title", label + " (더블클릭 또는 ✏️)");
+
+    var wrap = document.createElement("span");
+    wrap.className = "project-brand-editable-wrap";
+    el.parentNode.insertBefore(wrap, el);
+    wrap.appendChild(el);
+
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "project-brand-edit-btn";
+    btn.setAttribute("aria-label", label);
+    btn.innerHTML = '<span aria-hidden="true">✏️</span>';
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      beginInlineEdit(el, onCommit);
+    });
+    wrap.appendChild(btn);
+
+    el.addEventListener("dblclick", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      beginInlineEdit(el, onCommit);
     });
   }
 
@@ -249,25 +277,13 @@
     }
 
     if (titleEl) {
-      titleEl.classList.add("project-brand-editable");
-      titleEl.setAttribute("title", "더블클릭하여 제목 수정");
-      titleEl.addEventListener("dblclick", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        beginInlineEdit(titleEl, function (val) {
-          persist("title", val);
-        });
+      bindBrandField(titleEl, "제목 수정", function (val) {
+        persist("title", val);
       });
     }
     if (taglineEl) {
-      taglineEl.classList.add("project-brand-editable");
-      taglineEl.setAttribute("title", "더블클릭하여 설명 수정");
-      taglineEl.addEventListener("dblclick", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        beginInlineEdit(taglineEl, function (val) {
-          persist("tagline", val);
-        });
+      bindBrandField(taglineEl, "소개 문구 수정", function (val) {
+        persist("tagline", val);
       });
     }
   }
