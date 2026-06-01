@@ -150,11 +150,139 @@
     closeDrawer();
   }
 
+  function loadBranding(storageKey) {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || "{}");
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function saveBranding(storageKey, data) {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(data));
+    } catch (e) {}
+  }
+
+  function syncBrandingUi(options, data) {
+    var titleEl = qs(options.titleSelector || "#app-brand-title");
+    var subEl = qs(options.subtitleSelector || "#app-brand-sub");
+    var title = data.title || options.defaults.title || "";
+    var subtitle = data.subtitle || options.defaults.subtitle || "";
+    if (titleEl) titleEl.textContent = title;
+    if (subEl) subEl.textContent = subtitle;
+    if (options.pageTitle !== false && title) {
+      document.title = title + (options.titleSuffix || "");
+    }
+    var banner = options.bannerBrandSelector ? qs(options.bannerBrandSelector) : null;
+    if (banner && title) {
+      banner.textContent =
+        (options.bannerIcon ? options.bannerIcon + " " : "") + title;
+    }
+  }
+
+  function beginInlineEdit(el, onCommit) {
+    if (!el || el.dataset.editing === "1") return;
+    el.dataset.editing = "1";
+    var input = document.createElement("input");
+    input.type = "text";
+    input.className = "project-brand-input";
+    input.value = el.textContent;
+    el.style.display = "none";
+    el.parentNode.insertBefore(input, el.nextSibling);
+    input.focus();
+    input.select();
+
+    function finish(save) {
+      if (save) {
+        var val = input.value.trim() || el.textContent;
+        el.textContent = val;
+        if (onCommit) onCommit(val);
+      }
+      input.remove();
+      el.style.display = "";
+      delete el.dataset.editing;
+    }
+
+    input.addEventListener("blur", function () {
+      finish(true);
+    });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        finish(true);
+      }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        finish(false);
+      }
+    });
+  }
+
+  function initBranding(options) {
+    options = options || {};
+    if (!options.storageKey) return;
+    var data = loadBranding(options.storageKey);
+    syncBrandingUi(options, data);
+
+    var titleEl = qs(options.titleSelector || "#app-brand-title");
+    var subEl = qs(options.subtitleSelector || "#app-brand-sub");
+
+    function persist(field, value) {
+      var next = loadBranding(options.storageKey);
+      next[field] = value;
+      saveBranding(options.storageKey, next);
+      syncBrandingUi(options, next);
+    }
+
+    if (titleEl) {
+      titleEl.classList.add("project-brand-editable");
+      titleEl.setAttribute("title", "더블클릭하여 제목 수정");
+      titleEl.addEventListener("dblclick", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        beginInlineEdit(titleEl, function (val) {
+          persist("title", val);
+        });
+      });
+    }
+    if (subEl) {
+      subEl.classList.add("project-brand-editable");
+      subEl.setAttribute("title", "더블클릭하여 부제 수정");
+      subEl.addEventListener("dblclick", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        beginInlineEdit(subEl, function (val) {
+          persist("subtitle", val);
+        });
+      });
+    }
+  }
+
+  function bindInlineTitles(root, selector, onSave) {
+    qsa(selector, root).forEach(function (el) {
+      el.classList.add("inline-title-editable");
+      el.setAttribute("title", "더블클릭하여 제목 수정");
+      el.addEventListener("dblclick", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var card = el.closest("[data-id]");
+        if (!card) return;
+        var id = card.getAttribute("data-id");
+        beginInlineEdit(el, function (val) {
+          if (onSave) onSave(id, val, el);
+        });
+      });
+    });
+  }
+
   global.ProjectShell = {
     init: init,
     setActiveView: setActiveView,
     openDrawer: openDrawer,
     closeDrawer: closeDrawer,
     isDrawerMode: isDrawerMode,
+    initBranding: initBranding,
+    bindInlineTitles: bindInlineTitles,
   };
 })(window);

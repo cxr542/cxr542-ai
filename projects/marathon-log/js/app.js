@@ -135,6 +135,11 @@
     $("btn-data-menu").setAttribute("aria-expanded", open ? "true" : "false");
   }
 
+  function updateNavCounts() {
+    var allEl = $("nav-count-all");
+    if (allEl) allEl.textContent = String(state.races.length);
+  }
+
   function renderList() {
     var list = $("race-list");
     var items = filteredRaces();
@@ -183,6 +188,18 @@
         openDetail(card.getAttribute("data-id"));
       });
     });
+    if (window.ProjectShell && window.ProjectShell.bindInlineTitles) {
+      ProjectShell.bindInlineTitles(list, ".race-card__name", function (id, title) {
+        var race = state.races.find(function (r) {
+          return r.id === id;
+        });
+        if (!race) return;
+        race.name = title.trim() || race.name;
+        return MarathonDb.putRace(race).then(function () {
+          updateNavCounts();
+        });
+      });
+    }
   }
 
   function renderYearChips() {
@@ -609,6 +626,7 @@
   function refreshRaces() {
     return MarathonDb.listRaces().then(function (races) {
       state.races = races;
+      updateNavCounts();
       renderDashboard();
       renderYearChips();
       renderList();
@@ -669,7 +687,7 @@
       showScreen("dashboard");
     });
 
-    document.querySelectorAll(".project-nav-item[data-view]").forEach(function (btn) {
+    document.querySelectorAll(".nav-item[data-view], .project-nav-item[data-view]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         navigateToView(btn.getAttribute("data-view"));
       });
@@ -819,6 +837,12 @@
         toolbarToggleId: "sidebar-toggle-toolbar",
         mobileTabs: true,
         onViewChange: navigateToView,
+      });
+      ProjectShell.initBranding({
+        storageKey: "marathon-log-branding",
+        defaults: { title: "마라톤 기록", subtitle: "PB · 대회 기록" },
+        bannerBrandSelector: ".app-banner__brand",
+        bannerIcon: "🏃",
       });
     }
     bindEvents();

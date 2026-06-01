@@ -322,6 +322,20 @@
         render();
       };
     });
+    if (window.ProjectShell && window.ProjectShell.bindInlineTitles) {
+      ProjectShell.bindInlineTitles($("content"), ".idea-card__title", function (id, title) {
+        return IdeaBankDb.getIdea(id).then(function (idea) {
+          if (!idea) return;
+          idea.title = title.trim() || idea.title;
+          idea.updatedAt = new Date().toISOString();
+          return IdeaBankDb.putIdea(idea).then(function () {
+            return IdeaBankDb.listIdeas();
+          });
+        }).then(function (ideas) {
+          if (ideas) updateNavCounts(ideas);
+        });
+      });
+    }
   }
 
   function renderCatRadios(selected) {
@@ -757,6 +771,13 @@
         shellId: "app-shell",
         railToggleId: "sidebar-toggle",
         toolbarToggleId: "sidebar-toggle-toolbar",
+      });
+      ProjectShell.initBranding({
+        storageKey: "idea-bank-branding",
+        defaults: { title: "idea-bank", subtitle: "개발 전 아이디어 노트" },
+        titleSuffix: " · 아이디어 노트",
+        bannerBrandSelector: ".app-banner__brand",
+        bannerIcon: "💡",
       });
     }
     document.querySelectorAll(".nav-item[data-view]").forEach(function (btn) {

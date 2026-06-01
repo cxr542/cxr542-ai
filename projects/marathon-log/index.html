@@ -11,12 +11,12 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../shared/css/project-shell.css?v=shell-2" />
-    <link rel="stylesheet" href="css/app.css?v=shell-2" />
+    <link rel="stylesheet" href="../shared/css/project-shell.css?v=20260601b" />
+    <link rel="stylesheet" href="css/app.css?v=20260601b" />
   </head>
   <body class="project-app project-app--mobile-tabs theme-marathon">
     <p class="app-banner">
-      <span class="app-banner__brand">🏃 마라톤 기록장</span>
+      <span class="app-banner__brand">🏃 마라톤 기록</span>
       <span class="app-banner__tagline">대회 기록 · PB · 통계</span>
       <span class="app-banner__meta storage-hint">로컬 저장 · JSON 백업</span>
     </p>
@@ -27,47 +27,51 @@
       aria-hidden="true"
     ></div>
     <div class="app-shell project-shell" id="app-shell">
-      <aside class="project-sidebar" id="sidebar" aria-label="서비스 메뉴">
-        <div class="project-sidebar__head">
-          <div class="project-logo">
+      <aside class="sidebar project-sidebar" id="sidebar" aria-label="서비스 메뉴">
+        <div class="sidebar__head project-sidebar__head">
+          <div class="logo-block project-logo">
             <h1>
-              <span class="project-logo__icon" aria-hidden="true">🏃</span>
-              <span class="project-logo__text">마라톤 기록</span>
+              <span class="logo-block__icon project-logo__icon" aria-hidden="true">🏃</span>
+              <span class="logo-block__text project-logo__text project-brand-editable" id="app-brand-title">마라톤 기록</span>
             </h1>
-            <p class="project-logo__sub">PB · 대회 기록</p>
+            <p class="logo-block__sub project-logo__sub project-brand-editable" id="app-brand-sub">PB · 대회 기록</p>
           </div>
         </div>
-        <nav class="project-sidebar-nav" aria-label="주 메뉴">
-          <button type="button" class="project-nav-item is-active" data-view="dashboard" title="기록 조회">
-            <span class="project-nav-item__icon" aria-hidden="true">📊</span>
-            <span class="project-nav-item__label">기록 조회</span>
+        <nav class="sidebar-nav project-sidebar-nav" aria-label="주 메뉴">
+          <button type="button" class="nav-item project-nav-item is-active" data-view="dashboard" title="기록 조회">
+            <span class="nav-item__icon project-nav-item__icon" aria-hidden="true">📊</span>
+            <span class="nav-item__label project-nav-item__label">기록 조회</span>
+            <span class="nav-item__badge project-nav-item__badge" id="nav-count-all" aria-label="전체 기록">0</span>
           </button>
-          <button type="button" class="project-nav-item" data-view="input" title="기록 입력">
-            <span class="project-nav-item__icon" aria-hidden="true">✏️</span>
-            <span class="project-nav-item__label">기록 입력</span>
+          <button type="button" class="nav-item project-nav-item" data-view="input" title="기록 입력">
+            <span class="nav-item__icon project-nav-item__icon" aria-hidden="true">✏️</span>
+            <span class="nav-item__label project-nav-item__label">기록 입력</span>
           </button>
         </nav>
-        <a class="project-nav-item project-nav-item--hub" href="../../" title="cxr542-hub로 돌아가기">
-          <span class="project-nav-item__icon" aria-hidden="true">🏠</span>
-          <span class="project-nav-item__label">허브로 돌아가기</span>
+        <a class="nav-item nav-item--hub project-nav-item project-nav-item--hub" href="../../" title="cxr542-hub로 돌아가기">
+          <span class="nav-item__icon project-nav-item__icon" aria-hidden="true">🏠</span>
+          <span class="nav-item__label project-nav-item__label">허브로 돌아가기</span>
         </a>
+        <p class="sidebar-note project-sidebar-note">
+          📍 로컬 저장 · JSON으로 백업·복원. 대회명은 목록에서 더블클릭해 바로 수정할 수 있습니다.
+        </p>
         <button
           type="button"
-          class="project-sidebar-rail"
+          class="sidebar-rail project-sidebar-rail"
           id="sidebar-toggle"
           aria-expanded="true"
           aria-controls="sidebar"
           title="메뉴 접기"
         >
-          <span class="project-sidebar-rail__label">접기</span>
-          <span class="project-sidebar-rail__icon" aria-hidden="true">‹</span>
+          <span class="sidebar-rail__label project-sidebar-rail__label">접기</span>
+          <span class="sidebar-rail__icon project-sidebar-rail__icon" aria-hidden="true">‹</span>
         </button>
       </aside>
-      <div class="project-main">
-        <div class="project-toolbar marathon-toolbar">
+      <div class="main project-main">
+        <div class="toolbar project-toolbar marathon-toolbar">
           <button
             type="button"
-            class="btn project-nav-toggle"
+            class="btn project-nav-toggle sidebar-toggle-toolbar"
             id="sidebar-toggle-toolbar"
             aria-expanded="false"
             aria-controls="sidebar"
@@ -75,7 +79,7 @@
           >
             ☰
           </button>
-          <a class="btn btn--hub" href="../../">← 허브</a>
+          <a class="btn btn--hub" href="../../" title="cxr542-hub로 돌아가기">← 허브</a>
           <p class="project-toolbar__title" id="header-sub">PB · 대회 기록 대시보드</p>
           <div class="project-toolbar__actions">
             <button type="button" class="btn" id="btn-data-menu" aria-expanded="false" aria-haspopup="true">
@@ -99,7 +103,7 @@
             <a class="data-menu__link" href="https://www.data.go.kr/data/15059093/openapi.do" target="_blank" rel="noopener">ASOS 일자료 신청 ↗</a>
           </div>
         </div>
-        <div class="project-content marathon-content" id="app-content">
+        <div class="content project-content marathon-content" id="app-content">
           <section class="screen is-active" id="screen-dashboard" aria-label="기록 조회">
             <p class="keep-motto" id="keep-motto" hidden></p>
             <div class="stats-grid" id="stats-grid"></div>
@@ -184,12 +188,21 @@
 
     <input type="file" id="import-file-hidden" accept="application/json,.json" hidden />
 
-    <script src="../shared/js/project-shell.js?v=shell-2"></script>
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem("marathon-log-sidebar-collapsed") === "1") {
+            document.documentElement.classList.add("project-sidebar-collapsed-boot");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script src="../shared/js/project-shell.js?v=20260601b"></script>
     <script src="js/time.js"></script>
     <script src="js/keep-seed.js"></script>
     <script src="js/events.js"></script>
     <script src="js/weather.js"></script>
     <script src="js/db.js"></script>
-    <script src="js/app.js?v=shell-2"></script>
+    <script src="js/app.js?v=20260601b"></script>
   </body>
 </html>

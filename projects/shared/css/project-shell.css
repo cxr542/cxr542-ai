@@ -149,6 +149,58 @@ html.project-sidebar-collapsed-boot .project-shell {
   line-height: 1.4;
 }
 
+.project-brand-editable {
+  cursor: text;
+  border-radius: 4px;
+  outline: 1px dashed transparent;
+  outline-offset: 2px;
+  transition: outline-color 0.15s ease, background 0.15s ease;
+}
+
+.project-brand-editable:hover,
+.project-brand-editable:focus-visible {
+  outline-color: rgba(var(--app-accent-rgb), 0.45);
+  background: rgba(var(--app-accent-rgb), 0.08);
+}
+
+.project-brand-input,
+.inline-title-input {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0.15rem 0.35rem;
+  font: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: var(--shell-text);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(var(--app-accent-rgb), 0.45);
+  border-radius: 6px;
+}
+
+.project-logo .project-brand-input {
+  font-family: var(--shell-font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.project-logo__sub.project-brand-input,
+.project-logo .project-brand-input + .project-brand-input {
+  font-family: var(--shell-font);
+  font-size: 0.75rem;
+}
+
+.inline-title-editable {
+  cursor: text;
+  border-radius: 4px;
+  outline: 1px dashed transparent;
+  outline-offset: 2px;
+}
+
+.inline-title-editable:hover {
+  outline-color: rgba(var(--app-accent-rgb), 0.35);
+}
+
 .project-sidebar-rail {
   position: absolute;
   top: 50%;

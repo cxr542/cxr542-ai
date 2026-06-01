@@ -14,8 +14,8 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../shared/css/project-shell.css?v=20260601" />
-    <link rel="stylesheet" href="css/app.css?v=20260601" />
+    <link rel="stylesheet" href="../shared/css/project-shell.css?v=20260601b" />
+    <link rel="stylesheet" href="css/app.css?v=20260601b" />
   </head>
   <body class="project-app theme-idea-bank">
     <p class="app-banner">
@@ -35,9 +35,9 @@
           <div class="logo-block project-logo">
             <h1>
               <span class="logo-block__icon project-logo__icon" aria-hidden="true">💡</span>
-              <span class="logo-block__text project-logo__text">idea-bank</span>
+              <span class="logo-block__text project-logo__text project-brand-editable" id="app-brand-title">idea-bank</span>
             </h1>
-            <p class="logo-block__sub project-logo__sub">개발 전 아이디어 노트</p>
+            <p class="logo-block__sub project-logo__sub project-brand-editable" id="app-brand-sub">개발 전 아이디어 노트</p>
           </div>
         </div>
         <nav class="sidebar-nav project-sidebar-nav" aria-label="주 메뉴">
@@ -61,7 +61,7 @@
           <span class="nav-item__label project-nav-item__label">허브로 돌아가기</span>
         </a>
         <p class="sidebar-note project-sidebar-note">
-          📝 승격 후에도 노트에 남습니다(자동 삭제 없음). 허브에 올린 뒤 정리하려면 직접 삭제하세요.
+          📝 승격 후에도 노트에 남습니다(자동 삭제 없음). 허브에 올린 뒤 정리하려면 직접 삭제하세요. 제목은 사이드바·목록에서 더블클릭해 수정할 수 있습니다.
         </p>
         <button
           type="button"
@@ -109,9 +109,9 @@
         } catch (e) {}
       })();
     </script>
-    <script src="../shared/js/project-shell.js?v=20260601"></script>
-    <script src="js/db.js?v=20260601"></script>
-    <script src="js/hub-checklist.js?v=20260601"></script>
-    <script src="js/app.js?v=20260601"></script>
+    <script src="../shared/js/project-shell.js?v=20260601b"></script>
+    <script src="js/db.js?v=20260601b"></script>
+    <script src="js/hub-checklist.js?v=20260601b"></script>
+    <script src="js/app.js?v=20260601b"></script>
   </body>
 </html>
