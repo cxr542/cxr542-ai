@@ -101,7 +101,7 @@
       el.classList.toggle("is-active", el.id === "screen-" + id);
     });
     var activeTab = tabForScreen(id);
-    if (global.ProjectShell) {
+    if (window.ProjectShell) {
       ProjectShell.setActiveView(activeTab);
     }
     document.body.classList.toggle("project-hide-mobile-tabs", id === "detail");
@@ -811,7 +811,7 @@
   }
 
   function init() {
-    if (global.ProjectShell) {
+    if (window.ProjectShell) {
       ProjectShell.init({
         storageKey: "marathon-log-sidebar-collapsed",
         shellId: "app-shell",

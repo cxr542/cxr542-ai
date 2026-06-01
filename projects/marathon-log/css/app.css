@@ -8,12 +8,6 @@ body.project-app.theme-marathon {
   font-family: "IBM Plex Sans", system-ui, sans-serif;
 }
 
-body.project-app.theme-marathon .app-shell {
-  display: grid;
-  grid-template-columns: 13.75rem 1fr;
-  min-height: calc(100dvh - 2.25rem);
-}
-
 :root {
   --card: rgba(255, 255, 255, 0.04);
   --border: rgba(255, 255, 255, 0.1);

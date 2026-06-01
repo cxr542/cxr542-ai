@@ -9,13 +9,6 @@ body.project-app.theme-idea-bank {
   font-size: 14px;
 }
 
-/* 셸 CSS 로드 실패 시 최소 레이아웃 */
-body.project-app.theme-idea-bank .app-shell {
-  display: grid;
-  grid-template-columns: 13.75rem 1fr;
-  min-height: calc(100dvh - 2.25rem);
-}
-
 :root {
   --bg: #050508;
   --border: rgba(255, 255, 255, 0.1);

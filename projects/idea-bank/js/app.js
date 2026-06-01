@@ -654,7 +654,7 @@
 
   function render() {
     var seq = ++renderSeq;
-    if (global.ProjectShell) {
+    if (window.ProjectShell) {
       ProjectShell.setActiveView(state.view);
     }
     IdeaBankDb.listIdeas()
@@ -751,7 +751,7 @@
   }
 
   function bindUi() {
-    if (global.ProjectShell) {
+    if (window.ProjectShell) {
       ProjectShell.init({
         storageKey: SIDEBAR_COLLAPSED_KEY,
         shellId: "app-shell",
