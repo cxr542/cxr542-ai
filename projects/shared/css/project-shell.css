@@ -89,7 +89,7 @@
 
 .app-banner .project-brand-input {
   min-width: 6rem;
-  max-width: min(42vw, 18rem);
+  max-width: min(72vw, 36rem);
   font: inherit;
   color: inherit;
   background: rgba(0, 0, 0, 0.35);
@@ -190,12 +190,47 @@ html.project-sidebar-collapsed-boot .project-shell {
   line-height: 1.4;
 }
 
+.project-brand-editable-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  max-width: 100%;
+}
+
 .project-brand-editable {
   cursor: text;
   border-radius: 4px;
   outline: 1px dashed transparent;
   outline-offset: 2px;
   transition: outline-color 0.15s ease, background 0.15s ease;
+}
+
+.project-brand-edit-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1;
+  color: var(--shell-muted);
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.project-brand-editable-wrap:hover .project-brand-edit-btn,
+.project-brand-edit-btn:hover,
+.project-brand-edit-btn:focus-visible {
+  opacity: 1;
+  color: var(--app-accent);
+  background: rgba(var(--app-accent-rgb), 0.12);
 }
 
 .project-brand-editable:hover,

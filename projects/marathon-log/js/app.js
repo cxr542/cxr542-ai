@@ -17,6 +17,8 @@
     planned: "예정",
     postponed: "연기",
   };
+  var BACKUP_REMINDER_KEY = "marathon-log-last-export-at";
+  var BACKUP_NUDGE_DAYS = 14;
 
   var state = {
     screen: "dashboard",
@@ -644,6 +646,7 @@
       a.download = "marathon-log-" + new Date().toISOString().slice(0, 10) + ".json";
       a.click();
       URL.revokeObjectURL(a.href);
+      recordExportBackup();
       closeDataMenu();
     });
   }
@@ -803,11 +806,44 @@
           ? "localStorage"
           : "저장 불가";
     hint.textContent =
+      "🔒 " +
       storeLabel +
-      " · JSON 백업" +
+      " · 내 브라우저에만" +
       (mode === "localstorage"
         ? " (IndexedDB 제한 → localStorage)"
-        : "");
+        : "") +
+      " · 🎯 준비되면 허브로" +
+      backupNudgeText();
+  }
+
+  function recordExportBackup() {
+    try {
+      localStorage.setItem(BACKUP_REMINDER_KEY, new Date().toISOString());
+    } catch (e) {}
+    MarathonDb.getStorageMode().then(updateStorageBanner);
+  }
+
+  function isProdHost() {
+    return (
+      location.protocol !== "file:" &&
+      (location.hostname === "cxr542.github.io" ||
+        location.hostname.endsWith(".github.io"))
+    );
+  }
+
+  function backupNudgeText() {
+    if (!isProdHost()) return "";
+    try {
+      var raw = localStorage.getItem(BACKUP_REMINDER_KEY);
+      if (!raw) {
+        return " · 💾 JSON 백업 권장";
+      }
+      var days = (Date.now() - new Date(raw).getTime()) / 86400000;
+      if (days >= BACKUP_NUDGE_DAYS) {
+        return " · 💾 백업 " + Math.floor(days) + "일 경과";
+      }
+    } catch (e) {}
+    return "";
   }
 
   function showInitError(err) {
@@ -833,9 +869,9 @@
       ProjectShell.init({
         storageKey: "marathon-log-sidebar-collapsed",
         shellId: "app-shell",
+        railToggleId: "sidebar-toggle",
         toolbarToggleId: "sidebar-toggle-toolbar",
         mobileTabs: true,
-        enableCollapse: false,
         onViewChange: navigateToView,
       });
       ProjectShell.initBranding({
