@@ -35,3 +35,17 @@ npm run deploy:all
 
 `main`에 push하면 GitHub Pages에 반영됩니다.  
 실험 데모 URL: `https://cxr542.github.io/cxr542-ai/projects/<id>/`
+
+### 브랜치 (idea-bank 파일럿)
+
+| 브랜ch | 용도 |
+|--------|------|
+| `develop` | 일상 개발 — `git push origin develop` |
+| `main` | 운영 Pages — PR merge 시만 갱신 |
+
+자세한 절차: [projects/idea-bank/README.md](projects/idea-bank/README.md)
+
+```bash
+git checkout develop && git pull origin develop
+npm run preview   # http://localhost:8080/projects/idea-bank/
+```

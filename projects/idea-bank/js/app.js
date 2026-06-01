@@ -3,6 +3,8 @@
 
   var CAT_LABEL = { work: "업무 도우미", study: "공부·실험", hobby: "러닝·취미" };
   var SIDEBAR_COLLAPSED_KEY = "idea-bank-sidebar-collapsed";
+  var BACKUP_REMINDER_KEY = "idea-bank-last-export-at";
+  var BACKUP_NUDGE_DAYS = 14;
   var renderSeq = 0;
   var state = {
     view: "list",
@@ -712,6 +714,7 @@
       a.download = "idea-bank-" + new Date().toISOString().slice(0, 10) + ".json";
       a.click();
       URL.revokeObjectURL(url);
+      recordExportBackup();
     });
   }
 
@@ -811,7 +814,41 @@
     };
   }
 
+  function recordExportBackup() {
+    try {
+      localStorage.setItem(BACKUP_REMINDER_KEY, new Date().toISOString());
+    } catch (e) {}
+    updateStorageBanner();
+  }
+
+  function isProdHost() {
+    return (
+      location.protocol !== "file:" &&
+      (location.hostname === "cxr542.github.io" ||
+        location.hostname.endsWith(".github.io"))
+    );
+  }
+
+  function backupNudgeText() {
+    if (!isProdHost()) return "";
+    try {
+      var raw = localStorage.getItem(BACKUP_REMINDER_KEY);
+      if (!raw) {
+        return " · 💾 JSON 백업 권장";
+      }
+      var days = (Date.now() - new Date(raw).getTime()) / 86400000;
+      if (days >= BACKUP_NUDGE_DAYS) {
+        return " · 💾 백업 " + Math.floor(days) + "일 경과";
+      }
+    } catch (e) {}
+    return "";
+  }
+
   function updateStorageBanner(mode) {
+    if (mode === undefined && window.IdeaBankDb) {
+      IdeaBankDb.getStorageMode().then(updateStorageBanner);
+      return;
+    }
     var meta = document.querySelector(".app-banner__meta");
     if (!meta) return;
     var storeLabel =
@@ -819,15 +856,20 @@
         ? "IndexedDB"
         : mode === "localstorage"
           ? "localStorage"
-          : "저장 불가";
+          : mode
+            ? "저장 불가"
+            : "내 브라우저에만";
+    if (!mode) {
+      meta.textContent = "🔒 내 브라우저에만 · 🎯 준비되면 허브로";
+      return;
+    }
     meta.textContent =
       "🔒 " +
       storeLabel +
       " · 내 브라우저에만" +
-      (mode === "localstorage"
-        ? " (IndexedDB 제한 → localStorage)"
-        : "") +
-      " · 🎯 준비되면 허브로";
+      (mode === "localstorage" ? " (IndexedDB 제한 → localStorage)" : "") +
+      " · 🎯 준비되면 허브로" +
+      backupNudgeText();
   }
 
   function showInitError(err) {

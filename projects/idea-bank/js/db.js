@@ -2,7 +2,9 @@
   "use strict";
 
   var DB_NAME = "idea-bank";
+  /** IndexedDB schema — 올릴 때는 onupgradeneeded 마이그레이션 필수. 운영 배포 전 로컬 검증. */
   var DB_VERSION = 1;
+  var EXPORT_FORMAT_VERSION = 1;
   var STORE = "ideas";
   var LS_IDEAS_KEY = "idea-bank-ideas";
   var dbPromise = null;
@@ -329,7 +331,7 @@
 
   function exportPayload(ideas) {
     return {
-      version: 1,
+      version: EXPORT_FORMAT_VERSION,
       exportedAt: new Date().toISOString(),
       ideas: ideas.map(function (i) {
         return Object.assign({}, i);
