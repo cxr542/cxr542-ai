@@ -550,21 +550,31 @@ body.project-app.theme-marathon {
   color: #fca5a5;
 }
 
-.btn-primary {
+.btn-primary,
+body.theme-marathon .btn-primary {
   width: 100%;
   margin-top: 0.5rem;
-  padding: 0.75rem;
+  padding: 0.8rem 0.75rem;
   font: inherit;
   font-size: 0.9375rem;
-  font-weight: 500;
-  color: #050508;
-  background: var(--accent);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #04140f;
+  background: #6ee7b7;
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  -webkit-font-smoothing: antialiased;
 }
 
-.btn-primary:disabled {
+.btn-primary:hover,
+body.theme-marathon .btn-primary:hover {
+  background: #86efc7;
+  color: #04140f;
+}
+
+.btn-primary:disabled,
+body.theme-marathon .btn-primary:disabled {
   opacity: 0.5;
   cursor: default;
 }
