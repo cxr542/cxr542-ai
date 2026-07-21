@@ -10,6 +10,15 @@
     "50k": "50K",
   };
 
+  var KNOWN_DISTANCES = {
+    full: true,
+    half: true,
+    "10k": true,
+    "5k": true,
+    "32k": true,
+    "50k": true,
+  };
+
   var STATUS_LABEL = {
     finished: "완주",
     dnf: "DNF",
@@ -51,11 +60,64 @@
     if (d === "5k") return "badge badge--5k";
     if (d === "32k") return "badge badge--32k";
     if (d === "50k") return "badge badge--50k";
-    return "badge badge--10k";
+    if (d === "10k") return "badge badge--10k";
+    return "badge badge--custom";
   }
 
   function distLabel(d) {
-    return DIST_LABEL[d] || d;
+    return DIST_LABEL[d] || d || "—";
+  }
+
+  function isKnownDistance(d) {
+    return !!(d && KNOWN_DISTANCES[d]);
+  }
+
+  function syncDistanceCustomField() {
+    var wrap = $("distance-custom-wrap");
+    var custom = $("field-distance-custom");
+    var sel = $("field-distance");
+    if (!wrap || !custom || !sel) return;
+    var isCustom = sel.value === "custom";
+    wrap.hidden = !isCustom;
+    custom.required = isCustom;
+    if (isCustom) {
+      custom.focus();
+    }
+  }
+
+  function setDistanceFields(distance) {
+    var sel = $("field-distance");
+    var custom = $("field-distance-custom");
+    if (!sel || !custom) return;
+    if (isKnownDistance(distance)) {
+      sel.value = distance;
+      custom.value = "";
+    } else {
+      sel.value = "custom";
+      custom.value = distance || "";
+    }
+    syncDistanceCustomField();
+  }
+
+  function readDistanceValue() {
+    var sel = $("field-distance");
+    if (!sel) return "";
+    if (sel.value !== "custom") return sel.value;
+    return ($("field-distance-custom").value || "").trim();
+  }
+
+  function normalizeCustomDistance(raw) {
+    var text = String(raw || "").trim();
+    if (!text) return "";
+    // "27" → "27km", "15k"/"15K" 유지, "27km"/"27 KM" 정리
+    var m = text.match(/^(\d+(?:\.\d+)?)\s*(k|km)?$/i);
+    if (m) {
+      var num = m[1];
+      var unit = (m[2] || "").toLowerCase();
+      if (unit === "k") return num + "k";
+      return num + "km";
+    }
+    return text;
   }
 
   function displayTime(r) {
@@ -73,7 +135,9 @@
 
   function matchesDistFilter(r, dist) {
     if (dist === "all") return true;
-    if (dist === "other") return r.distance === "32k" || r.distance === "50k";
+    if (dist === "other") {
+      return r.distance === "32k" || r.distance === "50k" || !isKnownDistance(r.distance);
+    }
     return r.distance === dist;
   }
 
@@ -301,7 +365,7 @@
     state.editId = id;
     $("field-date").value = r.date;
     $("field-name").value = r.name;
-    $("field-distance").value = r.distance;
+    setDistanceFields(r.distance);
     $("field-status").value = r.status || "finished";
     $("field-chip").value = r.chipTime;
     $("field-goal").value = r.goal || "";
@@ -321,6 +385,9 @@
     $("race-form").reset();
     $("field-date").value = new Date().toISOString().slice(0, 10);
     $("field-status").value = "finished";
+    $("field-distance").value = "full";
+    $("field-distance-custom").value = "";
+    syncDistanceCustomField();
     $("btn-save").textContent = "기록 저장";
     clearFormError();
     renderNameSuggestions();
@@ -383,7 +450,7 @@
     if (!item) return;
     $("field-name").value = item.name;
     if (item.distance) {
-      $("field-distance").value = item.distance;
+      setDistanceFields(item.distance);
     }
     state.weatherManualEdit = false;
     scheduleWeatherFetch(true);
@@ -459,10 +526,14 @@
   }
 
   function readForm() {
+    var distance = readDistanceValue();
+    if ($("field-distance").value === "custom") {
+      distance = normalizeCustomDistance(distance);
+    }
     return {
       date: $("field-date").value,
       name: $("field-name").value.trim(),
-      distance: $("field-distance").value,
+      distance: distance,
       status: $("field-status").value,
       chipTime: $("field-chip").value.trim(),
       goal: $("field-goal").value.trim(),
@@ -474,7 +545,11 @@
   function validateForm(data) {
     if (!data.date) return "날짜를 입력하세요.";
     if (!data.name) return "대회명을 입력하세요.";
-    if (!data.distance) return "거리를 선택하세요.";
+    if (!data.distance) {
+      return $("field-distance").value === "custom"
+        ? "거리를 직접 입력하세요. (예: 27km)"
+        : "거리를 선택하세요.";
+    }
     var st = data.status || "finished";
     if (st === "finished") {
       if (!data.chipTime) return "칩 기록을 입력하세요.";
@@ -711,6 +786,8 @@
     $("field-name").addEventListener("change", function () {
       scheduleWeatherFetch(true);
     });
+
+    $("field-distance").addEventListener("change", syncDistanceCustomField);
 
     $("field-weather").addEventListener("input", function () {
       state.weatherManualEdit = true;

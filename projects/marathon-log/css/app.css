@@ -300,6 +300,15 @@ body.project-app.theme-marathon {
   border: 1px solid rgba(196, 181, 253, 0.4);
 }
 
+.badge--custom {
+  color: #f0abfc;
+  border: 1px solid rgba(240, 171, 252, 0.45);
+}
+
+.distance-custom-wrap {
+  margin-top: -0.35rem;
+}
+
 .race-card__time--muted {
   color: var(--muted);
   font-size: 0.875rem;
