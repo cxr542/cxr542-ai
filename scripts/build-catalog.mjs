@@ -27,7 +27,6 @@ const SUBCATEGORY_BY_ID = {
   dynamic_deploy_test: "dev",
   webtest: "dev",
   Crawlingtest: "dev",
-  "ppt-test": "dev",
   cursor: "ai-tools",
   chatgpt: "ai-tools",
   claude: "ai-tools",
