@@ -1022,29 +1022,6 @@
       }
     },
     {
-      "id": "ppt-test",
-      "title": "Ppt Test",
-      "summary": "Cursorstudy experiments/ppt-test",
-      "status": "learning",
-      "tags": [
-        "Dev"
-      ],
-      "links": [
-        {
-          "label": "소개",
-          "url": "https://cxr542.github.io/cxr542-ai/intro/ppt-test.html"
-        }
-      ],
-      "source": "projects",
-      "category": "study",
-      "categoryBase": "study",
-      "introUrl": "https://cxr542.github.io/cxr542-ai/intro/ppt-test.html",
-      "repoUrl": null,
-      "primaryAppUrl": null,
-      "appUrls": [],
-      "subcategory": "dev"
-    },
-    {
       "id": "note-pythagorean-proof",
       "title": "Pythagorean Proof",
       "summary": "학습 메모 — notes/pythagorean-proof.md",

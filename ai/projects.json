@@ -354,21 +354,6 @@
       ]
     },
     {
-      "id": "ppt-test",
-      "title": "Ppt Test",
-      "summary": "Cursorstudy experiments/ppt-test",
-      "status": "learning",
-      "tags": [
-        "Dev"
-      ],
-      "links": [
-        {
-          "label": "소개",
-          "url": "https://cxr542.github.io/cxr542-ai/intro/ppt-test.html"
-        }
-      ]
-    },
-    {
       "id": "react_test",
       "title": "React · Vite 클리커",
       "summary": "모바일 클리커 게임 — Vite + React 실습",
